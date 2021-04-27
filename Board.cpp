@@ -14,13 +14,12 @@ class Board {
         setValues(w, h);
         rows = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         
-        for (int i = 0; i < height; i++) {
-            test1.push_back("  ");
+        for (int j = 0; j < width; j++) {
+            for (int i = 0; i < height; i++) {
+                test1.push_back("  ");
+            }
+            test2.push_back(test1);
         }
-        //    for (int j = 0; j < width; j++) {
-        //        test2[i].push_back("aa");
-        //    }
-        //}
     }
 
     void setValues(int x, int y) {
@@ -46,7 +45,7 @@ class Board {
         for (int x = 0; x < height; x++) {
             std::cout << rows[x] << " |";
             for (int y = 0; y < width; y++) {
-                std::cout << test1[x] << "|";
+                std::cout << test2[x][y] << "|";
             }
             std::cout << "\n";
         }

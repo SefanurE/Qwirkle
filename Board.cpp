@@ -14,8 +14,8 @@ class Board {
         setValues(w, h);
         rows = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         
-        for (int j = 0; j < width; j++) {
-            for (int i = 0; i < height; i++) {
+        for (int j = 0; j < height; j++) {
+            for (int i = 0; i < width; i++) {
                 test1.push_back("  ");
             }
             test2.push_back(test1);
@@ -54,8 +54,7 @@ class Board {
 
 
 int main () {
-    
-    Board board(26, 26);
+    Board board(20, 14);
     board.printBoard();
     return 0;
 }

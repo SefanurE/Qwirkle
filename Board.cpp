@@ -6,11 +6,21 @@ class Board {
     private:
     int width, height;
     std::string rows;
+    std::vector<std::string> test1;
+    std::vector<std::vector<std::string> > test2;
 
     public:
     Board(int w, int h) {
         setValues(w, h);
         rows = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        
+        for (int i = 0; i < height; i++) {
+            test1.push_back("  ");
+        }
+        //    for (int j = 0; j < width; j++) {
+        //        test2[i].push_back("aa");
+        //    }
+        //}
     }
 
     void setValues(int x, int y) {
@@ -36,7 +46,7 @@ class Board {
         for (int x = 0; x < height; x++) {
             std::cout << rows[x] << " |";
             for (int y = 0; y < width; y++) {
-                std::cout << "  " << "|";
+                std::cout << test1[x] << "|";
             }
             std::cout << "\n";
         }
@@ -45,6 +55,7 @@ class Board {
 
 
 int main () {
+    
     Board board(26, 26);
     board.printBoard();
     return 0;

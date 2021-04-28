@@ -1,5 +1,6 @@
 
 #include "LinkedList.h"
+#include "Menu.h"
 
 #include <iostream>
 
@@ -8,6 +9,9 @@
 int main(void) {
    LinkedList* list = new LinkedList();
    delete list;
+
+   Menu* menu = new Menu();
+   menu->displayMenu();
 
    std::cout << "TODO: Implement Qwirkle!" << std::endl;
 

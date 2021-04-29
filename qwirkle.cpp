@@ -11,9 +11,8 @@ int main(void) {
    delete list;
 
    Menu* menu = new Menu();
-   menu->displayMenu();
-
-   std::cout << "TODO: Implement Qwirkle!" << std::endl;
-
+   menu->mainMenu();
+   delete menu;
+   
    return EXIT_SUCCESS;
 }

@@ -2,19 +2,23 @@
 #include <vector>
 #include <string>
 
+#define PROMPT "> "
+
 enum GameManagerState {
   DEFAULT,
-  PLAYING
+  PLAYING,
+  QUIT
 };
 
 class GameManager {
 
-  GameManagerState gameState = DEFAULT;
+  GameManagerState state = DEFAULT;
 
   private:
-    void parseCommand(std::istream in);
+    void parseCommand(std::string command);
   
   public:
+    GameManager();
     void startGame();
     void loadGameSave(std::string path);
 };

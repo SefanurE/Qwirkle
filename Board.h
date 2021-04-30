@@ -9,15 +9,21 @@ class Board{
 public:
 
     Board(int w, int h);
-    void setValues(int x, int y);
+    ~Board();
+    void setValues(int w, int h);
     void printBoard();
+    void addTile(Tile tile, int row, int col);
+    std::vector<std::string> Board::tileLocations();
+
 
 private:
 
     int width, height;
-    std::string rows;
-    std::vector<std::string> test1;
-    std::vector<std::vector<std::string> > test2;
+    std::string rowLabels;
+    std::vector<std::string> rowVec;
+    std::vector<std::vector<std::string> > gridVec;
+    std::vector<std::string> tilesOnBoard;
+
 
 
 };

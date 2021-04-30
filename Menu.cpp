@@ -70,18 +70,12 @@ std::string Menu::getNameInput() {
         std::cout << "> ";
         std::cin >> playerName;
 
-        char arrPlayerName[playerName.size()+1];
-        strcpy(arrPlayerName, playerName.c_str());
-
-        // Checks if each character is a letter then uppercase letter
-        for (size_t i = 0; i < strlen(arrPlayerName); ++i) {
-            if (!isalpha(arrPlayerName[i])) {
-                nameIsOnlyUppercase = false;
-            }
-            else if (arrPlayerName[i] != toupper(arrPlayerName[i])) {
+        for (char c : playerName) {
+            if (c < 'A' || c > 'Z') {
                 nameIsOnlyUppercase = false;
             }
         }
+
         if (!nameIsOnlyUppercase) {
             std::cout << "Name must be only uppercase letters, enter new name" << std::endl;
         }  

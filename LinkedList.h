@@ -9,9 +9,18 @@ public:
 
    LinkedList();
    ~LinkedList();
+   int getSize();
+   void push(Tile* tile);
+   Tile* pop();
+   void insertAfter(int index, Tile* tile);
+   Tile* remove(int index);
+   Tile* get(int index);
+   std::string toString();
 
 private:
    Node* head;
+   int size;
+   Node* getNode(int index);
 };
 
 #endif // ASSIGN2_LINKEDLIST_H

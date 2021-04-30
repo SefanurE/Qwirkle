@@ -19,16 +19,16 @@ Board::~Board(){
 }
 
 
-    void Board::setValues(int w, int h) {
-        width = w;
-        height = h;
-    }
+void Board::setValues(int w, int h) {
+    width = w;
+    height = h;
+}
 
-    void Board::printBoard() {
-        std::cout << " ";
-        for (int a = 0; a < width; a++) {
-            if (a < 11) {
-                std::cout << "  " << a;
+void Board::printBoard() {
+    std::cout << " ";
+    for (int a = 0; a < width; a++) {
+        if (a < 11) {
+            std::cout << "  " << a;
             } else {
                 std::cout << " " << a;
             }
@@ -48,10 +48,12 @@ Board::~Board(){
         }
     }
 
-/* Testing
-int main () {
-    Board board(20, 14);
-    board.printBoard();
-    return 0;
+void Board::addTile(Tile tile, int row, int col) {
+    gridVec[col][row] = tile->toString();
+    tilesOnBoard.push_back(tile->toString() + "@" + std::to_string(row) + std::to_string(col));
+
 }
-*/
+
+std::vector<std::string> Board::tileLocations() {
+    return tilesOnBoard;
+}

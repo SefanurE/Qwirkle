@@ -46,9 +46,6 @@ void Menu::displayMenu() {
 }
 
 void Menu::newGame() {
-    // std::string player1Name = "";
-    // std::string player2Name = "";
-
     std::cout << "Starting a New Game" << std::endl;
     std::cout << std::endl;
     std::cout << "Enter a name for player 1 (uppercase letters only)" << std::endl;

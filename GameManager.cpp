@@ -1,7 +1,10 @@
 #include "GameManager.h"
 #include <regex>
 
-GameManager::GameManager() {}
+GameManager::GameManager(Player player1, Player player2) {
+  players[0] = player1;
+  players[1] = player2;
+}
 
 void GameManager::startGame() {
   state = PLAYING;

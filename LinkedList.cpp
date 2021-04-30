@@ -7,7 +7,7 @@ LinkedList::LinkedList() {
 
 LinkedList::~LinkedList() {
   Node* node = head;
-  Node* nextNode;
+  Node* nextNode = nullptr;
   while (node != nullptr) {
     nextNode = node->next;
     delete node->tile;

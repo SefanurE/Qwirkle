@@ -23,6 +23,7 @@ private:
     std::vector<std::string> rowVec;
     std::vector<std::vector<std::string> > gridVec;
     std::vector<std::string> tilesOnBoard;
+    std::string newTile;
 
 
 

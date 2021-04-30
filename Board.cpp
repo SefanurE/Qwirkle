@@ -49,8 +49,9 @@ void Board::printBoard() {
     }
 
 void Board::addTile(Tile tile, int row, int col) {
-    gridVec[col][row] = tile->toString();
-    tilesOnBoard.push_back(tile->toString() + "@" + std::to_string(row) + std::to_string(col));
+    newTile = tile->toString();
+    gridVec[col][row] = newTile;
+    tilesOnBoard.push_back(newTile + "@" + std::to_string(row) + std::to_string(col));
 
 }
 

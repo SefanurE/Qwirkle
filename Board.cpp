@@ -5,26 +5,30 @@
 
 Board::Board(int w, int h) {
         setValues(w, h);
-        rows = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        rowLabels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         
         for (int j = 0; j < height; j++) {
             for (int i = 0; i < width; i++) {
-                test1.push_back("  ");
+                rowVec.push_back("  ");
             }
-            test2.push_back(test1);
+            gridVec.push_back(rowVec);
         }
 }
 
-    void Board::setValues(int x, int y) {
-        width = x;
-        height = y;
-    }
+Board::~Board(){
+}
 
-    void Board::printBoard() {
-        std::cout << " ";
-        for (int a = 0; a < width; a++) {
-            if (a < 11) {
-                std::cout << "  " << a;
+
+void Board::setValues(int w, int h) {
+    width = w;
+    height = h;
+}
+
+void Board::printBoard() {
+    std::cout << " ";
+    for (int a = 0; a < width; a++) {
+        if (a < 11) {
+            std::cout << "  " << a;
             } else {
                 std::cout << " " << a;
             }
@@ -36,18 +40,20 @@ Board::Board(int w, int h) {
         }
         std::cout << "-\n";
         for (int x = 0; x < height; x++) {
-            std::cout << rows[x] << " |";
+            std::cout << rowLabels[x] << " |";
             for (int y = 0; y < width; y++) {
-                std::cout << test2[x][y] << "|";
+                std::cout << gridVec[x][y] << "|";
             }
             std::cout << "\n";
         }
     }
 
-/* Testing
-int main () {
-    Board board(20, 14);
-    board.printBoard();
-    return 0;
+void Board::addTile(Tile tile, int row, int col) {
+    gridVec[col][row] = tile->toString();
+    tilesOnBoard.push_back(tile->toString() + "@" + std::to_string(row) + std::to_string(col));
+
 }
-*/
+
+std::vector<std::string> Board::tileLocations() {
+    return tilesOnBoard;
+}

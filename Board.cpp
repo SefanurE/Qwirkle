@@ -1,16 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "Board.h"
 
-class Board {
-    private:
-    int width, height;
-    std::string rows;
-    std::vector<std::string> test1;
-    std::vector<std::vector<std::string> > test2;
-
-    public:
-    Board(int w, int h) {
+Board::Board(int w, int h) {
         setValues(w, h);
         rows = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         
@@ -20,14 +13,14 @@ class Board {
             }
             test2.push_back(test1);
         }
-    }
+}
 
-    void setValues(int x, int y) {
+    void Board::setValues(int x, int y) {
         width = x;
         height = y;
     }
 
-    void printBoard() {
+    void Board::printBoard() {
         std::cout << " ";
         for (int a = 0; a < width; a++) {
             if (a < 11) {
@@ -50,11 +43,11 @@ class Board {
             std::cout << "\n";
         }
     }
-};
 
-
+/* Testing
 int main () {
     Board board(20, 14);
     board.printBoard();
     return 0;
 }
+*/

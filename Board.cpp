@@ -5,19 +5,23 @@
 
 Board::Board(int w, int h) {
         setValues(w, h);
-        rows = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        rowLabels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         
         for (int j = 0; j < height; j++) {
             for (int i = 0; i < width; i++) {
-                test1.push_back("  ");
+                rowVec.push_back("  ");
             }
-            test2.push_back(test1);
+            gridVec.push_back(rowVec);
         }
 }
 
-    void Board::setValues(int x, int y) {
-        width = x;
-        height = y;
+Board::~Board(){
+}
+
+
+    void Board::setValues(int w, int h) {
+        width = w;
+        height = h;
     }
 
     void Board::printBoard() {
@@ -36,9 +40,9 @@ Board::Board(int w, int h) {
         }
         std::cout << "-\n";
         for (int x = 0; x < height; x++) {
-            std::cout << rows[x] << " |";
+            std::cout << rowLabels[x] << " |";
             for (int y = 0; y < width; y++) {
-                std::cout << test2[x][y] << "|";
+                std::cout << gridVec[x][y] << "|";
             }
             std::cout << "\n";
         }

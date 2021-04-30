@@ -15,17 +15,17 @@ void Menu::mainMenu() {
         std::cout << "> ";
         std::cin >> menuOption;
         std::cout << std::endl;
-        if (menuOption == NEW_GAME) {
+        if (menuOption == NEW_GAME_OPTION) {
             newGame();
         }
-        else if (menuOption == LOAD_GAME) {
+        else if (menuOption == LOAD_GAME_OPTION) {
             loadGame();
         }
-        else if (menuOption == CREDITS) {
+        else if (menuOption == CREDITS_OPTION) {
             printCredits();
             displayMenu();
         }
-        else if (menuOption == QUIT) {
+        else if (menuOption == QUIT_OPTION) {
             std::cout << "Goodbye" << std::endl;
             quit = true;
         }

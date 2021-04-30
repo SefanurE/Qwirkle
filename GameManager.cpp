@@ -37,7 +37,7 @@ void GameManager::parseCommand(std::string command) {
   std::string buffer = "";
   std::string comm = "";
   std::vector<std::string> args;
-  for (int i = 0; i < command.length(); i++) {
+  for (size_t i = 0; i < command.length(); i++) {
     char c = std::tolower(command[i]);
     if (!std::isspace(c)) {
       buffer.push_back(c);

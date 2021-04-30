@@ -1,37 +1,34 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "Board.h"
 
-class Board {
-    private:
-    int width, height;
-    std::string rows;
-    std::vector<std::string> test1;
-    std::vector<std::vector<std::string> > test2;
-
-    public:
-    Board(int w, int h) {
+Board::Board(int w, int h) {
         setValues(w, h);
-        rows = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        rowLabels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         
         for (int j = 0; j < height; j++) {
             for (int i = 0; i < width; i++) {
-                test1.push_back("  ");
+                rowVec.push_back("  ");
             }
-            test2.push_back(test1);
+            gridVec.push_back(rowVec);
         }
-    }
+}
 
-    void setValues(int x, int y) {
-        width = x;
-        height = y;
-    }
+Board::~Board(){
+}
 
-    void printBoard() {
-        std::cout << " ";
-        for (int a = 0; a < width; a++) {
-            if (a < 11) {
-                std::cout << "  " << a;
+
+void Board::setValues(int w, int h) {
+    width = w;
+    height = h;
+}
+
+void Board::printBoard() {
+    std::cout << " ";
+    for (int a = 0; a < width; a++) {
+        if (a < 11) {
+            std::cout << "  " << a;
             } else {
                 std::cout << " " << a;
             }
@@ -43,18 +40,21 @@ class Board {
         }
         std::cout << "-\n";
         for (int x = 0; x < height; x++) {
-            std::cout << rows[x] << " |";
+            std::cout << rowLabels[x] << " |";
             for (int y = 0; y < width; y++) {
-                std::cout << test2[x][y] << "|";
+                std::cout << gridVec[x][y] << "|";
             }
             std::cout << "\n";
         }
     }
-};
 
+void Board::addTile(Tile tile, int row, int col) {
+    newTile = tile->toString();
+    gridVec[col][row] = newTile;
+    tilesOnBoard.push_back(newTile + "@" + std::to_string(row) + std::to_string(col));
 
-int main () {
-    Board board(20, 14);
-    board.printBoard();
-    return 0;
+}
+
+std::vector<std::string> Board::tileLocations() {
+    return tilesOnBoard;
 }

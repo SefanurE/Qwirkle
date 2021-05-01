@@ -3,8 +3,9 @@
 class Player {
 private:
   std::string name;
-  LinkedList hand;
+  LinkedList* hand;
 public:
+  Player(std::string name);
   std::string getName();
-  LinkedList getHand();
+  LinkedList* getHand();
 };

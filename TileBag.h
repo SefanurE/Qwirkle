@@ -2,10 +2,10 @@
 
 class TileBag {
 private:
-  LinkedList tiles;
+  LinkedList* tiles;
 public:
   TileBag();
   void shuffle();
   Tile* draw();
-  LinkedList getList();
+  LinkedList* getList();
 };

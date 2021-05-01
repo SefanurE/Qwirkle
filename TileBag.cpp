@@ -2,10 +2,11 @@
 #include <vector>
 #include <iostream>
 TileBag::TileBag() {
+  tiles = new LinkedList();
   char colours[] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
   for (int shape = 0; shape <= 5; shape++) {
     for (int j = 0; j <= 5; j++) {
-      tiles.push(new Tile(colours[j], shape));
+      tiles->push(new Tile(colours[j], shape));
     }
   }
 }
@@ -13,22 +14,18 @@ TileBag::TileBag() {
 void TileBag::shuffle() {
   srand (time(NULL));
   LinkedList* tempTiles = new LinkedList();
-  while (tiles.getSize() != 0) {
-    std::cout << "Size: " << tiles.getSize() << std::endl;
-    int randIndex = rand() % tiles.getSize();
-    std::cout << randIndex << std::endl;
-    Tile* tempTile = tiles.remove(randIndex);
-    std::cout << "TEST: " << tempTile->toString() << std::endl;
+  while (tiles->getSize() != 0) {
+    int randIndex = rand() % tiles->getSize();
+    Tile* tempTile = tiles->remove(randIndex);
     tempTiles->push(tempTile);
   }
-  std::cout << tempTiles->toString() << std::endl;
-  tiles = *tempTiles;
+  tiles = tempTiles;
 }
 
 Tile* TileBag::draw() {
-  return tiles.pop();
+  return tiles->pop();
 }
 
-LinkedList TileBag::getList() {
+LinkedList* TileBag::getList() {
   return tiles;
 }

@@ -12,7 +12,7 @@ public:
 
     GameState(Player players);
     ~GameState();
-    void InitialHand();
+    void InitialHand(LinkedList* hand);
 
 
 

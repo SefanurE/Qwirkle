@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "TileBag.h"
 
 
 class GameState{
@@ -10,6 +11,7 @@ public:
 
     GameState(int w, int h);
     ~GameState();
+    InitialHand();
 
 
 

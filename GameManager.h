@@ -3,6 +3,7 @@
 #include <string>
 #include "Player.h"
 #include "TileBag.h"
+#include "Board.h"
 #define PROMPT "> "
 
 enum GameManagerState {
@@ -23,6 +24,7 @@ class GameManager {
     void doReplaceTile(std::string tile);
     Player* players[2];
     TileBag* tileBag;
+    Board* board;
 
   public:
     GameManager(Player* player1, Player* player2);

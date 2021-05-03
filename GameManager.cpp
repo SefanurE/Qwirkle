@@ -5,6 +5,7 @@ GameManager::GameManager(Player* player1, Player* player2) {
   players[0] = player1;
   players[1] = player2;
   tileBag = new TileBag();
+  board = new Board(20, 20);
 }
 
 void GameManager::startGame() {
@@ -88,7 +89,8 @@ void GameManager::parseCommand(std::string command) {
 }
 
 void GameManager::doQuit() {
-  std::cout << "TODO: IMPL QUIT" << std::endl;
+  std::cout << "Goodbye" << std::endl;
+  state = QUIT;
 }
 
 void GameManager::doSave(std::string path) {
@@ -96,9 +98,21 @@ void GameManager::doSave(std::string path) {
 }
 
 void GameManager::doPlaceTile(std::string tile, std::string position) {
+
   std::cout << "TODO: IMPL PLACE " << tile << " to " << position << "'" << std::endl;
 }
 
 void GameManager::doReplaceTile(std::string tile) {
+
+  /* Moved this to GameState
+  int i = 0;
+  while(!found && player.getHand()->get(i) != nullptr) {
+    if(tile == player.getHand()->get(i)->toString()) {
+      found = true;
+    }
+    ++i;
+  }
+  //std::cout << "Tile object to be replaced: " << player->getHand()->get(i) << std::endl;
   std::cout << "TODO: IMPL REPLACE " << tile << std::endl;
+  */
 }

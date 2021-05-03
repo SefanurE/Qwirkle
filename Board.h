@@ -10,6 +10,7 @@
 class Board{
 public:
 
+    Board();
     Board(int w, int h);
     ~Board();
     void setValues(int w, int h);

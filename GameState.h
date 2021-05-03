@@ -9,14 +9,16 @@
 
 class GameState {
   public:
-    GameState(Player* players);
+    GameState(std::string player1Name, std::string player2Name);
+    GameState(std::istream stream);
     ~GameState();
-    void InitialHand(LinkedList* hand);
+    std::string serialise();
 
   private:
-    Player* players;
+    void initHand(LinkedList* hand);
+    Player** players;
     Board* board;
-    TileBag bag;
+    TileBag* bag;
 };
 
 #endif //COSC_ASSIGN_TWO_GS

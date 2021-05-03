@@ -1,4 +1,5 @@
 #include "Menu.h"
+#include "GameManager.h"
 
 // Menu::Menu() {
 //     menuOption = "";
@@ -10,6 +11,7 @@ void Menu::mainMenu() {
               << "-------------------" << std::endl;
     displayMenu();
 
+    std::string menuOption = "";
     bool quit = false;
     while (!quit && !std::cin.eof()) {
         std::cout << "> ";
@@ -57,6 +59,9 @@ void Menu::newGame() {
 
     std::cout << std::endl;
     std::cout << "Let's Play!" << std::endl;
+
+    GameManager* gameManager = new GameManager();
+    gameManager->newGame(player1Name, player2Name);
 }
 
 std::string Menu::getNameInput() {
@@ -85,7 +90,12 @@ std::string Menu::getNameInput() {
 }
 
 void Menu::loadGame() {
-
+  std::cout << "Enter the filename from which load a game: " << std::endl;
+  std::cout << "> ";
+  std::string fileName;
+  std::cin >> fileName;
+  GameManager* gameManager = new GameManager();
+  gameManager->loadGame(fileName);
 }
 
 void Menu::printCredits() {

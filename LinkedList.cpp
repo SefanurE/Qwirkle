@@ -79,3 +79,18 @@ std::string LinkedList::toString() {
 int LinkedList::getSize() {
   return size;
 }
+
+void LinkedList::fromString(std::string listString) {
+  int charIndex = 0;
+  std::string currentBlock = "";
+  while (listString[charIndex] != '\0') {
+    if (listString[charIndex] != ',') {
+      currentBlock += listString[charIndex];
+    } else {
+      Tile* newTile = new Tile(currentBlock[0], currentBlock[1]);
+      push(newTile);
+      currentBlock = "";
+    }
+    charIndex++;
+  }
+}

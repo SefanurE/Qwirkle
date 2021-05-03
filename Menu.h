@@ -1,4 +1,4 @@
-
+#include <fstream>
 #include <iostream>
 #include <cstring>
 #include <cctype>
@@ -20,6 +20,4 @@ private:
     std::string getNameInput();
     void loadGame();
     void printCredits();
-
-    std::string menuOption;
 };

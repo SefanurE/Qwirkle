@@ -1,10 +1,9 @@
 #include "GameManager.h"
 #include <regex>
+#include <fstream>
 
-GameManager::GameManager(Player* player1, Player* player2) {
-  players[0] = player1;
-  players[1] = player2;
-  tileBag = new TileBag();
+GameManager::GameManager() {
+
 }
 
 void GameManager::startGame() {
@@ -33,8 +32,15 @@ void GameManager::startGame() {
   }
 }
 
-void GameManager::loadGameSave(std::string path) {
+void GameManager::newGame(std::string player1Name, std::string player2Name) {
+  gameState = new GameState(player1Name, player2Name);
+  startGame();
+}
 
+void GameManager::loadGame(std::string fileName) {
+  std::ifstream gameData(fileName);
+  gameState = new GameState(gameData);
+  startGame();
 }
 
 void GameManager::parseCommand(std::string command) {

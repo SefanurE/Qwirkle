@@ -10,7 +10,7 @@
 class GameState {
   public:
     GameState(std::string player1Name, std::string player2Name);
-    GameState(std::istream stream);
+    GameState(std::istream &stream);
     ~GameState();
     std::string serialise();
 

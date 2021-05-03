@@ -5,6 +5,10 @@ Player::Player(std::string name) {
   hand = new LinkedList();
 }
 
-LinkedList Player::getHand() {
+std::string Player::getName() {
+  return name;
+}
+
+LinkedList* Player::getHand() {
   return hand;
 }

@@ -1,9 +1,10 @@
 #include "GameManager.h"
 #include <regex>
 
-GameManager::GameManager(Player player1, Player player2) {
+GameManager::GameManager(Player* player1, Player* player2) {
   players[0] = player1;
   players[1] = player2;
+  tileBag = new TileBag();
 }
 
 void GameManager::startGame() {

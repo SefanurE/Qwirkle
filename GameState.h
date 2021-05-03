@@ -3,19 +3,20 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "Player.h"
+#include "TileBag.h"
 
 
 class GameState{
 public:
 
-    GameState(int w, int h);
+    GameState(Player* players);
     ~GameState();
+    void InitialHand(LinkedList* hand);
 
 
 
 private:
-
-
 
 
 };

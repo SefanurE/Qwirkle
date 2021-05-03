@@ -6,18 +6,14 @@
 #include "Player.h"
 #include "TileBag.h"
 
-
 class GameState{
-public:
+  public:
 
     GameState(Player* players);
     ~GameState();
     void InitialHand(LinkedList* hand);
 
-
-
-private:
-
+  private:
 
 };
 

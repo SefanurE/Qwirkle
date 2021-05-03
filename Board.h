@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+#include "Tile.h"
+#include "Board.h"
 
 class Board{
 public:
@@ -13,8 +15,7 @@ public:
     void setValues(int w, int h);
     void printBoard();
     void addTile(Tile tile, int row, int col);
-    std::vector<std::string> Board::tileLocations();
-
+    std::vector<std::string> tileLocations();
 
 private:
 

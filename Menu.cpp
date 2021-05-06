@@ -1,10 +1,6 @@
 #include "Menu.h"
 #include "GameManager.h"
 
-// Menu::Menu() {
-//     menuOption = "";
-// }
-
 void Menu::mainMenu() {
     std::cout << std::endl 
               << "Welcome to Qwirkle!" << std::endl
@@ -28,13 +24,13 @@ void Menu::mainMenu() {
             displayMenu();
         }
         else if (menuOption == QUIT_OPTION) {
-            std::cout << "Goodbye" << std::endl;
             quit = true;
         }
         else {
             std::cout << "Invalid input, try again" << std::endl;
         }
-    } 
+    }
+    std::cout << "Goodbye" << std::endl;
 }
 
 void Menu::displayMenu() {

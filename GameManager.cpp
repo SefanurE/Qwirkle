@@ -39,8 +39,13 @@ void GameManager::newGame(std::string player1Name, std::string player2Name) {
 
 void GameManager::loadGame(std::string fileName) {
   std::ifstream gameData(fileName);
-  gameState = new GameState(gameData);
-  startGame();
+  if (gameData.is_open()) {
+    gameState = new GameState(gameData);
+    startGame();
+  }
+  else {
+    std::cout << "Failed to read" << std::endl;
+  }
 }
 
 void GameManager::parseCommand(std::string command) {

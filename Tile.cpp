@@ -1,4 +1,7 @@
 #include "Tile.h"
+#include <iostream>
+#include <sstream> 
+#include <string> 
 
 Tile::Tile(Colour colour, Shape shape) {
   this->colour = colour;
@@ -6,5 +9,5 @@ Tile::Tile(Colour colour, Shape shape) {
 }
 
 std::string Tile::toString() {
-  return std::to_string(shape) + colour;
+  return colour + std::to_string(shape);
 }

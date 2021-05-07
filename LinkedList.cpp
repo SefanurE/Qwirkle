@@ -1,4 +1,5 @@
 #include "LinkedList.h"
+#include <iostream>
 
 LinkedList::LinkedList() {
    head = nullptr;
@@ -87,10 +88,14 @@ void LinkedList::fromString(std::string listString) {
     if (listString[charIndex] != ',') {
       currentBlock += listString[charIndex];
     } else {
-      Tile* newTile = new Tile(currentBlock[0], currentBlock[1]);
+      std::string shapeStr(1, currentBlock[1]);
+      Tile* newTile = new Tile(currentBlock[0], stoi(shapeStr));
       push(newTile);
       currentBlock = "";
     }
     charIndex++;
   }
+  std::string shapeStr(1, currentBlock[1]);
+  Tile* newTile = new Tile(currentBlock[0], stoi(shapeStr));
+  push(newTile);
 }

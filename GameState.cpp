@@ -14,6 +14,8 @@ GameState::GameState(std::string player1Name, std::string player2Name) {
 }
 
 GameState::GameState(std::istream &gameData) {
+  players = new Player*[2];
+
   std::string player1Name = "";
   getline(gameData, player1Name);
   players[0] = new Player(player1Name);
@@ -64,6 +66,7 @@ GameState::GameState(std::istream &gameData) {
   board = new Board(stoi(width), stoi(height));
   std::cout << width << "," << height << std::endl;
 
+  // TODO Read placed tiles
   std::string placedTileString = "";
   getline(gameData, placedTileString);
   board->fromString(placedTileString);

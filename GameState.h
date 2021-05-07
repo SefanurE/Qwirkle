@@ -6,23 +6,22 @@
 #include "Player.h"
 #include "TileBag.h"
 #include "Board.h"
-#include "LinkedList.h"
 
 class GameState {
   public:
-    GameState(Player currentPlayer, Board board, TileBag tileBag);
+    GameState(std::string player1Name, std::string player2Name);
     GameState(std::istream stream);
     ~GameState();
     std::string serialise();
-    void doPlaceTile(std::string tile, std::string position);
+    void doPlaceTile(std::string tile, std::string pos);
     void doReplaceTile(std::string tile);
 
   private:
-    Player player;
-    Board board;
-    TileBag tileBag;
-    bool found = false;
-
+    void initHand(LinkedList* hand);
+    Player* currentPlayer();
+    Player** players;
+    Board* board;
+    TileBag* bag;
 };
 
 #endif //COSC_ASSIGN_TWO_GS

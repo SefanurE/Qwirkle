@@ -1,13 +1,8 @@
 #include "Player.h"
 
-Player::Player() {
-}
-
 Player::Player(std::string name) {
   this->name = name;
   hand = new LinkedList();
-  initHand();
-
 }
 
 std::string Player::getName() {
@@ -18,8 +13,8 @@ LinkedList* Player::getHand() {
   return hand;
 }
 
-void Player::initHand() {
+void Player::initHand(TileBag* bag) {
     for(int i = 0; i < HANDSIZE; i++) {
-        hand->push(TileBag().draw());
+        hand->push(bag->draw());
     }
 }

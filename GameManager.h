@@ -22,12 +22,10 @@ class GameManager {
     void doSave(std::string path);
     void doPlaceTile(std::string tile, std::string position);
     void doReplaceTile(std::string tile);
-    Player* players[2];
-    TileBag* tileBag;
-    Board* board;
 
   public:
-    GameManager(Player* player1, Player* player2);
+    GameManager();
     void startGame();
-    void loadGameSave(std::string path);
+    void newGame(std::string player1Name, std::string player2Name);
+    void loadGame(std::string path);
 };

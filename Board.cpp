@@ -3,10 +3,6 @@
 #include <string>
 #include "Board.h"
 
-Board::Board() {
-
-}
-
 Board::Board(int w, int h) {
         setValues(w, h);
         rowLabels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -18,8 +14,6 @@ Board::Board(int w, int h) {
             gridVec.push_back(rowVec);
         }
 }
-
-
 
 Board::~Board(){
 }

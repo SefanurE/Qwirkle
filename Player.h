@@ -16,7 +16,7 @@ public:
   Player(std::string name);
   std::string getName();
   LinkedList* getHand();
-  void initHand();
+  void initHand(TileBag* bag);
 
 };
 

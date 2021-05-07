@@ -1,11 +1,10 @@
 #include "GameManager.h"
 #include <regex>
 
-GameManager::GameManager(Player* player1, Player* player2) {
-  players[0] = player1;
-  players[1] = player2;
-  tileBag = new TileBag();
-  board = new Board(20, 20);
+GameManager::GameManager() {}
+
+void GameManager::newGame(std::string player1Name, std::string player2Name) {
+
 }
 
 void GameManager::startGame() {
@@ -34,7 +33,7 @@ void GameManager::startGame() {
   }
 }
 
-void GameManager::loadGameSave(std::string path) {
+void GameManager::loadGame(std::string path) {
 
 }
 
@@ -103,16 +102,6 @@ void GameManager::doPlaceTile(std::string tile, std::string position) {
 }
 
 void GameManager::doReplaceTile(std::string tile) {
-
-  /* Moved this to GameState
-  int i = 0;
-  while(!found && player.getHand()->get(i) != nullptr) {
-    if(tile == player.getHand()->get(i)->toString()) {
-      found = true;
-    }
-    ++i;
-  }
-  //std::cout << "Tile object to be replaced: " << player->getHand()->get(i) << std::endl;
   std::cout << "TODO: IMPL REPLACE " << tile << std::endl;
-  */
+  // TODO: call to game state 
 }

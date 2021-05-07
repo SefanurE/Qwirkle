@@ -1,8 +1,5 @@
 #include "Menu.h"
-
-// Menu::Menu() {
-//     menuOption = "";
-// }
+#include "GameManager.h"
 
 void Menu::mainMenu() {
     std::cout << std::endl 
@@ -10,6 +7,7 @@ void Menu::mainMenu() {
               << "-------------------" << std::endl;
     displayMenu();
 
+    std::string menuOption = "";
     bool quit = false;
     while (!quit && !std::cin.eof()) {
         std::cout << "> ";
@@ -26,13 +24,13 @@ void Menu::mainMenu() {
             displayMenu();
         }
         else if (menuOption == QUIT_OPTION) {
-            std::cout << "Goodbye" << std::endl;
             quit = true;
         }
         else {
             std::cout << "Invalid input, try again" << std::endl;
         }
-    } 
+    }
+    std::cout << "Goodbye" << std::endl;
 }
 
 void Menu::displayMenu() {
@@ -57,6 +55,9 @@ void Menu::newGame() {
 
     std::cout << std::endl;
     std::cout << "Let's Play!" << std::endl;
+
+    GameManager* gameManager = new GameManager();
+    gameManager->newGame(player1Name, player2Name);
 }
 
 std::string Menu::getNameInput() {
@@ -85,7 +86,12 @@ std::string Menu::getNameInput() {
 }
 
 void Menu::loadGame() {
-
+  std::cout << "Enter the filename from which load a game: " << std::endl;
+  std::cout << "> ";
+  std::string fileName;
+  std::cin >> fileName;
+  GameManager* gameManager = new GameManager();
+  gameManager->loadGame(fileName);
 }
 
 void Menu::printCredits() {

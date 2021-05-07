@@ -16,7 +16,7 @@ public:
    Tile* remove(int index);
    Tile* get(int index);
    std::string toString();
-
+   void fromString(std::string listString);
 private:
    Node* head;
    int size;

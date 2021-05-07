@@ -1,4 +1,4 @@
-
+#include <fstream>
 #include <iostream>
 #include <cstring>
 #include <cctype>
@@ -10,7 +10,6 @@
 
 class Menu {
 public:
-    // Menu();
     void mainMenu();
     
 
@@ -20,6 +19,4 @@ private:
     std::string getNameInput();
     void loadGame();
     void printCredits();
-
-    std::string menuOption;
 };

@@ -48,13 +48,60 @@ void Board::printBoard() {
         }
     }
 
-void Board::addTile(Tile tile, int row, int col) {
+void Board::addTile(Tile* tile, int row, int col) {
     newTile = tile->toString();
     gridVec[col][row] = newTile;
     tilesOnBoard.push_back(newTile + "@" + std::to_string(row) + std::to_string(col));
-
 }
 
 std::vector<std::string> Board::tileLocations() {
     return tilesOnBoard;
+}
+
+void Board::fromString(std::string placedTileString) {
+  int charIndex = 0;
+  char tileColor = ' ';
+  std::string tileShape = "";
+  std::string column = "";
+  std::string row = "";
+  while (placedTileString[charIndex] != '\0') {
+    char character = placedTileString[charIndex];
+    if (character != ',' && character != ' ') {
+      if (tileColor == ' ') {
+        tileColor = character;
+      } else if (tileShape.empty()) {
+        tileShape = character;
+      } else if (column.empty()) {
+        column = character;
+      } else {
+        row = character;
+        Tile* newTile = new Tile(tileColor, stoi(tileShape));
+        addTile(newTile, stoi(row), stoi(column));
+        tileColor = ' ';
+        tileShape = "";
+        column = "";
+        row = "";
+      }
+    }
+    charIndex++;
+  }
+}
+
+std::string Board::toString() {
+  std::string boardString = "";
+  for (size_t i = 0; i < tilesOnBoard.size(); i++) {
+    boardString += tilesOnBoard[i];
+    if (i != tilesOnBoard.size() - 1) {
+      boardString += ", ";
+    }
+  }
+  return boardString;
+}
+
+int Board::getWidth() {
+  return width;
+}
+
+int Board::getHeight() {
+  return height;
 }

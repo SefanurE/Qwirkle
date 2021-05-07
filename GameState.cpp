@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <sstream>
 #include "GameState.h"
 #include "LinkedList.h"
 #include "TileBag.h"
@@ -13,32 +14,84 @@ GameState::GameState(std::string player1Name, std::string player2Name) {
 }
 
 GameState::GameState(std::istream &gameData) {
-
   std::string player1Name = "";
   getline(gameData, player1Name);
   players[0] = new Player(player1Name);
+  std::cout << players[0]->getName() << std::endl;
 
   std::string player1Score = "";
   getline(gameData, player1Score);
   players[0]->setScore(stoi(player1Score));
+  std::cout << players[0]->getScore() << std::endl;
 
   std::string player1Hand = "";
   getline(gameData, player1Hand);
   players[0]->getHand()->fromString(player1Hand);
+  std::cout << players[0]->getHand()->toString() << std::endl;
 
   std::string player2Name = "";
   getline(gameData, player2Name);
   players[1] = new Player(player2Name);
+  std::cout << players[1]->getName() << std::endl;
 
   std::string player2Score = "";
   getline(gameData, player2Score);
   players[1]->setScore(stoi(player2Score));
+  std::cout << players[1]->getScore() << std::endl;
 
   std::string player2Hand = "";
   getline(gameData, player2Hand);
   players[1]->getHand()->fromString(player2Hand);
+  std::cout << players[1]->getHand()->toString() << std::endl;
 
+  std::string boardShapeString = "";
+  getline(gameData, boardShapeString);
 
+  int charIndex = 0;
+  std::string width = "";
+  std::string height = "";
+  std::string block = "";
+  while (boardShapeString[charIndex] != '\0') {
+    if (boardShapeString[charIndex] != ',') {
+      block += boardShapeString[charIndex];
+    } else {
+      width = block;
+      block = "";
+    }
+    charIndex++;
+  }
+  height = block;
+  board = new Board(stoi(width), stoi(height));
+  std::cout << width << "," << height << std::endl;
+
+  std::string placedTileString = "";
+  getline(gameData, placedTileString);
+  board->fromString(placedTileString);
+  std::cout << board->toString() << std::endl;
+
+  // TODO Read tile locations
+  std::string tileLocationsString = "";
+  getline(gameData, tileLocationsString);
+
+  std::string tileBagString = "";
+  getline(gameData, tileBagString);
+
+  charIndex = 0;
+  block = "";
+  while (tileBagString[charIndex] != '\0') {
+    if (tileBagString[charIndex] != ',') {
+      block += tileBagString[charIndex];
+    } else {
+      Tile* newTile = new Tile(block[0], block[1]);
+      bag->getList()->push(newTile);
+      block = "";
+    }
+  }
+  Tile* newTile = new Tile(block[0], block[1]);
+  bag->getList()->push(newTile);
+
+  std::string currentPlayer = "";
+  getline(gameData, currentPlayer);
 }
 
 GameState::~GameState(){
@@ -50,7 +103,15 @@ GameState::~GameState(){
 }
 
 std::string GameState::serialise() {
-  return "";
+  std::stringstream ss;
+  for (int i = 0; i <= 1; i++) {
+    ss << players[i]->getName() << "\n" << players[i]->getScore() << "\n" <<
+       players[i]->getHand()->toString() << "\n";
+  }
+  ss << board->getWidth() << "," << board->getHeight() << "\n" <<
+  board->toString() << "\n" << bag->getList()->toString() << "\n";
+  // TODO Add current player tracker and add to serialise method
+  return ss.str();
 }
 
 void GameState::initHand(LinkedList* hand) {

@@ -6,5 +6,7 @@
 #define EXIT_SUCCESS    0
 
 int main(void) {
+  Menu* menu = new Menu();
+  menu->mainMenu();
   return EXIT_SUCCESS;
 }

@@ -14,19 +14,21 @@ public:
     ~Board();
     void setValues(int w, int h);
     void printBoard();
-    void addTile(Tile tile, int row, int col);
+    void addTile(Tile* tile, int row, int col);
     std::vector<std::string> tileLocations();
+    void fromString(std::string placedTileString);
+    int getWidth();
+    int getHeight();
+    std::string toString();
 
 private:
 
     int width, height;
     std::string rowLabels;
     std::vector<std::string> rowVec;
-    std::vector<std::vector<std::string> > gridVec;
+    std::vector<std::vector<std::string>> gridVec;
     std::vector<std::string> tilesOnBoard;
     std::string newTile;
-
-
 
 };
 

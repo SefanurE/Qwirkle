@@ -21,3 +21,9 @@ int Player::getScore() {
 void Player::setScore(int score) {
   this->score = score;
 }
+
+void Player::initHand(TileBag* bag) {
+    for(int i = 0; i < HANDSIZE; i++) {
+        hand->push(bag->draw());
+    }
+}

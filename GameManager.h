@@ -4,7 +4,7 @@
 #include "Player.h"
 #include "TileBag.h"
 #include "GameState.h"
-
+#include "Board.h"
 #define PROMPT "> "
 
 enum GameManagerState {

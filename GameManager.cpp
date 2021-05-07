@@ -99,7 +99,8 @@ void GameManager::parseCommand(std::string command) {
 }
 
 void GameManager::doQuit() {
-  std::cout << "TODO: IMPL QUIT" << std::endl;
+  std::cout << "Goodbye" << std::endl;
+  state = QUIT;
 }
 
 void GameManager::doSave(std::string path) {
@@ -107,9 +108,11 @@ void GameManager::doSave(std::string path) {
 }
 
 void GameManager::doPlaceTile(std::string tile, std::string position) {
+
   std::cout << "TODO: IMPL PLACE " << tile << " to " << position << "'" << std::endl;
 }
 
 void GameManager::doReplaceTile(std::string tile) {
   std::cout << "TODO: IMPL REPLACE " << tile << std::endl;
+  // TODO: call to game state 
 }

@@ -13,9 +13,12 @@ class GameState {
     GameState(std::istream &stream);
     ~GameState();
     std::string serialise();
+    void doPlaceTile(std::string tile, std::string pos);
+    void doReplaceTile(std::string tile);
 
   private:
     void initHand(LinkedList* hand);
+    Player* currentPlayer();
     Player** players;
     Board* board;
     TileBag* bag;

@@ -15,8 +15,8 @@ class GameState {
     GameState(std::istream &stream);
     ~GameState();
     std::string serialise();
-    void doPlaceTile(std::string tile, std::string pos);
-    void doReplaceTile(std::string tile);
+    bool doPlaceTile(std::string tile, std::string pos);
+    bool doReplaceTile(std::string tile);
     void showBeforeRoundOutput();
 
   private:

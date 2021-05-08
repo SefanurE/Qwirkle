@@ -11,8 +11,11 @@ GameManager::~GameManager() {
 void GameManager::startGame() {
   state = PLAYING;
   while (state == PLAYING) {
-    // Read in a command
-    gameState->showBeforeRoundOutput();
+    if (showRoundOutput) {
+      gameState->showBeforeRoundOutput();
+    } else {
+      std::cout << std::endl;
+    }
     std::cout << PROMPT;
     std::string command;
     bool readCommand = true;
@@ -30,6 +33,7 @@ void GameManager::startGame() {
     
     // Did we not quit?
     if (state == PLAYING) {
+      showRoundOutput = false;
       parseCommand(command);
     }
   }
@@ -81,13 +85,13 @@ void GameManager::parseCommand(std::string command) {
         } else if (args.size() == 1 && std::regex_match(buffer, std::regex(COMM_AT))) {
           args.push_back(buffer);
         } else if (args.size() == 2 && std::regex_match(buffer, std::regex(COMM_TILE))) {
-          doPlaceTile(args[0], buffer);
+          showRoundOutput = doPlaceTile(args[0], buffer);
         } else {
           std::cerr << "Malformed " << comm << " command." << std::endl;
         }
       } else if (comm == COMM_REPLACE) {
         if (std::regex_match(buffer, std::regex(COMM_TILE))) {
-          doReplaceTile(buffer);
+          showRoundOutput = doReplaceTile(buffer);
         } else {
           std::cerr << "Malformed " << comm << " command." << std::endl;
         }
@@ -110,11 +114,10 @@ void GameManager::doSave(std::string path) {
   std::cout << "TODO: SAVE to '" << path << "'" << std::endl;
 }
 
-void GameManager::doPlaceTile(std::string tile, std::string position) {
-
-  std::cout << "TODO: IMPL PLACE " << tile << " to " << position << "'" << std::endl;
+bool GameManager::doPlaceTile(std::string tile, std::string position) {
+  return gameState->doPlaceTile(tile, position);
 }
 
-void GameManager::doReplaceTile(std::string tile) {
-  gameState->doReplaceTile(tile);
+bool GameManager::doReplaceTile(std::string tile) {
+  return gameState->doReplaceTile(tile);
 }

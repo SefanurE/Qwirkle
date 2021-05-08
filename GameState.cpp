@@ -109,16 +109,17 @@ void GameState::showBeforeRoundOutput() {
   std::cout << std::endl << "Your hand is" << std::endl << getCurrentPlayer()->getHand()->toString() << std::endl << std::endl;
 }
 
-void GameState::doPlaceTile(std::string tile, std::string position) {
-  std::cout << "TODO: IMPL PLACE " << tile << " to " << position << "'" << std::endl;
-}
-
 Player* GameState::getCurrentPlayer() {
   // TODO: alternate players
   return players[0];
 }
 
-void GameState::doReplaceTile(std::string tile) {
+bool GameState::doPlaceTile(std::string tile, std::string position) {
+  std::cout << "TODO: IMPL PLACE " << tile << " to " << position << "'" << std::endl;
+  return false;
+}
+
+bool GameState::doReplaceTile(std::string tile) {
   Player* player = getCurrentPlayer();
   LinkedList* hand = player->getHand();
   bool found = false;
@@ -135,6 +136,8 @@ void GameState::doReplaceTile(std::string tile) {
   } else {
     std::cout << "You do not have a " << tile << " tile!" << std::endl;
   }
+
+  return found;
 }
 
 GameState::~GameState(){

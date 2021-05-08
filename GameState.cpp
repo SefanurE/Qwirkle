@@ -80,9 +80,7 @@ GameState::GameState(std::istream &gameData) {
   std::string tileBagString = "";
   getline(gameData, tileBagString);
 
-  // charIndex = 0;
   block = "";
-  // while (tileBagString[charIndex] != '\0') {
   for (char c : tileBagString) {
     if (c != ',') {
       block += c;

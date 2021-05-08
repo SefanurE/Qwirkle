@@ -101,7 +101,7 @@ GameState::GameState(std::istream &gameData) {
 }
 
 void GameState::showBeforeRoundOutput() {
-  std::cout << getCurrentPlayer()->getName() << ", it's your turn" << std::endl;
+  std::cout << std::endl << getCurrentPlayer()->getName() << ", it's your turn" << std::endl;
   for (int playerIndex = 0; playerIndex < PLAYER_COUNT; playerIndex++) {
     std::cout << "Score for " << players[playerIndex]->getName() << ": " << players[playerIndex]->getScore() << std::endl;
   }
@@ -129,6 +129,11 @@ void GameState::doReplaceTile(std::string tile) {
       bag->shuffle();
       found = true;
     }
+  }
+  if (found) {
+    // TODO: swap players
+  } else {
+    std::cout << "You do not have a " << tile << " tile!" << std::endl;
   }
 }
 

@@ -56,37 +56,37 @@ void GameManager::parseCommand(std::string command) {
   std::string comm = "";
   std::vector<std::string> args;
   for (size_t i = 0; i < command.length(); i++) {
-    char c = std::tolower(command[i]);
+    char c = std::toupper(command[i]);
     if (!std::isspace(c)) {
       buffer.push_back(c);
     }
     if (std::isspace(c) || i == command.length() - 1) {
       if (comm == "") {
-        if (std::regex_match(buffer, std::regex("quit"))) {
+        if (std::regex_match(buffer, std::regex(COMM_QUIT))) {
           doQuit();
-        } else if (std::regex_match(buffer, std::regex("save"))) {
-          comm = "save";
-        } else if (std::regex_match(buffer, std::regex("place"))) {
-          comm = "place";
-        } else if (std::regex_match(buffer, std::regex("replace"))) {
-          comm = "replace";
+        } else if (std::regex_match(buffer, std::regex(COMM_SAVE))) {
+          comm = COMM_SAVE;
+        } else if (std::regex_match(buffer, std::regex(COMM_PLACE))) {
+          comm = COMM_PLACE;
+        } else if (std::regex_match(buffer, std::regex(COMM_REPLACE))) {
+          comm = COMM_REPLACE;
         } else {
           std::cerr << "Unrecognised command '" << buffer << "'" << std::endl;
         }
-      } else if (comm == "save") {
+      } else if (comm == COMM_SAVE) {
         doSave(buffer);
-      } else if (comm == "place") {
-        if (args.size() == 0 && std::regex_match(buffer, std::regex("[a-z][0-9]"))) {
+      } else if (comm == COMM_PLACE) {
+        if (args.size() == 0 && std::regex_match(buffer, std::regex(COMM_TILE))) {
           args.push_back(buffer);
-        } else if (args.size() == 1 && std::regex_match(buffer, std::regex("at"))) {
+        } else if (args.size() == 1 && std::regex_match(buffer, std::regex(COMM_AT))) {
           args.push_back(buffer);
-        } else if (args.size() == 2 && std::regex_match(buffer, std::regex("[a-z][0-9]"))) {
+        } else if (args.size() == 2 && std::regex_match(buffer, std::regex(COMM_TILE))) {
           doPlaceTile(args[0], buffer);
         } else {
           std::cerr << "Malformed " << comm << " command." << std::endl;
         }
-      } else if (comm == "replace") {
-        if (std::regex_match(buffer, std::regex("[a-z][0-9]"))) {
+      } else if (comm == COMM_REPLACE) {
+        if (std::regex_match(buffer, std::regex(COMM_TILE))) {
           doReplaceTile(buffer);
         } else {
           std::cerr << "Malformed " << comm << " command." << std::endl;

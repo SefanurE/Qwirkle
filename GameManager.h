@@ -29,7 +29,7 @@ class GameManager {
     void doPlaceTile(std::string tile, std::string position);
     void doReplaceTile(std::string tile);
     GameState* gameState;
-    GameManagerState state = DEFAULT;
+    GameManagerState status = DEFAULT;
     bool showRoundOutput = true;
 
   public:

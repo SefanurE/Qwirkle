@@ -9,8 +9,8 @@ GameManager::~GameManager() {
 }
 
 void GameManager::startGame() {
-  state = PLAYING;
-  while (state == PLAYING) {
+  status = PLAYING;
+  while (status == PLAYING) {
     if (showRoundOutput) {
       gameState->showBeforeRoundOutput();
     } else {
@@ -22,7 +22,7 @@ void GameManager::startGame() {
     while (readCommand) {
       char c = std::cin.get();
       if (c == EOF) {
-        state = QUIT;
+        status = QUIT;
         readCommand = false;
       } else if (c == '\n') {
         readCommand = false;
@@ -32,7 +32,7 @@ void GameManager::startGame() {
     }
     
     // Did we not quit?
-    if (state == PLAYING) {
+    if (status == PLAYING) {
       showRoundOutput = false;
       parseCommand(command);
     }
@@ -107,7 +107,7 @@ void GameManager::parseCommand(std::string command) {
 
 void GameManager::doQuit() {
   std::cout << "Goodbye" << std::endl;
-  state = QUIT;
+  status = QUIT;
 }
 
 void GameManager::doSave(std::string path) {

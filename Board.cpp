@@ -59,22 +59,20 @@ std::vector<std::string> Board::tileLocations() {
 }
 
 void Board::fromString(std::string placedTileString) {
-  int charIndex = 0;
   char tileColor = ' ';
   std::string tileShape = "";
   std::string column = "";
   std::string row = "";
-  while (placedTileString[charIndex] != '\0') {
-    char character = placedTileString[charIndex];
-    if (character != ',' && character != ' ') {
+  for (char c : placedTileString) {
+    if (c != ',' && c != ' ') {
       if (tileColor == ' ') {
-        tileColor = character;
+        tileColor = c;
       } else if (tileShape.empty()) {
-        tileShape = character;
+        tileShape = c;
       } else if (column.empty()) {
-        column = character;
+        column = c;
       } else {
-        row = character;
+        row = c;
         Tile* newTile = new Tile(tileColor, stoi(tileShape));
         addTile(newTile, stoi(row), stoi(column));
         tileColor = ' ';
@@ -83,7 +81,6 @@ void Board::fromString(std::string placedTileString) {
         row = "";
       }
     }
-    charIndex++;
   }
 }
 

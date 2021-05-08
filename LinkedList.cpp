@@ -82,18 +82,16 @@ int LinkedList::getSize() {
 }
 
 void LinkedList::fromString(std::string listString) {
-  int charIndex = 0;
   std::string currentBlock = "";
-  while (listString[charIndex] != '\0') {
-    if (listString[charIndex] != ',') {
-      currentBlock += listString[charIndex];
+  for (char c : listString) {
+    if (c != ',') {
+      currentBlock += c;
     } else {
       std::string shapeStr(1, currentBlock[1]);
       Tile* newTile = new Tile(currentBlock[0], stoi(shapeStr));
       push(newTile);
       currentBlock = "";
     }
-    charIndex++;
   }
   std::string shapeStr(1, currentBlock[1]);
   Tile* newTile = new Tile(currentBlock[0], stoi(shapeStr));

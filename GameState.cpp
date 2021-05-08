@@ -52,18 +52,16 @@ GameState::GameState(std::istream &gameData) {
   std::string boardShapeString = "";
   getline(gameData, boardShapeString);
 
-  int charIndex = 0;
   std::string width = "";
   std::string height = "";
   std::string block = "";
-  while (boardShapeString[charIndex] != '\0') {
-    if (boardShapeString[charIndex] != ',') {
-      block += boardShapeString[charIndex];
+  for (char c : boardShapeString) {
+    if (c != ',') {
+      block += c;
     } else {
       width = block;
       block = "";
     }
-    charIndex++;
   }
   height = block;
   board = new Board(stoi(width), stoi(height));
@@ -82,11 +80,12 @@ GameState::GameState(std::istream &gameData) {
   std::string tileBagString = "";
   getline(gameData, tileBagString);
 
-  charIndex = 0;
+  // charIndex = 0;
   block = "";
-  while (tileBagString[charIndex] != '\0') {
-    if (tileBagString[charIndex] != ',') {
-      block += tileBagString[charIndex];
+  // while (tileBagString[charIndex] != '\0') {
+  for (char c : tileBagString) {
+    if (c != ',') {
+      block += c;
     } else {
       Tile* newTile = new Tile(block[0], block[1]);
       bag->getList()->push(newTile);

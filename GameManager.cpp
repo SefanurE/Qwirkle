@@ -12,6 +12,7 @@ void GameManager::startGame() {
   state = PLAYING;
   while (state == PLAYING) {
     // Read in a command
+    gameState->showBeforeRoundOutput();
     std::cout << PROMPT;
     std::string command;
     bool readCommand = true;

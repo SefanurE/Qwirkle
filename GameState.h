@@ -15,6 +15,7 @@ class GameState {
     std::string serialise();
     void doPlaceTile(std::string tile, std::string pos);
     void doReplaceTile(std::string tile);
+    void showBeforeRoundOutput();
 
   private:
     void initHand(LinkedList* hand);

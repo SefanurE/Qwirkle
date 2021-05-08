@@ -100,6 +100,10 @@ GameState::GameState(std::istream &gameData) {
   getline(gameData, currentPlayer);
 }
 
+void GameState::showBeforeRoundOutput() {
+
+}
+
 void GameState::doPlaceTile(std::string tile, std::string position) {
   std::cout << "TODO: IMPL PLACE " << tile << " to " << position << "'" << std::endl;
 }

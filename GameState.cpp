@@ -7,6 +7,7 @@
 #include "TileBag.h"
 
 GameState::GameState(std::string player1Name, std::string player2Name) {
+  players = new Player*[2];
   players[0] = new Player(player1Name);
   players[1] = new Player(player2Name);
   board = new Board(20, 20);

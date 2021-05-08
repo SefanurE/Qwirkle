@@ -58,6 +58,9 @@ void Menu::newGame() {
 
     GameManager* gameManager = new GameManager();
     gameManager->newGame(player1Name, player2Name);
+
+    // Game is over, cleanup
+    delete gameManager;
 }
 
 std::string Menu::getNameInput() {
@@ -92,6 +95,7 @@ void Menu::loadGame() {
   std::cin >> fileName;
   GameManager* gameManager = new GameManager();
   gameManager->loadGame(fileName);
+  delete gameManager;
 }
 
 void Menu::printCredits() {

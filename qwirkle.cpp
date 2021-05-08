@@ -8,5 +8,6 @@
 int main(void) {
   Menu* menu = new Menu();
   menu->mainMenu();
+  delete menu;
   return EXIT_SUCCESS;
 }

@@ -110,18 +110,16 @@ Player* GameState::currentPlayer() {
 }
 
 void GameState::doReplaceTile(std::string tile) {
-  int i = 0;
-  bool found = false;
   Player* player = currentPlayer();
-  while (!found && player->getHand()->get(i) != nullptr) {
-    if (tile == player->getHand()->get(i)->toString()) {
-      player->getHand()->remove(i);
-      player->getHand()->push(bag->draw());
-      bag->getList()->push(player->getHand()->get(i));
+  LinkedList* hand = player->getHand();
+  bool found = false;
+  for (int i = 0; !found && i < hand->getSize(); i++) {
+    if (tile == hand->get(i)->toString()) {
+      hand->push(bag->draw());
+      bag->getList()->push(hand->remove(i));
       bag->shuffle();
-      found = true;  
+      found = true;
     }
-    i++;
   }
 }
 

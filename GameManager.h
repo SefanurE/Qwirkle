@@ -26,8 +26,8 @@ class GameManager {
     void parseCommand(std::string command);
     void doQuit();
     void doSave(std::string path);
-    bool doPlaceTile(std::string tile, std::string position);
-    bool doReplaceTile(std::string tile);
+    void doPlaceTile(std::string tile, std::string position);
+    void doReplaceTile(std::string tile);
     GameState* gameState;
     GameManagerState state = DEFAULT;
     bool showRoundOutput = true;

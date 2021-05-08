@@ -85,13 +85,13 @@ void GameManager::parseCommand(std::string command) {
         } else if (args.size() == 1 && std::regex_match(buffer, std::regex(COMM_AT))) {
           args.push_back(buffer);
         } else if (args.size() == 2 && std::regex_match(buffer, std::regex(COMM_TILE))) {
-          showRoundOutput = doPlaceTile(args[0], buffer);
+          doPlaceTile(args[0], buffer);
         } else {
           std::cerr << "Malformed " << comm << " command." << std::endl;
         }
       } else if (comm == COMM_REPLACE) {
         if (std::regex_match(buffer, std::regex(COMM_TILE))) {
-          showRoundOutput = doReplaceTile(buffer);
+          doReplaceTile(buffer);
         } else {
           std::cerr << "Malformed " << comm << " command." << std::endl;
         }
@@ -114,10 +114,12 @@ void GameManager::doSave(std::string path) {
   std::cout << "TODO: SAVE to '" << path << "'" << std::endl;
 }
 
-bool GameManager::doPlaceTile(std::string tile, std::string position) {
-  return gameState->doPlaceTile(tile, position);
+void GameManager::doPlaceTile(std::string tile, std::string position) {
+  bool success = gameState->doPlaceTile(tile, position);
+  showRoundOutput = success;
 }
 
-bool GameManager::doReplaceTile(std::string tile) {
-  return gameState->doReplaceTile(tile);
+void GameManager::doReplaceTile(std::string tile) {
+  bool success = gameState->doReplaceTile(tile);
+  showRoundOutput = success;
 }

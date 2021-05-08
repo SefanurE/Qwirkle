@@ -36,8 +36,8 @@ void GameManager::startGame() {
 
 void GameManager::newGame(std::string player1Name, std::string player2Name) {
   std::cout << "starting game w/ players" << player1Name << player2Name << std::endl;
-  gameState = new GameState(player1Name, player2Name);
-  startGame();
+  //gameState = new GameState(player1Name, player2Name);
+  //startGame();
 }
 
 void GameManager::loadGame(std::string fileName) {

@@ -12,8 +12,10 @@ private:
   std::string name;
   LinkedList* hand;
   int score;
+
 public:
   Player();
+  ~Player();
   Player(std::string name);
   std::string getName();
   LinkedList* getHand();

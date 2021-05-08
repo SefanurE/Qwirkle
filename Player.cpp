@@ -6,6 +6,10 @@ Player::Player(std::string name) {
   score = 0;
 }
 
+Player::~Player() {
+  delete hand;
+}
+
 std::string Player::getName() {
   return name;
 }

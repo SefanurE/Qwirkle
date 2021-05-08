@@ -101,20 +101,25 @@ GameState::GameState(std::istream &gameData) {
 }
 
 void GameState::showBeforeRoundOutput() {
-
+  std::cout << getCurrentPlayer()->getName() << ", it's your turn" << std::endl;
+  for (int playerIndex = 0; playerIndex < PLAYER_COUNT; playerIndex++) {
+    std::cout << "Score for " << players[playerIndex]->getName() << ": " << players[playerIndex]->getScore() << std::endl;
+  }
+  board->printBoard();
+  std::cout << std::endl << "Your hand is" << std::endl << getCurrentPlayer()->getHand()->toString() << std::endl << std::endl;
 }
 
 void GameState::doPlaceTile(std::string tile, std::string position) {
   std::cout << "TODO: IMPL PLACE " << tile << " to " << position << "'" << std::endl;
 }
 
-Player* GameState::currentPlayer() {
+Player* GameState::getCurrentPlayer() {
   // TODO: alternate players
   return players[0];
 }
 
 void GameState::doReplaceTile(std::string tile) {
-  Player* player = currentPlayer();
+  Player* player = getCurrentPlayer();
   LinkedList* hand = player->getHand();
   bool found = false;
   for (int i = 0; !found && i < hand->getSize(); i++) {

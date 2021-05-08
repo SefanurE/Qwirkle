@@ -7,6 +7,8 @@
 #include "TileBag.h"
 #include "Board.h"
 
+#define PLAYER_COUNT 2
+
 class GameState {
   public:
     GameState(std::string player1Name, std::string player2Name);
@@ -19,7 +21,7 @@ class GameState {
 
   private:
     void initHand(LinkedList* hand);
-    Player* currentPlayer();
+    Player* getCurrentPlayer();
     Player** players;
     Board* board;
     TileBag* bag;

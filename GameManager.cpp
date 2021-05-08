@@ -2,8 +2,10 @@
 #include <regex>
 #include <fstream>
 
-GameManager::GameManager() {
+GameManager::GameManager() {}
 
+GameManager::~GameManager() {
+  delete gameState;
 }
 
 void GameManager::startGame() {
@@ -33,6 +35,7 @@ void GameManager::startGame() {
 }
 
 void GameManager::newGame(std::string player1Name, std::string player2Name) {
+  std::cout << "starting game w/ players" << player1Name << player2Name << std::endl;
   gameState = new GameState(player1Name, player2Name);
   startGame();
 }

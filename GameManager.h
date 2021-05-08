@@ -15,8 +15,6 @@ enum GameManagerState {
 
 class GameManager {
 
-  GameManagerState state = DEFAULT;
-
   private:
     void parseCommand(std::string command);
     void doQuit();
@@ -24,9 +22,10 @@ class GameManager {
     void doPlaceTile(std::string tile, std::string position);
     void doReplaceTile(std::string tile);
     GameState* gameState;
+    GameManagerState state = DEFAULT;
 
   public:
-    GameManager();
+    GameManager(); ~GameManager();
     void startGame();
     void newGame(std::string player1Name, std::string player2Name);
     void loadGame(std::string fileName);

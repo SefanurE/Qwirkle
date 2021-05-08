@@ -11,7 +11,7 @@ void Menu::mainMenu() {
     bool quit = false;
     while (!quit && !std::cin.eof()) {
         std::cout << "> ";
-        std::cin >> menuOption;
+        std::getline(std::cin, menuOption);
         std::cout << std::endl;
         if (menuOption == NEW_GAME_OPTION) {
             newGame();
@@ -69,7 +69,7 @@ std::string Menu::getNameInput() {
     bool nameIsOnlyUppercase = true;
     while (!exitWhile && !std::cin.eof()) {
         std::cout << "> ";
-        std::cin >> playerName;
+        std::getline(std::cin, playerName);
 
         for (char c : playerName) {
             if (c < 'A' || c > 'Z') {
@@ -92,7 +92,7 @@ void Menu::loadGame() {
   std::cout << "Enter the filename from which load a game: " << std::endl;
   std::cout << "> ";
   std::string fileName;
-  std::cin >> fileName;
+  std::getline(std::cin, fileName);
   GameManager* gameManager = new GameManager();
   gameManager->loadGame(fileName);
   delete gameManager;

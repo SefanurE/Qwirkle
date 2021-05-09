@@ -17,6 +17,8 @@ public:
    Tile* get(int index);
    std::string toString();
    void fromString(std::string listString);
+   int getIndexOf(std::string tileString);
+
 private:
    Node* head;
    int size;

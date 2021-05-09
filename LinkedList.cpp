@@ -29,7 +29,7 @@ void LinkedList::push(Tile *tile) {
 }
 
 Tile* LinkedList::pop() {
-  return remove(size - 1);;
+  return remove(0);;
 }
 
 void LinkedList::insertAfter(int index, Tile *tile) {
@@ -96,4 +96,16 @@ void LinkedList::fromString(std::string listString) {
   std::string shapeStr(1, currentBlock[1]);
   Tile* newTile = new Tile(currentBlock[0], stoi(shapeStr));
   push(newTile);
+}
+
+int LinkedList::getIndexOf(std::string tileString) {
+  bool found = false;
+  int index = -1;
+  for (int i = 0; !found && i < size; i++) {
+    if (tileString == get(i)->toString()) {
+      found = true;
+      index = i;
+    }
+  }
+  return index;
 }

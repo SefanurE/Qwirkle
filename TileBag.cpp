@@ -9,6 +9,25 @@ TileBag::TileBag() {
       tiles->push(new Tile(colours[j], shape));
     }
   }
+  shuffle();
+}
+
+TileBag::TileBag(std::string tileBagString) {
+  tiles = new LinkedList();
+  std::string block = "";
+  for (char c : tileBagString) {
+    if (c != ',') {
+      block += c;
+    } else {
+      Tile* newTile = new Tile(block[0], atoi(&block[1]));
+      std::cout << newTile->toString() << std::endl;
+      tiles->push(newTile);
+      block = "";
+    }
+  }
+  Tile* newTile = new Tile(block[0], atoi(&block[1]));
+  tiles->push(newTile);
+  shuffle();
 }
 
 void TileBag::shuffle() {

@@ -1,0 +1,30 @@
+#ifndef COSC_ASSIGN_TWO_GAMEPLAY
+#define COSC_ASSIGN_TWO_GAMEPLAY
+#include <iostream>
+#include <vector>
+#include <string>
+#include "Tile.h"
+#include "Board.h"
+
+class GamePlay {
+public:
+    Board(int width, int height);
+    Board(std::string boardShapeString, std::string placedTilesString);
+    ~Board();
+    void printBoard();
+    void addTile(Tile* tile, char col, std::string row);
+    Tile* getPosition(char row, char col);
+    int getWidth();
+    int getHeight();
+    std::string toString();
+
+private:
+
+    int width, height;
+    std::string rowLabels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    std::vector<std::vector<Tile*>> gridVec;
+    int columnToInt(char columnLabel);
+    void initGrid();
+};
+
+#endif //COSC_ASSIGN_TWO_GAMEPLAY

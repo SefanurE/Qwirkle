@@ -20,6 +20,7 @@ public:
   std::string getName();
   LinkedList* getHand();
   void setScore(int score);
+  void updateScore(int newScore);
   int getScore();
   void initHand(TileBag* bag);
 };

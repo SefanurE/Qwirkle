@@ -21,7 +21,6 @@ class GameState {
     void showBeforeRoundOutput();
 
   private:
-    void initHand(LinkedList* hand);
     Player* getCurrentPlayer();
     Player** players;
     Board* board;

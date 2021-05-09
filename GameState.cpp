@@ -120,9 +120,3 @@ std::string GameState::serialise() {
   // TODO Add current player tracker and add to serialise method
   return ss.str();
 }
-
-void GameState::initHand(LinkedList* hand) {
-    for(int i = 0; i < 6; i++) {
-        hand->push(TileBag().draw());
-    }
-}

@@ -19,7 +19,6 @@ public:
   Player(std::string name);
   std::string getName();
   LinkedList* getHand();
-  void addHand(Tile* tile);
   void setScore(int score);
   int getScore();
   void initHand(TileBag* bag);

@@ -3,25 +3,52 @@
 #include <string>
 #include "Board.h"
 
-Board::Board(int w, int h) {
-        setValues(w, h);
-        rowLabels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        
-        for (int j = 0; j < height; j++) {
-            for (int i = 0; i < width; i++) {
-                rowVec.push_back("  ");
-            }
-            gridVec.push_back(rowVec);
+Board::Board(int width, int height) {
+  this->width = width;
+  this->height = height;
+  initGrid();
+}
+
+Board::Board(std::string boardShapeString, std::string placedTilesString) {
+  std::string widthString = "";
+  std::string block = "";
+  for (char c : boardShapeString) {
+    if (c != ',') {
+      block += c;
+    } else {
+      widthString = block;
+      block = "";
+    }
+  }
+  width = stoi(widthString);
+  height = stoi(block);
+
+  initGrid();
+
+  block = "";
+  for (char c : placedTilesString) {
+    if (c == ',') {
+      for (size_t i = 0; i < block.length(); i++) {
+        if (block[i] == '@') {
+          Tile* tile = new Tile(block[0], atoi(&block[1]));
+          addTile(tile, block[i + 1], block.substr(i + 2, block.length()));
         }
+      }
+      block = "";
+    } else {
+      block += c;
+    }
+  }
 }
 
 Board::~Board(){
+
 }
 
-
-void Board::setValues(int w, int h) {
-    width = w;
-    height = h;
+void Board::initGrid() {
+  for (int i = 0; i < height; i++) {
+    gridVec.push_back(std::vector<Tile*>(width));
+  }
 }
 
 void Board::printBoard() {
@@ -32,7 +59,7 @@ void Board::printBoard() {
             } else {
                 std::cout << " " << a;
             }
-            
+
         }
         std::cout << "\n" << "  ";
         for (int a = 0; a < width; a++) {
@@ -42,60 +69,22 @@ void Board::printBoard() {
         for (int x = 0; x < height; x++) {
             std::cout << rowLabels[x] << " |";
             for (int y = 0; y < width; y++) {
-                std::cout << gridVec[x][y] << "|";
+                if (gridVec[x][y] != nullptr) {
+                  std::cout << gridVec[x][y]->toString() << "|";
+                } else {
+                  std::cout << "  |";
+                }
             }
             std::cout << "\n";
         }
     }
 
-void Board::addTile(Tile* tile, int row, int col) {
-    newTile = tile->toString();
-    gridVec[col][row] = newTile;
-    tilesOnBoard.push_back(newTile + "@" + std::to_string(row) + std::to_string(col));
-}
-
-std::vector<std::string> Board::tileLocations() {
-    return tilesOnBoard;
-}
-
-void Board::fromString(std::string placedTileString) {
-  int charIndex = 0;
-  char tileColor = ' ';
-  std::string tileShape = "";
-  std::string column = "";
-  std::string row = "";
-  while (placedTileString[charIndex] != '\0') {
-    char character = placedTileString[charIndex];
-    if (character != ',' && character != ' ') {
-      if (tileColor == ' ') {
-        tileColor = character;
-      } else if (tileShape.empty()) {
-        tileShape = character;
-      } else if (column.empty()) {
-        column = character;
-      } else {
-        row = character;
-        Tile* newTile = new Tile(tileColor, stoi(tileShape));
-        addTile(newTile, stoi(row), stoi(column));
-        tileColor = ' ';
-        tileShape = "";
-        column = "";
-        row = "";
-      }
-    }
-    charIndex++;
-  }
+void Board::addTile(Tile* tile, char col, std::string row) {
+    gridVec[columnToInt(col)][std::stoi(row)] = tile;
 }
 
 std::string Board::toString() {
-  std::string boardString = "";
-  for (size_t i = 0; i < tilesOnBoard.size(); i++) {
-    boardString += tilesOnBoard[i];
-    if (i != tilesOnBoard.size() - 1) {
-      boardString += ", ";
-    }
-  }
-  return boardString;
+  return "";
 }
 
 int Board::getWidth() {
@@ -105,3 +94,19 @@ int Board::getWidth() {
 int Board::getHeight() {
   return height;
 }
+
+Tile* Board::getPosition(char col, char row) {
+  return gridVec[columnToInt(col)][std::stoi(&row)];
+}
+
+int Board::columnToInt(char columnLabel) {
+  std::string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  int index = -1;
+  for (size_t i = 0; i < alphabet.length() && index == -1; i++) {
+    if (alphabet[i] == columnLabel) {
+      index = i;
+    }
+  }
+  return index;
+}
+

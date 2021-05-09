@@ -17,87 +17,30 @@ GameState::GameState(std::string player1Name, std::string player2Name) {
 }
 
 GameState::GameState(std::istream &gameData) {
-  players = new Player*[2];
+  players = new Player*[PLAYER_COUNT];
 
-  std::string player1Name = "";
-  getline(gameData, player1Name);
-  players[0] = new Player(player1Name);
-  std::cout << players[0]->getName() << std::endl;
-
-  std::string player1Score = "";
-  getline(gameData, player1Score);
-  players[0]->setScore(stoi(player1Score));
-  std::cout << players[0]->getScore() << std::endl;
-
-  std::string player1Hand = "";
-  getline(gameData, player1Hand);
-  players[0]->getHand()->fromString(player1Hand);
-  std::cout << players[0]->getHand()->toString() << std::endl;
-
-  std::string player2Name = "";
-  getline(gameData, player2Name);
-  players[1] = new Player(player2Name);
-  std::cout << players[1]->getName() << std::endl;
-
-  std::string player2Score = "";
-  getline(gameData, player2Score);
-  players[1]->setScore(stoi(player2Score));
-  std::cout << players[1]->getScore() << std::endl;
-
-  std::string player2Hand = "";
-  getline(gameData, player2Hand);
-  players[1]->getHand()->fromString(player2Hand);
-  std::cout << players[1]->getHand()->toString() << std::endl;
+  for (int i = 0; i < PLAYER_COUNT; i++) {
+    std::string tempPlayerInfoString = "";
+    getline(gameData, tempPlayerInfoString);
+    players[i] = new Player(tempPlayerInfoString);
+    getline(gameData, tempPlayerInfoString);
+    players[i]->setScore(stoi(tempPlayerInfoString));
+    getline(gameData, tempPlayerInfoString);
+    players[i]->getHand()->fromString(tempPlayerInfoString);
+  }
 
   std::string boardShapeString = "";
   getline(gameData, boardShapeString);
-
-  int charIndex = 0;
-  std::string width = "";
-  std::string height = "";
-  std::string block = "";
-  while (boardShapeString[charIndex] != '\0') {
-    if (boardShapeString[charIndex] != ',') {
-      block += boardShapeString[charIndex];
-    } else {
-      width = block;
-      block = "";
-    }
-    charIndex++;
-  }
-  height = block;
-  board = new Board(stoi(width), stoi(height));
-  std::cout << width << "," << height << std::endl;
-
-  // TODO Read placed tiles
   std::string placedTileString = "";
   getline(gameData, placedTileString);
-  board->fromString(placedTileString);
-  std::cout << board->toString() << std::endl;
 
-  // TODO Read tile locations
-  std::string tileLocationsString = "";
-  getline(gameData, tileLocationsString);
+  board = new Board(boardShapeString, placedTileString);
 
   std::string tileBagString = "";
   getline(gameData, tileBagString);
+  bag = new TileBag(tileBagString);
 
-  charIndex = 0;
-  block = "";
-  while (tileBagString[charIndex] != '\0') {
-    if (tileBagString[charIndex] != ',') {
-      block += tileBagString[charIndex];
-    } else {
-      Tile* newTile = new Tile(block[0], block[1]);
-      bag->getList()->push(newTile);
-      block = "";
-    }
-  }
-  Tile* newTile = new Tile(block[0], block[1]);
-  bag->getList()->push(newTile);
-
-  std::string currentPlayer = "";
-  getline(gameData, currentPlayer);
+  // TODO: Current players (EWAN)
 }
 
 void GameState::showBeforeRoundOutput() {
@@ -107,6 +50,29 @@ void GameState::showBeforeRoundOutput() {
   }
   board->printBoard();
   std::cout << std::endl << "Your hand is" << std::endl << getCurrentPlayer()->getHand()->toString() << std::endl << std::endl;
+  std::cout << "BAG CONTAINS " << bag->getList()->toString() << std::endl;
+}
+
+bool GameState::doPlaceTile(std::string tileString, std::string position) {
+  // Player* player = getCurrentPlayer();
+  Player* player = players[0];
+  bool success = false;
+  int tileIndex = player->getHand()->getIndexOf(tileString);
+  if (tileIndex != TILE_NOT_FOUND) {
+    if (board->getPosition(position[0], position[1]) == nullptr) {
+      Tile* tile = player->getHand()->remove(tileIndex);
+      board->addTile(tile, position[0], position.substr(1, position.length()));
+      if (bag->getList()->getSize() > 0) {
+        player->getHand()->push(bag->draw());
+      }
+      success = true;
+    } else {
+      std::cout << "There is already a tile in position " << position << std::endl;
+    }
+  } else {
+    std::cout << "You do not have a " << tileString << " tile!" << std::endl;
+  }
+  return success;
 }
 
 Player* GameState::getCurrentPlayer() {
@@ -114,30 +80,25 @@ Player* GameState::getCurrentPlayer() {
   return players[0];
 }
 
-bool GameState::doPlaceTile(std::string tile, std::string position) {
-  std::cout << "TODO: IMPL PLACE " << tile << " to " << position << "'" << std::endl;
-  return false;
-}
-
 bool GameState::doReplaceTile(std::string tile) {
   Player* player = getCurrentPlayer();
   LinkedList* hand = player->getHand();
-  bool found = false;
-  for (int i = 0; !found && i < hand->getSize(); i++) {
-    if (tile == hand->get(i)->toString()) {
-      hand->push(bag->draw());
-      bag->getList()->push(hand->remove(i));
-      bag->shuffle();
-      found = true;
+  bool success = false;
+  int tileIndex = hand->getIndexOf(tile);
+  if (tileIndex != TILE_NOT_FOUND) {
+    hand->insertAfter(tileIndex, bag->draw());
+    if (bag->getList()->getSize() != 0) {
+      bag->getList()->push(hand->remove(tileIndex));
+      success = true;
+    } else {
+      std::cout << "The bag is empty! You cannot replace your tile!" << std::endl;
     }
-  }
-  if (found) {
     // TODO: swap players
   } else {
     std::cout << "You do not have a " << tile << " tile!" << std::endl;
   }
 
-  return found;
+  return success;
 }
 
 GameState::~GameState(){

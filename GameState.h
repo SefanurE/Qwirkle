@@ -8,6 +8,7 @@
 #include "Board.h"
 
 #define PLAYER_COUNT 2
+#define TILE_NOT_FOUND -1
 
 class GameState {
   public:
@@ -15,7 +16,7 @@ class GameState {
     GameState(std::istream &stream);
     ~GameState();
     std::string serialise();
-    bool doPlaceTile(std::string tile, std::string pos);
+    bool doPlaceTile(std::string tileString, std::string position);
     bool doReplaceTile(std::string tile);
     void showBeforeRoundOutput();
 

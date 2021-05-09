@@ -3,20 +3,17 @@
 #include <iostream>
 #include <vector>
 #include <string>
-
 #include "Tile.h"
 #include "Board.h"
 
-class Board{
+class Board {
 public:
-
-    Board(int w, int h);
+    Board(int width, int height);
+    Board(std::string boardShapeString, std::string placedTilesString);
     ~Board();
-    void setValues(int w, int h);
     void printBoard();
-    void addTile(Tile* tile, int row, int col);
-    std::vector<std::string> tileLocations();
-    void fromString(std::string placedTileString);
+    void addTile(Tile* tile, char col, std::string row);
+    Tile* getPosition(char row, char col);
     int getWidth();
     int getHeight();
     std::string toString();
@@ -24,12 +21,10 @@ public:
 private:
 
     int width, height;
-    std::string rowLabels;
-    std::vector<std::string> rowVec;
-    std::vector<std::vector<std::string>> gridVec;
-    std::vector<std::string> tilesOnBoard;
-    std::string newTile;
-
+    std::string rowLabels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    std::vector<std::vector<Tile*>> gridVec;
+    int columnToInt(char columnLabel);
+    void initGrid();
 };
 
 #endif //COSC_ASSIGN_TWO_BOARD

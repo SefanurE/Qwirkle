@@ -111,7 +111,7 @@ GameState::~GameState(){
 
 std::string GameState::serialise() {
   std::stringstream ss;
-  for (int i = 0; i <= 1; i++) {
+  for (int i = 0; i < PLAYER_COUNT; i++) {
     ss << players[i]->getName() << "\n" << players[i]->getScore() << "\n" <<
        players[i]->getHand()->toString() << "\n";
   }

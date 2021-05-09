@@ -110,8 +110,12 @@ void GameManager::doQuit() {
   status = QUIT;
 }
 
-void GameManager::doSave(std::string path) {
-  std::cout << "TODO: SAVE to '" << path << "'" << std::endl;
+void GameManager::doSave(std::string fileName) {
+  fileName = fileName + ".save";
+  std::ofstream save(fileName);
+  save << gameState->serialise();
+  save.close();
+  std::cout << std::endl << "Game successfully saved" << std::endl;
 }
 
 void GameManager::doPlaceTile(std::string tile, std::string position) {

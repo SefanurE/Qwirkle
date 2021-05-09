@@ -21,9 +21,9 @@ public:
 private:
 
     int width, height;
-    std::string rowLabels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const std::string rowLabels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     std::vector<std::vector<Tile*>> gridVec;
-    int columnToInt(char columnLabel);
+    int rowToInt(char columnLabel);
     void initGrid();
 };
 

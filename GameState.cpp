@@ -5,12 +5,16 @@
 #include "GameState.h"
 #include "LinkedList.h"
 #include "TileBag.h"
+#include "GamePlay.h"
+
 
 GameState::GameState(std::string player1Name, std::string player2Name) {
   players = new Player*[2];
   players[0] = new Player(player1Name);
   players[1] = new Player(player2Name);
   board = new Board(20, 20);
+  gamePlay = new GamePlay(board);
+  //GamePlay* gamePlay = new GamePlay();
   bag = new TileBag();
   players[0]->initHand(bag);
   players[1]->initHand(bag);
@@ -35,6 +39,8 @@ GameState::GameState(std::istream &gameData) {
   getline(gameData, placedTileString);
 
   board = new Board(boardShapeString, placedTileString);
+  gamePlay = new GamePlay(board);
+  //GamePlay* gamePlay = new GamePlay();
 
   std::string tileBagString = "";
   getline(gameData, tileBagString);
@@ -59,12 +65,16 @@ bool GameState::doPlaceTile(std::string tileString, std::string position) {
   bool success = false;
   int tileIndex = player->getHand()->getIndexOf(tileString);
   if (tileIndex != TILE_NOT_FOUND) {
-    if (board->getPosition(position[0], position[1]) == nullptr) {
+    if (board->getTile(position[0], position[1]) == nullptr) {
       Tile* tile = player->getHand()->remove(tileIndex);
       board->addTile(tile, position[0], position.substr(1, position.length()));
       if (bag->getList()->getSize() > 0) {
         player->getHand()->push(bag->draw());
       }
+      Tile* playedTile = new Tile(tileString[0], tileString[1]);
+      gamePlay->submittedTurn(playedTile, position);
+
+      //new Tile*(tileString[0], tileString[1]), position);
       success = true;
     } else {
       std::cout << "There is already a tile in position " << position << std::endl;

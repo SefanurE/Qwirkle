@@ -3,6 +3,10 @@
 #include <string>
 #include "Board.h"
 
+Board::Board() {
+
+}
+
 Board::Board(int width, int height) {
   this->width = width;
   this->height = height;
@@ -79,8 +83,8 @@ void Board::printBoard() {
         }
     }
 
-void Board::addTile(Tile* tile, char col, std::string row) {
-    gridVec[columnToInt(col)][std::stoi(row)] = tile;
+void Board::addTile(Tile* tile, char row, std::string col) {
+    gridVec[rowToInt(row)][std::stoi(col)] = tile;
 }
 
 std::string Board::toString() {
@@ -95,18 +99,25 @@ int Board::getHeight() {
   return height;
 }
 
-Tile* Board::getPosition(char col, char row) {
-  return gridVec[columnToInt(col)][std::stoi(&row)];
+Tile* Board::getTile(char row, char col) {
+  return getTile(rowToInt(row), std::stoi(&col));
 }
 
-int Board::columnToInt(char columnLabel) {
+Tile* Board::getTile(int row, int col) {
+  Tile* tile = nullptr;
+  tile = gridVec[row][col];
+  return tile;
+}
+
+int Board::rowToInt(char rowLabel) {
   std::string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   int index = -1;
   for (size_t i = 0; i < alphabet.length() && index == -1; i++) {
-    if (alphabet[i] == columnLabel) {
+    if (alphabet[i] == rowLabel) {
       index = i;
     }
   }
   return index;
 }
+
 

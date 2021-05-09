@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "TileBag.h"
 #include "Board.h"
+#include "GamePlay.h"
 
 #define PLAYER_COUNT 2
 #define TILE_NOT_FOUND -1
@@ -19,12 +20,15 @@ class GameState {
     bool doPlaceTile(std::string tileString, std::string position);
     bool doReplaceTile(std::string tile);
     void showBeforeRoundOutput();
+    Board* board;
+    //GamePlay* gamePlay;
+
 
   private:
     Player* getCurrentPlayer();
     Player** players;
-    Board* board;
     TileBag* bag;
+
 };
 
 #endif //COSC_ASSIGN_TWO_GS

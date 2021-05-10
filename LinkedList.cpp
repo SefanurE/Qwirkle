@@ -70,7 +70,7 @@ std::string LinkedList::toString() {
   while (node != nullptr) {
     listString += node->tile->toString();
     if (node->next != nullptr) {
-      listString += ", ";
+      listString += ",";
     }
     node = node->next;
   }

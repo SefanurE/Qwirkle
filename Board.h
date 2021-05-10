@@ -18,13 +18,14 @@ public:
     int getWidth();
     int getHeight();
     std::string toString();
+    int rowToInt(char rowLabel);
+
 
 private:
 
     int width, height;
     std::string rowLabels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     std::vector<std::vector<Tile*>> gridVec;
-    int rowToInt(char rowLabel);
     void initGrid();
 };
 

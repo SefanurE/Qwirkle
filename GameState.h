@@ -6,7 +6,7 @@
 #include "Player.h"
 #include "TileBag.h"
 #include "Board.h"
-#include "GamePlay.h"
+
 
 #define PLAYER_COUNT 2
 #define TILE_NOT_FOUND -1
@@ -28,6 +28,10 @@ class GameState {
     Player* getCurrentPlayer();
     Player** players;
     TileBag* bag;
+    bool checkAdjacent(Tile* tile, std::string position);
+    bool checkPlacementValid(Tile* myTile, Tile* neighbourTile);
+    bool validate(Tile* tile, std::string position);
+    bool firstTile;
 
 };
 

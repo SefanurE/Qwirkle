@@ -119,5 +119,3 @@ int Board::rowToInt(char rowLabel) {
   }
   return index;
 }
-
-

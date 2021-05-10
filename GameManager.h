@@ -35,6 +35,6 @@ class GameManager {
   public:
     GameManager(); ~GameManager();
     void startGame();
-    void newGame(std::string player1Name, std::string player2Name);
+    void newGame(std::string playerNames[PLAYER_COUNT]);
     void loadGame(std::string fileName);
 };

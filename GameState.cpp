@@ -6,14 +6,14 @@
 #include "LinkedList.h"
 #include "TileBag.h"
 
-GameState::GameState(std::string player1Name, std::string player2Name) {
-  players = new Player*[2];
-  players[0] = new Player(player1Name);
-  players[1] = new Player(player2Name);
+GameState::GameState(std::string playerNames[PLAYER_COUNT]) {
+  players = new Player*[PLAYER_COUNT];
   board = new Board(20, 20);
   bag = new TileBag();
-  players[0]->initHand(bag);
-  players[1]->initHand(bag);
+  for (int i = 0; i < PLAYER_COUNT; i++) {
+    players[i] = new Player(playerNames[i]);
+    players[i]->initHand(bag);
+  }
 }
 
 GameState::GameState(std::istream &gameData) {

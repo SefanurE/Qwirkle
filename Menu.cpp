@@ -45,19 +45,19 @@ void Menu::displayMenu() {
 
 void Menu::newGame() {
     std::cout << "Starting a New Game" << std::endl;
-    std::cout << std::endl;
-    std::cout << "Enter a name for player 1 (uppercase letters only)" << std::endl;
-    std::string player1Name = getNameInput();
-
-    std::cout << std::endl;
-    std::cout << "Enter a name for player 2 (uppercase letters only)" << std::endl;
-    std::string player2Name = getNameInput();
+    std::string playerNames[PLAYER_COUNT] = {"0"};
+    for (int i = 0; i < PLAYER_COUNT; i++) {
+        std::cout << std::endl;
+        std::cout << "Enter a name for player " << i + 1 
+                  << " (uppercase letters only)" << std::endl;
+        playerNames[i] = getNameInput();
+    }
 
     std::cout << std::endl;
     std::cout << "Let's Play!" << std::endl;
 
     GameManager* gameManager = new GameManager();
-    gameManager->newGame(player1Name, player2Name);
+    gameManager->newGame(playerNames);
 
     // Game is over, cleanup
     delete gameManager;

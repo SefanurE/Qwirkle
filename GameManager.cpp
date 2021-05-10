@@ -39,8 +39,8 @@ void GameManager::startGame() {
   }
 }
 
-void GameManager::newGame(std::string player1Name, std::string player2Name) {
-  gameState = new GameState(player1Name, player2Name);
+void GameManager::newGame(std::string playerNames[PLAYER_COUNT]) {
+  gameState = new GameState(playerNames);
   startGame();
 }
 

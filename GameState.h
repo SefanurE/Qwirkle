@@ -31,10 +31,10 @@ class GameState {
     Player* getCurrentPlayer();
     Player** players;
     TileBag* bag;
-    bool checkAdjacent(Tile* tile, std::string position);
+    bool validateTile(Tile* tile, std::string position);
     bool checkPlacementValid(Tile* myTile, Tile* neighbourTile);
-    bool validate(Tile* tile, std::string position);
     bool firstTile;
+    int maxLength;
 
 };
 

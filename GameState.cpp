@@ -16,7 +16,7 @@ GameState::GameState(std::string player1Name, std::string player2Name) {
   players[0]->initHand(bag);
   players[1]->initHand(bag);
   firstTile = true;
-
+  maxLength = 0;
 }
 
 GameState::GameState(std::istream &gameData) {
@@ -53,6 +53,7 @@ void GameState::showBeforeRoundOutput() {
   }
   board->printBoard();
   std::cout << std::endl << "Your hand is" << std::endl << getCurrentPlayer()->getHand()->toString() << std::endl << std::endl;
+  std::cout << "Current score: " << players[0]->getScore() << std::endl;
   std::cout << "BAG CONTAINS " << bag->getList()->toString() << std::endl;
 }
 
@@ -62,15 +63,16 @@ bool GameState::doPlaceTile(std::string tileString, std::string position) {
   Player* player = players[0];
   bool success = false;
   int tileIndex = player->getHand()->getIndexOf(tileString);
-  std::cout << "right before the ifs" << std::endl;
 
   if (tileIndex != TILE_NOT_FOUND) {
     std::cout << "inside if tile index not found etc" << std::endl;
     if (board->getTile(position[0], position[1]) == nullptr) {
 
-      if (firstTile || (!firstTile && validate(playedTile, position))) {
+      if (firstTile || (!firstTile && validateTile(playedTile, position))) {
         Tile* tile = player->getHand()->remove(tileIndex);
         board->addTile(tile, position[0], position.substr(1, position.length()));
+        player->updateScore(1);
+
         if (bag->getList()->getSize() > 0) {
           player->getHand()->push(bag->draw());
         }
@@ -132,64 +134,64 @@ std::string GameState::serialise() {
   return ss.str();
 }
 
-bool GameState::validate(Tile* tile, std::string position) {
-    bool valid = false;
-    std::cout << "valid before validate: " << valid << std::endl;
-    if(checkAdjacent(tile, position)) {
-        valid = true;
-    }
-  std::cout << "valid after validate: " << valid << std::endl;
-    return valid;
-}
-
-bool GameState::checkAdjacent(Tile* tile, std::string position) {
+bool GameState::validateTile(Tile* tile, std::string position) {
     int row = board->rowToInt(position[0]);
     std::string colstr = position.substr(1, position.length());
     int col = std::stoi(colstr);
     std::cout << "position " << " row " << row << " col " << col << std::endl;
 
-    std::pair<int, int> neighbours[4] = {std::make_pair(0, -1), std::make_pair(-1, 0), std::make_pair(0, 1), std::make_pair(1, 0)};
-    int i = 0;
-    int j = 1;
+    std::pair<int, int> directions[4] = {std::make_pair(0, -1), std::make_pair(-1, 0), std::make_pair(0, 1), std::make_pair(1, 0)};
+    int direction = 0;
+    int neighbour = 1;
+    int roundScore = 0;
     bool flag = true;
     bool hasNeighbour = false;
     bool validated = true;
-    while(validated && i < 4) {
-      int neebRow = row + neighbours[i].first*j;
-      int neebCol = col + neighbours[i].second*j;
-        //std::cout << "In neighbour loop " << i << " row " << neighbours[i].first << " col " << neighbours[i].second << std::endl;
-        if (neebCol >= 0 && neebRow  >= 0 && neebCol < board->getWidth() && neebRow < board->getHeight()) {
-          //std::cout << "Inside board at row " << row << " col " << col << std::endl;
-            Tile* neighbourTile = board->getTile(neebRow, neebCol);
 
-            if (neighbourTile != nullptr) {
-              hasNeighbour = true;
-                if (!checkPlacementValid(tile, neighbourTile)) {
-                  std::cout << "TILE IS NOT VALID" << std::endl;
-                  validated = false;
-                } else {
-                  j++;
-                }
-            } else {
-              i++;
-              j = 1;
+    while(validated && direction < 4) {
+      int neebRow = row + directions[direction].first * neighbour;
+      int neebCol = col + directions[direction].second * neighbour;
+      std::cout << "direction: " << direction << " neighbour: " << neighbour << std::endl;
+
+      if (neebCol >= 0 && neebRow  >= 0 && neebCol < board->getWidth() && neebRow < board->getHeight()) {
+        Tile* neighbourTile = board->getTile(neebRow, neebCol);
+
+        if (neighbourTile != nullptr) {
+          hasNeighbour = true;
+
+          if (!checkPlacementValid(tile, neighbourTile)) {
+            std::cout << "TILE IS NOT VALID" << std::endl;
+            validated = false;
+          } else {
+            neighbour++;
+            if (neighbour > maxLength) {
+              maxLength = neighbour;
             }
+          }
+        } else {
+          roundScore = roundScore + neighbour - 1;
+          if (neighbour == QWIRKLE) {
+            roundScore = roundScore + neighbour - 1;
+          }
+          direction++;
+          neighbour = 1;
         }
+      }
     }
+
     if (!hasNeighbour || !validated) {
       flag = false;
+    } else {
+      players[0]->updateScore(roundScore);
+      std::cout << "max " << maxLength << std::endl;
     }
     return flag;
 }
 
 bool GameState::checkPlacementValid(Tile* myTile, Tile* neighbourTile) {
     bool check = false;
-    
-    std::cout << "neighbour tile: " << neighbourTile->colour<< neighbourTile->shape<<std::endl;
-
     if(neighbourTile->colour == myTile->colour ^ neighbourTile->shape == myTile->shape-48) {
         check = true;
     }
-    std::cout << "check: " << check << std::endl;
     return check;
 }

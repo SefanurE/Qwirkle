@@ -4,26 +4,28 @@
 #include <vector>
 #include <string>
 #include "Tile.h"
-#include "Board.h"
 
 class Board {
 public:
+    Board();
     Board(int width, int height);
     Board(std::string boardShapeString, std::string placedTilesString);
     ~Board();
     void printBoard();
-    void addTile(Tile* tile, char col, std::string row);
-    Tile* getPosition(char row, char col);
+    void addTile(Tile* tile, char row, std::string col);
+    Tile* getTile(int row, int col);
+    Tile* getTile(char row, char col);
     int getWidth();
     int getHeight();
     std::string toString();
+    int rowToInt(char rowLabel);
+
 
 private:
 
     int width, height;
     const std::string rowLabels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     std::vector<std::vector<Tile*>> gridVec;
-    int rowToInt(char columnLabel);
     void initGrid();
 };
 

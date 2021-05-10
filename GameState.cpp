@@ -171,7 +171,7 @@ bool GameState::validateTile(Tile* tile, std::string position) {
         } else {
           roundScore = roundScore + neighbour - 1;
           if (neighbour == QWIRKLE) {
-            roundScore = roundScore + neighbour - 1;
+            roundScore = roundScore + neighbour;
           }
           direction++;
           neighbour = 1;

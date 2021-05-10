@@ -7,26 +7,37 @@ void Menu::mainMenu() {
               << "-------------------" << std::endl;
     displayMenu();
 
-    std::string menuOption = "";
     bool quit = false;
     while (!quit && !std::cin.eof()) {
         std::cout << "> ";
-        std::getline(std::cin, menuOption);
+        std::string menuOption = "";
+        bool read = true;
+        while (read) {
+          char c = std::cin.get();
+          if (c == '\n') {
+            read = false;
+          } else if (c == EOF) {
+            read = false;
+            quit = true;
+          } else if (!std::isspace(c)) {
+            menuOption.push_back(c);
+          }
+        }
+
         std::cout << std::endl;
+
         if (menuOption == NEW_GAME_OPTION) {
             newGame();
-        }
-        else if (menuOption == LOAD_GAME_OPTION) {
+            quit = true;
+        } else if (menuOption == LOAD_GAME_OPTION) {
             loadGame();
-        }
-        else if (menuOption == CREDITS_OPTION) {
+            quit = true;
+        } else if (menuOption == CREDITS_OPTION) {
             printCredits();
             displayMenu();
-        }
-        else if (menuOption == QUIT_OPTION) {
+        } else if (menuOption == QUIT_OPTION) {
             quit = true;
-        }
-        else {
+        } else if (!quit) {
             std::cout << "Invalid input, try again" << std::endl;
         }
     }

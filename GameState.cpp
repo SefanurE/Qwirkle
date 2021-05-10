@@ -148,28 +148,33 @@ bool GameState::checkAdjacent(Tile* tile, std::string position) {
     int col = std::stoi(colstr);
     std::cout << "position " << " row " << row << " col " << col << std::endl;
 
-    std::pair<int, int> neighbours[4] = {std::make_pair(row, col - 1), std::make_pair(row - 1, col), std::make_pair(row, col + 1), std::make_pair(row + 1, col)};
+    std::pair<int, int> neighbours[4] = {std::make_pair(0, -1), std::make_pair(-1, 0), std::make_pair(0, 1), std::make_pair(1, 0)};
     int i = 0;
+    int j = 1;
     bool flag = true;
     bool hasNeighbour = false;
     bool validated = true;
     while(validated && i < 4) {
+      int neebRow = row + neighbours[i].first*j;
+      int neebCol = col + neighbours[i].second*j;
         //std::cout << "In neighbour loop " << i << " row " << neighbours[i].first << " col " << neighbours[i].second << std::endl;
-        if (neighbours[i].second >= 0 && neighbours[i].first  >= 0 && neighbours[i].second < board->getWidth() && neighbours[i].first < board->getHeight()) {
-            std::cout << "Inside board at row " << row << " col " << col << std::endl;
-            Tile* neighbourTile = board->getTile(neighbours[i].first, neighbours[i].second);
+        if (neebCol >= 0 && neebRow  >= 0 && neebCol < board->getWidth() && neebRow < board->getHeight()) {
+          //std::cout << "Inside board at row " << row << " col " << col << std::endl;
+            Tile* neighbourTile = board->getTile(neebRow, neebCol);
 
             if (neighbourTile != nullptr) {
               hasNeighbour = true;
                 if (!checkPlacementValid(tile, neighbourTile)) {
                   std::cout << "TILE IS NOT VALID" << std::endl;
                   validated = false;
+                } else {
+                  j++;
                 }
             } else {
-              std::cout << "no tile there " << std::endl;
+              i++;
+              j = 1;
             }
         }
-        i++;
     }
     if (!hasNeighbour || !validated) {
       flag = false;

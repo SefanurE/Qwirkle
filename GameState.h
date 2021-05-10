@@ -10,6 +10,9 @@
 
 #define PLAYER_COUNT 2
 #define TILE_NOT_FOUND -1
+#define QWIRKLE 6
+
+
 
 class GameState {
   public:

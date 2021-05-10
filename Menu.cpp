@@ -55,57 +55,91 @@ void Menu::displayMenu() {
 }
 
 void Menu::newGame() {
+    bool cancel = false;
     std::cout << "Starting a New Game" << std::endl;
     std::string playerNames[PLAYER_COUNT] = {"0"};
-    for (int i = 0; i < PLAYER_COUNT; i++) {
+    for (int i = 0; !cancel && i < PLAYER_COUNT; i++) {
         std::cout << std::endl;
         std::cout << "Enter a name for player " << i + 1 
                   << " (uppercase letters only)" << std::endl;
         playerNames[i] = getNameInput();
+        if (playerNames[i] == "") {
+          cancel = true;
+        }
     }
 
-    std::cout << std::endl;
-    std::cout << "Let's Play!" << std::endl;
+    if (!cancel) {
+      std::cout << std::endl;
+      std::cout << "Let's Play!" << std::endl;
 
-    GameManager* gameManager = new GameManager();
-    gameManager->newGame(playerNames);
+      GameManager* gameManager = new GameManager();
+      gameManager->newGame(playerNames);
 
-    // Game is over, cleanup
-    delete gameManager;
+      // Game is over, cleanup
+      delete gameManager;
+    }
 }
 
 std::string Menu::getNameInput() {
     std::string playerName = "";
-    bool exitWhile = false;
-    bool nameIsOnlyUppercase = true;
-    while (!exitWhile && !std::cin.eof()) {
+    bool done = false;
+    while (!done) {
         std::cout << "> ";
-        std::getline(std::cin, playerName);
-
-        for (char c : playerName) {
-            if (c < 'A' || c > 'Z') {
-                nameIsOnlyUppercase = false;
-            }
-        }
-
-        if (!nameIsOnlyUppercase) {
+        playerName = "";
+        bool read = true;
+        while (read) {
+          char c = std::cin.get();
+          if (c == '\n') {
+            read = false;
+            done = true;
+          } else if (c == EOF) {
+            std::cout << std::endl << std::endl;
+            read = false;
+            done = true;
+            playerName = "";
+          } else if (c < 'A' || c > 'Z') {
+            std::cin.ignore(INT8_MAX, '\n');
             std::cout << "Name must be only uppercase letters, enter new name" << std::endl;
-        }  
-        else {
-            exitWhile = true;
+            read = false;
+            done = false;
+          } else {
+            playerName.push_back(c);
+          }
         }
-        nameIsOnlyUppercase = true;
     }
     return playerName;
 }
 
 void Menu::loadGame() {
-  std::cout << "Enter the filename from which load a game: " << std::endl;
-  std::cout << "> ";
-  std::string fileName;
-  std::getline(std::cin, fileName);
   GameManager* gameManager = new GameManager();
-  gameManager->loadGame(fileName);
+
+  std::string fileName = "";
+  bool done = false;
+  bool quit = false;
+  while (!done) {
+    std::cout << "Enter the filename from which load a game: " << std::endl;
+    std::cout << "> ";
+    fileName = "";
+    bool read = true;
+    while (read) {
+      char c = std::cin.get();
+      if (c == EOF) {
+        read = false;
+        done = true;
+        quit = true;
+      } else if (c == '\n') {
+        read = false;
+        done = true; // TODO: gameManager->testFileValidity(fileName);
+      } else {
+        fileName.push_back(c);
+      }
+    }
+  }
+
+  if (!quit) {
+    gameManager->loadGame(fileName);
+  }
+
   delete gameManager;
 }
 

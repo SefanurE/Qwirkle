@@ -29,12 +29,12 @@ class GameState {
 
   private:
     Player* getCurrentPlayer();
+    void nextPlayer();
     Player** players;
     TileBag* bag;
-    bool validateTile(Tile* tile, std::string position);
+    int validateTile(Tile* tile, int row, int col);
     bool checkPlacementValid(Tile* myTile, Tile* neighbourTile);
     bool firstTile;
-    int maxLength;
 
 };
 

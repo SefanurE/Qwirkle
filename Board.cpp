@@ -1,11 +1,9 @@
-#include <iostream>
-#include <vector>
-#include <string>
 #include "Board.h"
+#include <iostream>
+#include <string>
+#include <vector>
 
-Board::Board() {
-
-}
+Board::Board() {}
 
 Board::Board(int width, int height) {
   this->width = width;
@@ -14,77 +12,79 @@ Board::Board(int width, int height) {
 }
 
 Board::Board(std::string boardShapeString, std::string placedTilesString) {
-  std::string widthString = "";
-  std::string block = "";
+  // Parse board shape string
+  // of form "height,width"
+  std::string heightString = "";
+  std::string buffer = "";
   for (char c : boardShapeString) {
     if (c != ',') {
-      block += c;
+      buffer += c;
     } else {
-      widthString = block;
-      block = "";
+      heightString = buffer;
+      buffer = "";
     }
   }
-  width = stoi(widthString);
-  height = stoi(block);
 
+  // Create the grid with the parsed dimensions
+  width = stoi(buffer);
+  height = stoi(heightString);
   initGrid();
 
-  block = "";
+  // Parse the placed tiles
+  buffer = "";
   for (char c : placedTilesString) {
     if (c == ',') {
-      for (size_t i = 0; i < block.length(); i++) {
-        if (block[i] == '@') {
-          Tile* tile = new Tile(block[0], atoi(&block[1]));
-          addTile(tile, block[i + 1], block.substr(i + 2, block.length()));
+      for (size_t i = 0; i < buffer.length(); i++) {
+        if (buffer[i] == '@') {
+          Tile *tile = new Tile(buffer[0], atoi(&buffer[1]));
+          addTile(tile, buffer[i + 1], buffer.substr(i + 2, buffer.length()));
         }
       }
-      block = "";
+      buffer = "";
     } else {
-      block += c;
+      buffer += c;
     }
   }
 }
 
-Board::~Board(){
-
-}
+Board::~Board() {}
 
 void Board::initGrid() {
   for (int i = 0; i < height; i++) {
-    gridVec.push_back(std::vector<Tile*>(width));
+    gridVec.push_back(std::vector<Tile *>(width));
   }
 }
 
 void Board::printBoard() {
-    std::cout << " ";
-    for (int a = 0; a < width; a++) {
-        if (a < 11) {
-            std::cout << "  " << a;
-            } else {
-                std::cout << " " << a;
-            }
-
-        }
-        std::cout << "\n" << "  ";
-        for (int a = 0; a < width; a++) {
-            std::cout << "---";
-        }
-        std::cout << "-\n";
-        for (int x = 0; x < height; x++) {
-            std::cout << rowLabels[x] << " |";
-            for (int y = 0; y < width; y++) {
-                if (gridVec[x][y] != nullptr) {
-                  std::cout << gridVec[x][y]->toString() << "|";
-                } else {
-                  std::cout << "  |";
-                }
-            }
-            std::cout << "\n";
-        }
+  std::cout << " ";
+  for (int a = 0; a < width; a++) {
+    if (a < 11) {
+      std::cout << "  " << a;
+    } else {
+      std::cout << " " << a;
     }
+  }
+  std::cout << "\n"
+            << "  ";
+  for (int a = 0; a < width; a++) {
+    std::cout << "---";
+  }
+  std::cout << "-\n";
+  for (int x = 0; x < height; x++) {
+    std::cout << rowLabels[x] << " |";
+    for (int y = 0; y < width; y++) {
+      if (gridVec[x][y] != nullptr) {
+        std::cout << gridVec[x][y]->toString() << "|";
+      } else {
+        std::cout << "  |";
+      }
+    }
+    std::cout << "\n";
+  }
+}
 
-void Board::addTile(Tile* tile, char row, std::string col) {
-    gridVec[rowToInt(row)][std::stoi(col)] = tile;
+void Board::addTile(Tile *tile, char row, std::string col) {
+  gridVec[rowToInt(row)][std::stoi(col)] = tile;
 }
 
 std::string Board::toString() {
@@ -92,29 +92,26 @@ std::string Board::toString() {
   for (int x = 0; x < height; x++) {
     for (int y = 0; y < width; y++) {
       if (gridVec[x][y] != nullptr) {
-        placedTilesString += gridVec[x][y]->toString() + "@" 
-                           + rowLabels[x] + std::to_string(y) + ", ";
+        placedTilesString += gridVec[x][y]->toString() + "@" + rowLabels[x] +
+                             std::to_string(y) + ", ";
       }
     }
   }
-  placedTilesString = placedTilesString.substr(0, placedTilesString.length() - 2);
+  placedTilesString =
+      placedTilesString.substr(0, placedTilesString.length() - 2);
   return placedTilesString;
 }
 
-int Board::getWidth() {
-  return width;
-}
+int Board::getWidth() { return width; }
 
-int Board::getHeight() {
-  return height;
-}
+int Board::getHeight() { return height; }
 
-Tile* Board::getTile(char row, char col) {
+Tile *Board::getTile(char row, char col) {
   return getTile(rowToInt(row), std::stoi(&col));
 }
 
-Tile* Board::getTile(int row, int col) {
-  Tile* tile = nullptr;
+Tile *Board::getTile(int row, int col) {
+  Tile *tile = nullptr;
   tile = gridVec[row][col];
   return tile;
 }

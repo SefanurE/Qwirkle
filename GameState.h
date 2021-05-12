@@ -13,9 +13,10 @@
 #define QWIRKLE 6
 
 
-
 class GameState {
   public:
+    Board* board;
+
     GameState(std::string playerNames[PLAYER_COUNT]);
     GameState(std::istream &stream);
     ~GameState();
@@ -23,18 +24,18 @@ class GameState {
     bool doPlaceTile(std::string tileString, std::string position);
     bool doReplaceTile(std::string tile);
     void showBeforeRoundOutput();
-    Board* board;
-    //GamePlay* gamePlay;
-
 
   private:
-    Player* getCurrentPlayer();
-    Player** players;
-    TileBag* bag;
-    bool validateTile(Tile* tile, std::string position);
-    bool checkPlacementValid(Tile* myTile, Tile* neighbourTile);
     bool firstTile;
     int maxLength;
+    int currentPlayerIndex;
+    Player** players;
+    TileBag* bag;
+   
+    Player* getCurrentPlayer();
+    void nextPlayer();
+    bool validateTile(Tile* tile, std::string position);
+    bool checkPlacementValid(Tile* myTile, Tile* neighbourTile);
 
 };
 

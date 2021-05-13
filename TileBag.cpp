@@ -5,8 +5,8 @@
 TileBag::TileBag() {
   tiles = new LinkedList();
   char colours[] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
-  for (int shape = 0; shape <= SHAPES_COUNT; shape++) {
-    for (int colour = 0; colour <= COLOURS_COUNT; colour++) {
+  for (int shape = 0; shape < SHAPES_COUNT; shape++) {
+    for (int colour = 0; colour < COLOURS_COUNT; colour++) {
       tiles->push(new Tile(colours[colour], shape));
       tiles->push(new Tile(colours[colour], shape));
     }

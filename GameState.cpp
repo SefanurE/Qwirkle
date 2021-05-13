@@ -112,8 +112,10 @@ bool GameState::doPlaceTile(std::string tileString, std::string position) {
           board->addTile(tile, row, col);
 
           // Award score for this move
-          int score = placeTileScore(playedTile, position);
-          player->updateScore(1 + score);
+          // First tile gets 1 point
+          int score = placeTileScore(playedTile, position) + (firstTile ? 1 : 0);
+          player->updateScore(score);
+          std::cout << "Awarded " << score << " points" << std::endl;
 
           // Draw the player a new tile if any remain in the bag
           if (bag->getList()->getSize() > 0) {
@@ -173,10 +175,6 @@ bool GameState::doReplaceTile(std::string tile) {
     }
   } else {
     std::cout << "You do not have a " << tile << " tile!" << std::endl;
-  }
-  // switches to next player after tile replacement (turn used)
-  if (success) {
-    nextPlayer();
   }
 
   // Swap player if move was successfull
@@ -265,12 +263,28 @@ LinkedList *GameState::getConnectedTilesInDir(Tile *tile, std::string position,
 
 int GameState::placeTileScore(Tile *tile, std::string position) {
   int roundScore = 0;
+  bool gotRowScore = false;
+  bool gotColScore = false;
 
   // For each orthogonal direction (UP, LEFT, DOWN, RIGHT)
   for (int direction = 0; direction < 4; direction++) {
-    // Award points for the length of the amount of connected tiles
+    // Award points for the length of the amount of connected tiles in this direction
     LinkedList *connected = getConnectedTilesInDir(tile, position, direction);
     roundScore += connected->getSize();
+
+    // Get a point for being included in a row?
+    if (connected->getSize() != 0) {
+      if (direction % 2 == 0 && !gotRowScore) {
+        roundScore++;
+        gotRowScore = true;
+      }
+
+      // Get a point for being included in a col?
+      if (direction % 2 == 1 && !gotColScore) {
+        roundScore++;
+        gotColScore = true;
+      }
+    }
 
     // Award double points if the length is a QWIRKLE!!
     if (connected->getSize() == QWIRKLE)

@@ -18,6 +18,15 @@ GameState::GameState(std::string playerNames[PLAYER_COUNT]) {
   currentPlayerIndex = 0;
 }
 
+GameState::~GameState() {
+  for (int i = 0; i < PLAYER_COUNT; i++) {
+    delete players[i];
+  }
+  delete[] players;
+  delete board;
+  delete bag;
+}
+
 GameState::GameState(std::istream &gameData) {
   // Read player information
   players = new Player *[PLAYER_COUNT];
@@ -161,11 +170,11 @@ bool GameState::doReplaceTile(std::string tile) {
   if (tileIndex != TILE_NOT_FOUND) {
     // Is the bag empty?
     if (bag->getList()->getSize() != 0) {
-      // Remove the tile from the players hand and put it in the bag
-      bag->getList()->push(hand->remove(tileIndex));
-
       // Draw a tile and put it in the players hand
       hand->insertAfter(tileIndex, bag->draw());
+  
+      // Remove the tile from the players hand and put it in the bag
+      bag->getList()->push(hand->remove(tileIndex));
 
       success = true;
     } else {
@@ -182,15 +191,6 @@ bool GameState::doReplaceTile(std::string tile) {
   }
 
   return success;
-}
-
-GameState::~GameState() {
-  for (int i = 0; i < PLAYER_COUNT; i++) {
-    delete players[i];
-  }
-  delete[] players;
-  delete board;
-  delete bag;
 }
 
 std::string GameState::serialise() {

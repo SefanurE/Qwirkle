@@ -33,9 +33,13 @@ Tile* LinkedList::pop() {
 }
 
 void LinkedList::insertAfter(int index, Tile *tile) {
-  Node* nextNode = getNode(index + 1);
-  Node* newNode = new Node(tile, nextNode);
-  getNode(index)->next = newNode;
+  if (index < size) {
+    Node* nextNode = getNode(index + 1);
+    Node* newNode = new Node(tile, nextNode);
+    getNode(index)->next = newNode;
+  } else {
+    getNode(index)->next = new Node(tile, nullptr);
+  }
   size++;
 }
 

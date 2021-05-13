@@ -32,17 +32,16 @@ Board::Board(std::string boardShapeString, std::string placedTilesString) {
 
   // Parse the placed tiles
   buffer = "";
+  Tile* tile = nullptr;
   for (char c : placedTilesString) {
-    if (c == ',') {
-      for (size_t i = 0; i < buffer.length(); i++) {
-        if (buffer[i] == '@') {
-          Tile *tile = new Tile(buffer[0], atoi(&buffer[1]));
-          addTile(tile, buffer[i + 1], buffer.substr(i + 2, buffer.length()));
-        }
-      }
+    if (c == '@') {
+      tile = new Tile(buffer[0], std::stoi(buffer.substr(1, buffer.length())));
       buffer = "";
-    } else {
-      buffer += c;
+    } else if (c == ',') {
+      addTile(tile, buffer[0], buffer.substr(1, buffer.length()));
+      buffer = "";
+    } else if (!std::isspace(c)) {
+      buffer.push_back(c);
     }
   }
 }

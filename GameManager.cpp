@@ -59,6 +59,7 @@ void GameManager::parseCommand(std::string command) {
   std::string buffer = "";
   std::string comm = "";
   std::vector<std::string> args;
+  bool completedCommand = false;
   for (size_t i = 0; i < command.length(); i++) {
     char c = std::toupper(command[i]);
     if (!std::isspace(c)) {
@@ -79,6 +80,7 @@ void GameManager::parseCommand(std::string command) {
         }
       } else if (comm == COMM_SAVE) {
         doSave(buffer);
+        completedCommand = true;
       } else if (comm == COMM_PLACE) {
         if (args.size() == 0 && std::regex_match(buffer, std::regex(COMM_TILE))) {
           args.push_back(buffer);
@@ -86,12 +88,14 @@ void GameManager::parseCommand(std::string command) {
           args.push_back(buffer);
         } else if (args.size() == 2 && std::regex_match(buffer, std::regex(COMM_TILE))) {
           doPlaceTile(args[0], buffer);
+          completedCommand = true;
         } else {
           std::cerr << "Malformed " << comm << " command." << std::endl;
         }
       } else if (comm == COMM_REPLACE) {
         if (std::regex_match(buffer, std::regex(COMM_TILE))) {
           doReplaceTile(buffer);
+          completedCommand = true;
         } else {
           std::cerr << "Malformed " << comm << " command." << std::endl;
         }
@@ -102,6 +106,11 @@ void GameManager::parseCommand(std::string command) {
       // reset buffer
       buffer.clear();
     }
+  }
+
+  // Report on unfinished commands
+  if (comm != "" && !completedCommand) {
+    std::cerr << "Incomplete " << comm << " command." << std::endl;
   }
 }
 

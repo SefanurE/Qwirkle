@@ -115,7 +115,6 @@ bool GameState::doPlaceTile(std::string tileString, std::string position) {
           // First tile gets 1 point
           int score = placeTileScore(playedTile, position) + (firstTile ? 1 : 0);
           player->updateScore(score);
-          std::cout << "Awarded " << score << " points" << std::endl;
 
           // Draw the player a new tile if any remain in the bag
           if (bag->getList()->getSize() > 0) {
@@ -287,8 +286,10 @@ int GameState::placeTileScore(Tile *tile, std::string position) {
     }
 
     // Award double points if the length is a QWIRKLE!!
-    if (connected->getSize() == QWIRKLE)
+    if (connected->getSize() == QWIRKLE - 1) {
       roundScore += QWIRKLE;
+      std::cout << std::endl << "QWIRKLE!!" << std::endl << std::endl;
+    }
 
     delete connected;
   }

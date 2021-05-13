@@ -22,6 +22,7 @@ void GameManager::startGame() {
     while (readCommand) {
       char c = std::cin.get();
       if (c == EOF) {
+        std::cout << std::endl << std::endl;
         status = QUIT;
         readCommand = false;
       } else if (c == '\n') {
@@ -135,7 +136,7 @@ bool GameManager::imatch(std::string s, std::string pattern) {
 }
 
 void GameManager::doQuit() {
-  std::cout << "Goodbye" << std::endl;
+  std::cout << std::endl;
   status = QUIT;
 }
 

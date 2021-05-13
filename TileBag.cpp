@@ -7,6 +7,7 @@ TileBag::TileBag() {
   for (int shape = 0; shape <= 5; shape++) {
     for (int j = 0; j <= 5; j++) {
       tiles->push(new Tile(colours[j], shape));
+      tiles->push(new Tile(colours[j], shape));
     }
   }
   shuffle();

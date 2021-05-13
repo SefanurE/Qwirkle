@@ -260,32 +260,43 @@ LinkedList* GameState::getConnectedTilesInDir(Tile* tile, std::string position, 
 
 int GameState::placeTileScore(Tile* tile, std::string position) {
   int roundScore = 0;
+
+  // For each orthogonal direction (UP, LEFT, DOWN, RIGHT)
   for (int direction = 0; direction < 4; direction++) {
+    // Award points for the length of the amount of connected tiles
     LinkedList* connected = getConnectedTilesInDir(tile, position, direction);
-    for (int i = 0; i < connected->getSize(); i++) {
-      Tile* t = connected->get(i);
-      if (checkPlacementValid(tile, t)) {
-        roundScore += i;
-      }
-    }
+    roundScore += connected->getSize();
+
+    // Award double points if the length is a QWIRKLE!!
+    if (connected->getSize() == QWIRKLE)
+      roundScore += QWIRKLE;
+
     delete connected;
   }
+
   return roundScore;
 }
 
 bool GameState::validateTile(Tile* tile, std::string position) {
   bool valid = true;
   bool hasNeighbour = false;
+ 
+  // For each orthogonal direction (UP,LEFT,DOWN,RIGHT)
   for (int direction = 0; direction < 4; direction++) {
+    // Get all of the connected tiles in this direction
     LinkedList* connected = getConnectedTilesInDir(tile, position, direction);
+
+    // Update whether we have a neighbour
+    hasNeighbour = hasNeighbour || connected->getSize() > 0;
+
+    // Validate all of these connected neighbours
     for (int i = 0; i < connected->getSize(); i++) {
-      hasNeighbour = true;
-      Tile* t = connected->get(i);
-      if (!checkPlacementValid(tile, t)) {
+      if (!checkPlacementValid(tile, connected->get(i))) {
         std::cout << "You can't place a tile here!" << std::endl;
         valid = false;
       }
     }
+
     delete connected;
   }
 

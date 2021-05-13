@@ -51,7 +51,7 @@ Board::~Board() {}
 
 void Board::initGrid() {
   for (int i = 0; i < height; i++) {
-    gridVec.push_back(std::vector<Tile *>(width));
+    gridVec.push_back(std::vector<Tile*>(width));
   }
 }
 

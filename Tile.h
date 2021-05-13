@@ -10,9 +10,10 @@ typedef char Colour;
 typedef int Shape;
 
 class Tile {
+private:
+  Colour colour;
+  Shape  shape;
 public:
-   Colour colour;
-   Shape  shape;
    Tile(Colour colour, Shape shape);
    std::string toString();
    Shape getShape();

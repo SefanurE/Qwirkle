@@ -1,6 +1,7 @@
 #include "TileBag.h"
 #include <vector>
 #include <iostream>
+
 TileBag::TileBag() {
   tiles = new LinkedList();
   char colours[] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};

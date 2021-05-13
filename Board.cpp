@@ -83,8 +83,12 @@ void Board::printBoard() {
   }
 }
 
+void Board::addTile(Tile *tile, int row, int col) {
+  gridVec[row][col] = tile;
+}
+
 void Board::addTile(Tile *tile, char row, std::string col) {
-  gridVec[rowToInt(row)][std::stoi(col)] = tile;
+  addTile(tile, rowToInt(row), std::stoi(col));
 }
 
 std::string Board::toString() {
@@ -123,4 +127,8 @@ int Board::rowToInt(char rowLabel) {
     }
   }
   return index;
+}
+
+bool Board::containsPosition(int row, int col) {
+  return row >= 0 && row < width && col >= 0 && col < height;
 }

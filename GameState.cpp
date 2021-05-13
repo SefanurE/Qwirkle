@@ -83,48 +83,54 @@ void GameState::showBeforeRoundOutput() {
             << getCurrentPlayer()->getHand()->toString() << std::endl
             << std::endl;
   std::cout << "Current score: " << getCurrentPlayer()->getScore() << std::endl;
-
-  // TODO: remove debug printout here
-  std::cout << "BAG CONTAINS " << bag->getList()->toString() << std::endl;
 }
 
 bool GameState::doPlaceTile(std::string tileString, std::string position) {
+  // Get row and col from position string
+  int row = board->rowToInt(position[0]);
+  std::string colstr = position.substr(1, position.length());
+  int col = std::stoi(colstr);
+
   Player *player = getCurrentPlayer();
   Tile *playedTile = new Tile(tileString[0], tileString[1]);
 
   bool success = false;
   int tileIndex = player->getHand()->getIndexOf(tileString);
 
-  // TODO: check the tile is on the board
-
   // Do we have the tile?
   if (tileIndex != TILE_NOT_FOUND) {
-    // If the position is empty?
-    if (board->getTile(position[0], position[1]) == nullptr) {
-      // Check that this placement is valid
-      if (firstTile || validateTile(playedTile, position)) {
-        // Remove the tile from the players hand and place it on the board
-        Tile *tile = player->getHand()->remove(tileIndex);
-        board->addTile(
-          tile,
-          position[0],
-          position.substr(1, position.length())
-        );
+    // Is the position on the board   
+    if (board->containsPosition(row, col)) {
+      
+      // If the position is empty?
+      if (board->getTile(row, col) == nullptr) {
+        // Check that this placement is valid
+        if (firstTile || validateTile(playedTile, position)) {
+          // Remove the tile from the players hand and place it on the board
+          Tile *tile = player->getHand()->remove(tileIndex);
+          board->addTile(
+            tile,
+            row,
+            col
+          );
 
-        // Award score for this move
-        int score = placeTileScore(playedTile, position);
-        player->updateScore(1 + score);
+          // Award score for this move
+          int score = placeTileScore(playedTile, position);
+          player->updateScore(1 + score);
 
-        // Draw the player a new tile if any remain in the bag
-        if (bag->getList()->getSize() > 0) {
-          player->getHand()->push(bag->draw());
+          // Draw the player a new tile if any remain in the bag
+          if (bag->getList()->getSize() > 0) {
+            player->getHand()->push(bag->draw());
+          }
+
+          firstTile = false;
+          success = true;
         }
-
-        firstTile = false;
-        success = true;
+      } else {
+        std::cout << "There is already a tile in position " << position << std::endl;
       }
     } else {
-      std::cout << "There is already a tile in position " << position << std::endl;
+      std::cout << "The position " << position << " isn't on the board" << std::endl;
     }
   } else {
     std::cout << "You do not have a " << tileString << " tile!" << std::endl;
@@ -241,7 +247,7 @@ LinkedList* GameState::getConnectedTilesInDir(Tile* tile, std::string position, 
     int sCol = col + direction.second * distance;
 
     // Are we are still on the board
-    if (sRow < 0 || sCol < 0 || sRow >= board->getWidth() || sCol >= board->getHeight()) {
+    if (!board->containsPosition(sRow, sCol)) {
       doScan = false;
     } else {
       // Get the tile from this position

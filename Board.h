@@ -13,13 +13,14 @@ public:
     ~Board();
     void printBoard();
     void addTile(Tile* tile, char row, std::string col);
+    void addTile(Tile* tile, int row, int col);
     Tile* getTile(int row, int col);
     Tile* getTile(char row, char col);
     int getWidth();
     int getHeight();
     std::string toString();
+    bool containsPosition(int row, int col);
     int rowToInt(char rowLabel);
-
 
 private:
 

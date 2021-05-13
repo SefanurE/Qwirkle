@@ -150,6 +150,9 @@ bool GameState::doPlaceTile(std::string tileString, std::string position) {
     nextPlayer();
   }
 
+  // Cleanup
+  delete playedTile;
+
   return success;
 }
 

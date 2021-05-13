@@ -199,26 +199,35 @@ std::string GameState::serialise() {
 }
 
 bool GameState::validateTile(Tile *tile, std::string position) {
+  // Get row and col from position string
   int row = board->rowToInt(position[0]);
   std::string colstr = position.substr(1, position.length());
   int col = std::stoi(colstr);
 
+  // Make a set of orthogonal directions
   std::pair<int, int> directions[4] = {
       std::make_pair(0, -1), std::make_pair(-1, 0), std::make_pair(0, 1),
       std::make_pair(1, 0)};
-  int direction = 0;
-  int neighbour = 1;
+
   int roundScore = 0;
-  bool flag = true;
   bool hasNeighbour = false;
   bool validated = true;
 
+  // We scan along each direction to validate the rows
+  int distance = 1;
+  int direction = 0;
   while (validated && direction < 4) {
-    int neebRow = row + directions[direction].first * neighbour;
-    int neebCol = col + directions[direction].second * neighbour;
+    // Determine scan position
+    int neebRow = row + directions[direction].first * distance;
+    int neebCol = col + directions[direction].second * distance;
 
-    if (neebCol >= 0 && neebRow >= 0 && neebCol < board->getWidth() &&
+    // If we are on the board...
+    if (neebCol >= 0 &&
+        neebRow >= 0 &&
+        neebCol < board->getWidth() &&
         neebRow < board->getHeight()) {
+  
+      // Get the tile at this position
       Tile *neighbourTile = board->getTile(neebRow, neebCol);
 
       if (neighbourTile != nullptr) {
@@ -228,36 +237,37 @@ bool GameState::validateTile(Tile *tile, std::string position) {
           std::cout << "You can't place a tile here!" << std::endl;
           validated = false;
         } else {
-          neighbour++;
-          if (neighbour > maxLength) {
-            maxLength = neighbour;
+          distance++;
+          if (distance > maxLength) {
+            maxLength = distance;
           }
         }
       } else {
-        roundScore = roundScore + neighbour - 1;
-        if (neighbour == QWIRKLE) {
-          roundScore = roundScore + neighbour;
+        roundScore += distance - 1;
+        if (distance == QWIRKLE) {
+          roundScore = roundScore + distance;
         }
         direction++;
-        neighbour = 1;
+        distance = 1;
       }
+    } else {
+      direction++;
+      distance = 1;
     }
   }
 
+  bool success = true;
   if (!hasNeighbour || !validated) {
-    flag = false;
+    success = false;
   } else {
     players[0]->updateScore(roundScore);
     std::cout << "max " << maxLength << std::endl;
   }
-  return flag;
+  return success;
 }
 
 bool GameState::checkPlacementValid(Tile *myTile, Tile *neighbourTile) {
-  bool check = false;
-  if((neighbourTile->getColour() == myTile->getColour()) ^
-  (neighbourTile->getShape() == myTile->getShape()-48)) {
-    check = true;
-  }
-  return check;
+  bool colourMatch = neighbourTile->getColour() == myTile->getColour();
+  bool shapeMatch = neighbourTile->getShape() == myTile->getShape()-48;
+  return ((colourMatch) ^ (shapeMatch));
 }

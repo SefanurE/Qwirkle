@@ -111,9 +111,7 @@ Tile *Board::getTile(char row, char col) {
 }
 
 Tile *Board::getTile(int row, int col) {
-  Tile *tile = nullptr;
-  tile = gridVec[row][col];
-  return tile;
+  return gridVec[row][col];
 }
 
 int Board::rowToInt(char rowLabel) {

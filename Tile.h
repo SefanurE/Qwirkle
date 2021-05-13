@@ -15,6 +15,7 @@ private:
   Shape  shape;
 public:
    Tile(Colour colour, Shape shape);
+   Tile(Tile& other);
    std::string toString();
    Shape getShape();
    Colour getColour();

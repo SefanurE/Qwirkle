@@ -91,19 +91,35 @@ void GameState::showBeforeRoundOutput() {
 bool GameState::doPlaceTile(std::string tileString, std::string position) {
   Player *player = getCurrentPlayer();
   Tile *playedTile = new Tile(tileString[0], tileString[1]);
+
   bool success = false;
   int tileIndex = player->getHand()->getIndexOf(tileString);
 
+  // TODO: check the tile is on the board
+
+  // Do we have the tile?
   if (tileIndex != TILE_NOT_FOUND) {
+    // If the position is empty?
     if (board->getTile(position[0], position[1]) == nullptr) {
-      if (firstTile || (!firstTile && validateTile(playedTile, position))) {
+      // Check that this placement is valid
+      if (firstTile || validateTile(playedTile, position)) {
+        // Remove the tile from the players hand and place it on the board
         Tile *tile = player->getHand()->remove(tileIndex);
-        board->addTile(tile, position[0],
-                       position.substr(1, position.length()));
-        player->updateScore(1);
+        board->addTile(
+          tile,
+          position[0],
+          position.substr(1, position.length())
+        );
+
+        // Award score for this move
+        int score = placeTileScore(playedTile, position);
+        player->updateScore(1 + score);
+
+        // Draw the player a new tile if any remain in the bag
         if (bag->getList()->getSize() > 0) {
           player->getHand()->push(bag->draw());
         }
+
         firstTile = false;
         success = true;
       }
@@ -113,11 +129,12 @@ bool GameState::doPlaceTile(std::string tileString, std::string position) {
   } else {
     std::cout << "You do not have a " << tileString << " tile!" << std::endl;
   }
+  
   //Next player is called upon a successful end to a round
   if (success) {
     nextPlayer();
   }
-  std::cout << "TEST";
+
   return success;
 }
 
@@ -198,7 +215,11 @@ std::string GameState::serialise() {
   return ss.str();
 }
 
-bool GameState::validateTile(Tile *tile, std::string position) {
+// Get tiles connected to (tile) in orthogonal direction (dir) in ascending distance order.
+LinkedList* GameState::getConnectedTilesInDir(Tile* tile, std::string position, int dir) {
+  // Create the list
+  LinkedList* tiles = new LinkedList();
+
   // Get row and col from position string
   int row = board->rowToInt(position[0]);
   std::string colstr = position.substr(1, position.length());
@@ -206,65 +227,145 @@ bool GameState::validateTile(Tile *tile, std::string position) {
 
   // Make a set of orthogonal directions
   std::pair<int, int> directions[4] = {
-      std::make_pair(0, -1), std::make_pair(-1, 0), std::make_pair(0, 1),
+      std::make_pair(0, -1),
+      std::make_pair(-1, 0),
+      std::make_pair(0, 1),
       std::make_pair(1, 0)};
 
-  int roundScore = 0;
-  bool hasNeighbour = false;
-  bool validated = true;
-
-  // We scan along each direction to validate the rows
+  std::pair<int, int> direction = directions[dir];
   int distance = 1;
-  int direction = 0;
-  while (validated && direction < 4) {
+  bool doScan = true;
+  while (doScan) {
     // Determine scan position
-    int neebRow = row + directions[direction].first * distance;
-    int neebCol = col + directions[direction].second * distance;
+    int sRow = row + direction.first * distance;
+    int sCol = col + direction.second * distance;
 
-    // If we are on the board...
-    if (neebCol >= 0 &&
-        neebRow >= 0 &&
-        neebCol < board->getWidth() &&
-        neebRow < board->getHeight()) {
-  
-      // Get the tile at this position
-      Tile *neighbourTile = board->getTile(neebRow, neebCol);
-
-      if (neighbourTile != nullptr) {
-        hasNeighbour = true;
-
-        if (!checkPlacementValid(tile, neighbourTile)) {
-          std::cout << "You can't place a tile here!" << std::endl;
-          validated = false;
-        } else {
-          distance++;
-          if (distance > maxLength) {
-            maxLength = distance;
-          }
-        }
-      } else {
-        roundScore += distance - 1;
-        if (distance == QWIRKLE) {
-          roundScore = roundScore + distance;
-        }
-        direction++;
-        distance = 1;
-      }
+    // Are we are still on the board
+    if (sRow < 0 || sCol < 0 || sRow >= board->getWidth() || sCol >= board->getHeight()) {
+      doScan = false;
     } else {
-      direction++;
-      distance = 1;
+      // Get the tile from this position
+      Tile* sTile = board->getTile(sRow, sCol);
+      if (sTile != nullptr) {
+        tiles->push(new Tile(*tile));
+        distance++;
+      } else {
+        doScan = false;
+      }
     }
   }
 
-  bool success = true;
-  if (!hasNeighbour || !validated) {
-    success = false;
-  } else {
-    players[0]->updateScore(roundScore);
-    std::cout << "max " << maxLength << std::endl;
-  }
-  return success;
+  return tiles;
 }
+
+int GameState::placeTileScore(Tile* tile, std::string position) {
+  int roundScore = 0;
+  for (int direction = 0; direction < 4; direction++) {
+    LinkedList* connected = getConnectedTilesInDir(tile, position, direction);
+    for (int i = 0; i < connected->getSize(); i++) {
+      Tile* t = connected->get(i);
+      if (checkPlacementValid(tile, t)) {
+        roundScore += i;
+      }
+    }
+    delete connected;
+  }
+  return roundScore;
+}
+
+bool GameState::validateTile(Tile* tile, std::string position) {
+  bool valid = true;
+  bool hasNeighbour = false;
+  for (int direction = 0; direction < 4; direction++) {
+    LinkedList* connected = getConnectedTilesInDir(tile, position, direction);
+    for (int i = 0; i < connected->getSize(); i++) {
+      hasNeighbour = true;
+      Tile* t = connected->get(i);
+      if (!checkPlacementValid(tile, t)) {
+        std::cout << "You can't place a tile here!" << std::endl;
+        valid = false;
+      }
+    }
+    delete connected;
+  }
+
+  if (!hasNeighbour) {
+    std::cout << "You can't place a tile here!" << std::endl;
+    valid = false;
+  }
+
+  return valid;
+}
+
+// bool GameState::validateTile(Tile *tile, std::string position) {
+//   // Get row and col from position string
+//   int row = board->rowToInt(position[0]);
+//   std::string colstr = position.substr(1, position.length());
+//   int col = std::stoi(colstr);
+// 
+//   // Make a set of orthogonal directions
+//   std::pair<int, int> directions[4] = {
+//       std::make_pair(0, -1), std::make_pair(-1, 0), std::make_pair(0, 1),
+//       std::make_pair(1, 0)};
+// 
+//   int roundScore = 0;
+//   bool hasNeighbour = false;
+//   bool validated = true;
+// 
+//   // We scan along each direction to validate the rows
+//   int distance = 1;
+//   int direction = 0;
+//   while (validated && direction < 4) {
+//     // Determine scan position
+//     int neebRow = row + directions[direction].first * distance;
+//     int neebCol = col + directions[direction].second * distance;
+// 
+//     // If we are on the board...
+//     if (neebCol >= 0 &&
+//         neebRow >= 0 &&
+//         neebCol < board->getWidth() &&
+//         neebRow < board->getHeight()) {
+//   
+//       // Get the tile at this position
+//       Tile *neighbourTile = board->getTile(neebRow, neebCol);
+// 
+//       if (neighbourTile != nullptr) {
+//         hasNeighbour = true;
+// 
+//         if (!checkPlacementValid(tile, neighbourTile)) {
+//           std::cout << "You can't place a tile here!" << std::endl;
+//           validated = false;
+//         } else {
+//           distance++;
+//           if (distance > maxLength) {
+//             maxLength = distance;
+//           }
+//         }
+//       } else {
+//         roundScore += distance - 1;
+//         if (distance == QWIRKLE) {
+//           roundScore = roundScore + distance;
+//         }
+//         direction++;
+//         distance = 1;
+//       }
+//     } else {
+//       direction++;
+//       distance = 1;
+//     }
+//   }
+// 
+//   bool success = true;
+//   if (!hasNeighbour || !validated) {
+//     success = false;
+//   } else {
+
+
+//     players[0]->updateScore(roundScore);
+//     std::cout << "max " << maxLength << std::endl;
+//   }
+//   return success;
+// }
 
 bool GameState::checkPlacementValid(Tile *myTile, Tile *neighbourTile) {
   bool colourMatch = neighbourTile->getColour() == myTile->getColour();

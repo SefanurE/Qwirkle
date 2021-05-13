@@ -27,14 +27,15 @@ class GameState {
 
   private:
     bool firstTile;
-    int maxLength;
     int currentPlayerIndex;
     Player** players;
     TileBag* bag;
    
     Player* getCurrentPlayer();
     void nextPlayer();
+    LinkedList* getConnectedTilesInDir(Tile* tile, std::string position, int dir);
     bool validateTile(Tile* tile, std::string position);
+    int placeTileScore(Tile* tile, std::string position);
     bool checkPlacementValid(Tile* myTile, Tile* neighbourTile);
 };
 

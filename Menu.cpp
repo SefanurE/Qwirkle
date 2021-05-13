@@ -91,7 +91,9 @@ std::string Menu::getNameInput() {
           char c = std::cin.get();
           if (c == '\n') {
             read = false;
-            done = true;
+            if (playerName.length() > 0) {
+              done = true;
+            }
           } else if (c == EOF) {
             std::cout << std::endl << std::endl;
             read = false;

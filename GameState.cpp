@@ -86,12 +86,11 @@ void GameState::showBeforeRoundOutput() {
   // Display the board
   board->printBoard();
 
-  // Display the current players hand and score
+  // Display the current players hand 
   std::cout << std::endl
             << "Your hand is" << std::endl
             << getCurrentPlayer()->getHand()->toString() << std::endl
             << std::endl;
-  std::cout << "Current score: " << getCurrentPlayer()->getScore() << std::endl;
 }
 
 bool GameState::doPlaceTile(std::string tileString, std::string position) {

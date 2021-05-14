@@ -9,11 +9,11 @@ GameManager::~GameManager() {
 }
 
 void GameManager::startGame() {
+  // Read and parse commands till the player quits
   status = PLAYING;
   while (status == PLAYING) {
     if (showRoundOutput) {
       gameState->showBeforeRoundOutput();
-    } else {
       std::cout << std::endl;
     }
     std::cout << PROMPT;
@@ -62,6 +62,7 @@ void GameManager::parseCommand(std::string command) {
   std::string buffer = "";
   std::string comm = "";
   std::vector<std::string> args;
+  bool invalid = false;
   bool completedCommand = false;
   for (size_t i = 0; !completedCommand && i < command.length(); i++) {
     char c = command[i];
@@ -83,7 +84,7 @@ void GameManager::parseCommand(std::string command) {
         } else if (imatch(buffer, COMM_REPLACE)) {
           comm = COMM_REPLACE;
         } else {
-          std::cerr << "Unrecognised command '" << buffer << "'" << std::endl;
+          invalid = true;
           completedCommand = true;
         }
       } else if (comm == COMM_SAVE) {
@@ -102,7 +103,7 @@ void GameManager::parseCommand(std::string command) {
           doPlaceTile(args[0], buffer);
           completedCommand = true;
         } else {
-          std::cerr << "Malformed " << comm << " command." << std::endl;
+          invalid = true;
           completedCommand = true;
         }
       } else if (comm == COMM_REPLACE) {
@@ -112,11 +113,11 @@ void GameManager::parseCommand(std::string command) {
           doReplaceTile(buffer);
           completedCommand = true;
         } else {
-          std::cerr << "Malformed " << comm << " command." << std::endl;
+          invalid = true;
           completedCommand = true;
         }
       } else {
-        std::cerr << "Malformed " << comm << " command." << std::endl;
+        invalid = true;
         completedCommand = true;
       }
 
@@ -127,7 +128,11 @@ void GameManager::parseCommand(std::string command) {
 
   // Report on unfinished commands
   if (comm != "" && !completedCommand) {
-    std::cerr << "Incomplete " << comm << " command." << std::endl;
+    invalid = true;
+  }
+
+  if (invalid) {
+    std::cout << "Invalid Input" << std::endl;
   }
 }
 

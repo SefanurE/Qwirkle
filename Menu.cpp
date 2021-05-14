@@ -39,7 +39,7 @@ void Menu::mainMenu() {
         } else if (menuOption == QUIT_OPTION) {
             quit = true;
         } else if (!quit) {
-            std::cout << "Invalid input, try again" << std::endl;
+            std::cout << "Invalid Input" << std::endl;
         }
     }
     std::cout << "Goodbye" << std::endl;

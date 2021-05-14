@@ -57,8 +57,7 @@ void GameManager::loadGame(std::string fileName) {
   if (gameData.is_open()) {
     gameState = new GameState(gameData);
     startGame();
-  }
-  else {
+  } else {
     std::cout << "Failed to read" << std::endl;
   }
 }

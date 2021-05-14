@@ -2,6 +2,7 @@
 #include "LinkedList.h"
 #include "TileBag.h"
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -39,7 +40,8 @@ GameState::GameState(std::istream &gameData) {
 
     // Read the player score and set
     getline(gameData, tempPlayerInfoString);
-    players[i]->setScore(stoi(tempPlayerInfoString));
+    int score = stoi(tempPlayerInfoString);
+    players[i]->setScore(score);
 
     // Read the players hand and set
     getline(gameData, tempPlayerInfoString);
@@ -86,12 +88,13 @@ Player* GameState::getWinningPlayer() {
 }
 
 void GameState::showAfterGameOutput() {
-  Player* winner = getWinningPlayer();
   std::cout << "Game over" << std::endl;
   for (int i = 0; i < PLAYER_COUNT; i++) {
-    std::cout << "Score for " << players[i]->getName() << ":";
-    std::cout << players[i]->getScore() << std::endl;
+    std::cout << "Score for " << players[i]->getName() << ": ";
+    std::cout << std::setfill('0') << std::setw(3) << players[i]->getScore() << std::endl;
   }
+
+  Player* winner = getWinningPlayer();
   std::cout << "Player " << winner->getName() << " won!" << std::endl;
   std::cout << std::endl;
 }
@@ -146,7 +149,7 @@ bool GameState::doPlaceTile(std::string tileString, std::string position) {
           // Award score for this move
           // First tile gets 1 point
           int score = placeTileScore(playedTile, position) + (firstTile ? 1 : 0);
-          player->updateScore(score);
+          player->addScore(score);
 
           // Draw the player a new tile if any remain in the bag
           if (bag->getList()->getSize() > 0) {

@@ -24,9 +24,9 @@ silent = options[:silent]
 diffCommand = ARGV[0] ? ARGV[0] : 'diff'
 
 # Find tests
-tests = Dir.glob('**/*.in')
+tests = Dir.glob('**/*.input')
 if tests.length == 0 then
-  puts "Found no tests. Will auto detect any .in files in this dir and subdirs." unless silent
+  puts "Found no tests. Will auto detect any .input files input this dir and subdirs." unless silent
   exit
 end
 
@@ -40,10 +40,10 @@ unless silent then
 end
 failedTests = []
 tests.each { |t|
-  name = t.match(/(.*)\.in$/)[1]
+  name = t.match(/(.*)\.input$/)[1]
 
   # Run test
-  _, stderr, status = Open3.capture3("./qwirkle < #{name}.in > #{name}.out")
+  _, stderr, status = Open3.capture3("./qwirkle < #{name}.input > #{name}.actual")
 
   unless status == 0 
     puts "  ❌ Failed to run test '#{name}'. Got status of '#{status}'"
@@ -52,19 +52,19 @@ tests.each { |t|
   end
 
   # Do we have this file
-  if not File.file?("#{name}.expected") then
+  if not File.file?("#{name}.output") then
     puts "  🟡 Test '#{name}' is incomplete"
     next
   end
 
   # Perform a diff
-  diff = `#{diffCommand} -u #{name}.expected #{name}.out`
+  diff = `#{diffCommand} -u #{name}.output #{name}.actual`
   if diff != '' then
     puts "  ❌ Test '#{name}' failed!"
     failedTests.push [name, "Diff of failed test'#{name}'\n\n#{diff}"]
   else
     puts "  ✅ Test '#{name}' passed" unless silent
-    File.delete("#{name}.out")
+    File.delete("#{name}.actual")
   end
 }
 

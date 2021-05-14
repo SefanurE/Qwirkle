@@ -17,6 +17,7 @@ void Menu::mainMenu() {
           if (c == '\n') {
             read = false;
           } else if (c == EOF) {
+            std::cout << std::endl;
             read = false;
             quit = true;
           } else if (!std::isspace(c)) {
@@ -91,7 +92,9 @@ std::string Menu::getNameInput() {
           char c = std::cin.get();
           if (c == '\n') {
             read = false;
-            done = true;
+            if (playerName.length() > 0) {
+              done = true;
+            }
           } else if (c == EOF) {
             std::cout << std::endl << std::endl;
             read = false;
@@ -99,7 +102,8 @@ std::string Menu::getNameInput() {
             playerName = "";
           } else if (c < 'A' || c > 'Z') {
             std::cin.ignore(INT8_MAX, '\n');
-            std::cout << "Name must be only uppercase letters, enter new name" << std::endl;
+            std::cout << "Name must be only uppercase letters, enter new name" 
+                      << std::endl;
             read = false;
             done = false;
           } else {
@@ -124,6 +128,7 @@ void Menu::loadGame() {
     while (read) {
       char c = std::cin.get();
       if (c == EOF) {
+        std::cout << std::endl << std::endl;
         read = false;
         done = true;
         quit = true;
@@ -160,5 +165,5 @@ void Menu::printCredits() {
     std::cout << "Name: Sivan Krispin" << std::endl
               << "Student ID: s3856571" << std::endl
               << "Email: s3856571@student.rmit.edu.au" << std::endl;
-    std::cout << "-----------------------------------" << std::endl;          
+    std::cout << "-----------------------------------" << std::endl;
 }

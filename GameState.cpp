@@ -8,7 +8,7 @@
 
 GameState::GameState(std::string playerNames[PLAYER_COUNT]) {
   players = new Player *[PLAYER_COUNT];
-  board = new Board(20, 20);
+  board = new Board(BOARD_SIZE, BOARD_SIZE);
   bag = new TileBag();
   for (int i = 0; i < PLAYER_COUNT; i++) {
     players[i] = new Player(playerNames[i]);
@@ -16,6 +16,15 @@ GameState::GameState(std::string playerNames[PLAYER_COUNT]) {
   }
   firstTile = true;
   currentPlayerIndex = 0;
+}
+
+GameState::~GameState() {
+  for (int i = 0; i < PLAYER_COUNT; i++) {
+    delete players[i];
+  }
+  delete[] players;
+  delete board;
+  delete bag;
 }
 
 GameState::GameState(std::istream &gameData) {
@@ -92,31 +101,29 @@ bool GameState::doPlaceTile(std::string tileString, std::string position) {
   int col = std::stoi(colstr);
 
   Player *player = getCurrentPlayer();
-  Tile *playedTile = new Tile(tileString[0], tileString[1]);
+  Tile *playedTile = new Tile(
+      tileString[0], std::stoi(tileString.substr(1, tileString.length())));
 
   bool success = false;
   int tileIndex = player->getHand()->getIndexOf(tileString);
 
   // Do we have the tile?
   if (tileIndex != TILE_NOT_FOUND) {
-    // Is the position on the board   
+    // Is the position on the board
     if (board->containsPosition(row, col)) {
-      
+
       // If the position is empty?
       if (board->getTile(row, col) == nullptr) {
         // Check that this placement is valid
         if (firstTile || validateTile(playedTile, position)) {
           // Remove the tile from the players hand and place it on the board
           Tile *tile = player->getHand()->remove(tileIndex);
-          board->addTile(
-            tile,
-            row,
-            col
-          );
+          board->addTile(tile, row, col);
 
           // Award score for this move
-          int score = placeTileScore(playedTile, position);
-          player->updateScore(1 + score);
+          // First tile gets 1 point
+          int score = placeTileScore(playedTile, position) + (firstTile ? 1 : 0);
+          player->updateScore(score);
 
           // Draw the player a new tile if any remain in the bag
           if (bag->getList()->getSize() > 0) {
@@ -127,19 +134,24 @@ bool GameState::doPlaceTile(std::string tileString, std::string position) {
           success = true;
         }
       } else {
-        std::cout << "There is already a tile in position " << position << std::endl;
+        std::cout << "There is already a tile in position " << position
+                  << std::endl;
       }
     } else {
-      std::cout << "The position " << position << " isn't on the board" << std::endl;
+      std::cout << "The position " << position << " isn't on the board"
+                << std::endl;
     }
   } else {
     std::cout << "You do not have a " << tileString << " tile!" << std::endl;
   }
-  
-  //Next player is called upon a successful end to a round
+
+  // Next player is called upon a successful end to a round
   if (success) {
     nextPlayer();
   }
+
+  // Cleanup
+  delete playedTile;
 
   return success;
 }
@@ -161,11 +173,11 @@ bool GameState::doReplaceTile(std::string tile) {
   if (tileIndex != TILE_NOT_FOUND) {
     // Is the bag empty?
     if (bag->getList()->getSize() != 0) {
-      // Remove the tile from the players hand and put it in the bag
-      bag->getList()->push(hand->remove(tileIndex));
-      
       // Draw a tile and put it in the players hand
       hand->insertAfter(tileIndex, bag->draw());
+  
+      // Remove the tile from the players hand and put it in the bag
+      bag->getList()->push(hand->remove(tileIndex));
 
       success = true;
     } else {
@@ -175,10 +187,6 @@ bool GameState::doReplaceTile(std::string tile) {
   } else {
     std::cout << "You do not have a " << tile << " tile!" << std::endl;
   }
-  //switches to next player after tile replacement (turn used)
-  if(success) {
-    nextPlayer();
-  }
 
   // Swap player if move was successfull
   if (success) {
@@ -186,15 +194,6 @@ bool GameState::doReplaceTile(std::string tile) {
   }
 
   return success;
-}
-
-GameState::~GameState() {
-  for (int i = 0; i < PLAYER_COUNT; i++) {
-    delete players[i];
-  }
-  delete[] players;
-  delete board;
-  delete bag;
 }
 
 std::string GameState::serialise() {
@@ -221,10 +220,12 @@ std::string GameState::serialise() {
   return ss.str();
 }
 
-// Get tiles connected to (tile) in orthogonal direction (dir) in ascending distance order.
-LinkedList* GameState::getConnectedTilesInDir(Tile* tile, std::string position, int dir) {
+// Get tiles connected to (tile) in orthogonal direction (dir) in ascending
+// distance order.
+LinkedList *GameState::getConnectedTilesInDir(Tile *tile, std::string position,
+                                              int dir) {
   // Create the list
-  LinkedList* tiles = new LinkedList();
+  LinkedList *tiles = new LinkedList();
 
   // Get row and col from position string
   int row = board->rowToInt(position[0]);
@@ -233,9 +234,7 @@ LinkedList* GameState::getConnectedTilesInDir(Tile* tile, std::string position, 
 
   // Make a set of orthogonal directions
   std::pair<int, int> directions[4] = {
-      std::make_pair(0, -1),
-      std::make_pair(-1, 0),
-      std::make_pair(0, 1),
+      std::make_pair(0, -1), std::make_pair(-1, 0), std::make_pair(0, 1),
       std::make_pair(1, 0)};
 
   std::pair<int, int> direction = directions[dir];
@@ -251,9 +250,9 @@ LinkedList* GameState::getConnectedTilesInDir(Tile* tile, std::string position, 
       doScan = false;
     } else {
       // Get the tile from this position
-      Tile* sTile = board->getTile(sRow, sCol);
+      Tile *sTile = board->getTile(sRow, sCol);
       if (sTile != nullptr) {
-        tiles->push(new Tile(*tile));
+        tiles->push(new Tile(*sTile));
         distance++;
       } else {
         doScan = false;
@@ -264,18 +263,36 @@ LinkedList* GameState::getConnectedTilesInDir(Tile* tile, std::string position, 
   return tiles;
 }
 
-int GameState::placeTileScore(Tile* tile, std::string position) {
+int GameState::placeTileScore(Tile *tile, std::string position) {
   int roundScore = 0;
+  bool gotRowScore = false;
+  bool gotColScore = false;
 
   // For each orthogonal direction (UP, LEFT, DOWN, RIGHT)
   for (int direction = 0; direction < 4; direction++) {
-    // Award points for the length of the amount of connected tiles
-    LinkedList* connected = getConnectedTilesInDir(tile, position, direction);
+    // Award points for the length of the amount of connected tiles in this direction
+    LinkedList *connected = getConnectedTilesInDir(tile, position, direction);
     roundScore += connected->getSize();
 
+    // Get a point for being included in a row?
+    if (connected->getSize() != 0) {
+      if (direction % 2 == 0 && !gotRowScore) {
+        roundScore++;
+        gotRowScore = true;
+      }
+
+      // Get a point for being included in a col?
+      if (direction % 2 == 1 && !gotColScore) {
+        roundScore++;
+        gotColScore = true;
+      }
+    }
+
     // Award double points if the length is a QWIRKLE!!
-    if (connected->getSize() == QWIRKLE)
+    if (connected->getSize() == QWIRKLE - 1) {
       roundScore += QWIRKLE;
+      std::cout << std::endl << "QWIRKLE!!" << std::endl << std::endl;
+    }
 
     delete connected;
   }
@@ -283,22 +300,25 @@ int GameState::placeTileScore(Tile* tile, std::string position) {
   return roundScore;
 }
 
-bool GameState::validateTile(Tile* tile, std::string position) {
+bool GameState::validateTile(Tile *tile, std::string position) {
   bool valid = true;
   bool hasNeighbour = false;
- 
+
   // For each orthogonal direction (UP,LEFT,DOWN,RIGHT)
   for (int direction = 0; direction < 4; direction++) {
     // Get all of the connected tiles in this direction
-    LinkedList* connected = getConnectedTilesInDir(tile, position, direction);
+    LinkedList *connected = getConnectedTilesInDir(tile, position, direction);
 
     // Update whether we have a neighbour
     hasNeighbour = hasNeighbour || connected->getSize() > 0;
 
     // Validate all of these connected neighbours
-    for (int i = 0; i < connected->getSize(); i++) {
+    bool doValidate = true;
+    for (int i = 0; doValidate && i < connected->getSize(); i++) {
       if (!checkPlacementValid(tile, connected->get(i))) {
-        std::cout << "You can't place a tile here!" << std::endl;
+        doValidate = false;
+        std::cout << "You can't place a " << tile->toString() << " tile here!"
+                  << std::endl;
         valid = false;
       }
     }
@@ -315,6 +335,6 @@ bool GameState::validateTile(Tile* tile, std::string position) {
 }
 bool GameState::checkPlacementValid(Tile *myTile, Tile *neighbourTile) {
   bool colourMatch = neighbourTile->getColour() == myTile->getColour();
-  bool shapeMatch = neighbourTile->getShape() == myTile->getShape()-48;
-  return ((colourMatch) ^ (shapeMatch));
+  bool shapeMatch = neighbourTile->getShape() == myTile->getShape();
+  return ((colourMatch) != (shapeMatch));
 }

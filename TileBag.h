@@ -8,6 +8,7 @@ private:
 public:
   TileBag();
   TileBag(std::string tileBagString);
+  ~TileBag();
   void shuffle();
   Tile* draw();
   LinkedList* getList();

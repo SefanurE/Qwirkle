@@ -31,6 +31,7 @@ class GameManager {
     GameState* gameState;
     GameManagerState status = DEFAULT;
     bool showRoundOutput = true;
+    bool imatch(std::string s, std::string pattern);
 
   public:
     GameManager(); ~GameManager();

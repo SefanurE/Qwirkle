@@ -9,6 +9,7 @@
 #define GREEN  'G'
 #define BLUE   'B'
 #define PURPLE 'P'
+#define COLOURS_COUNT 6
 
 // Shapes
 #define CIRCLE    1
@@ -17,5 +18,7 @@
 #define SQUARE    4
 #define STAR_6    5
 #define CLOVER    6
+#define SHAPES_COUNT 6
+
 
 #endif // ASSIGN1_TILECODES_H

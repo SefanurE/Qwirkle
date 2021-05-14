@@ -79,57 +79,59 @@ void GameManager::parseCommand(std::string command) {
 
     // Once we get to a natural break...
     if (std::isspace(c) || i == command.length() - 1) {
-      
-      // Establish initial command
-      if (comm == "") {
-        if (imatch(buffer, COMM_QUIT)) {
-          doQuit();
-        } else if (imatch(buffer, COMM_SAVE)) {
-          comm = COMM_SAVE;
-        } else if (imatch(buffer, COMM_PLACE)) {
-          comm = COMM_PLACE;
-        } else if (imatch(buffer, COMM_REPLACE)) {
-          comm = COMM_REPLACE;
-        } else {
-          invalid = true;
-          completedCommand = true;
-        }
-      } else if (comm == COMM_SAVE) {
-        // Parse the SAVE Command arguments
-        // of the form SAVE [path]
-        doSave(buffer);
-        completedCommand = true;
-      } else if (comm == COMM_PLACE) {
-        // Parse the PLACE command arguments
-        // of the form "PLACE [TILE] AT [TILE]"
-        if (args.size() == 0 && imatch(buffer, COMM_TILE)) {
-          args.push_back(buffer);
-        } else if (args.size() == 1 && imatch(buffer, COMM_AT)) {
-          args.push_back(buffer);
-        } else if (args.size() == 2 && imatch(buffer, COMM_TILE)) {
-          doPlaceTile(args[0], buffer);
-          completedCommand = true;
-        } else {
-          invalid = true;
-          completedCommand = true;
-        }
-      } else if (comm == COMM_REPLACE) {
-        // Parse the REPLACE command arguments
-        // of the form REPLACE [TILE]
-        if (imatch(buffer, COMM_TILE)) {
-          doReplaceTile(buffer);
-          completedCommand = true;
-        } else {
-          invalid = true;
-          completedCommand = true;
-        }
-      } else {
-        invalid = true;
-        completedCommand = true;
-      }
 
-      // reset buffer
-      buffer.clear();
+      if (buffer != "") {
+        // Establish initial command
+        if (comm == "") {
+          if (imatch(buffer, COMM_QUIT)) {
+            doQuit();
+          } else if (imatch(buffer, COMM_SAVE)) {
+            comm = COMM_SAVE;
+          } else if (imatch(buffer, COMM_PLACE)) {
+            comm = COMM_PLACE;
+          } else if (imatch(buffer, COMM_REPLACE)) {
+            comm = COMM_REPLACE;
+          } else {
+            invalid = true;
+            completedCommand = true;
+          }
+        } else if (comm == COMM_SAVE) {
+          // Parse the SAVE Command arguments
+          // of the form SAVE [path]
+          doSave(buffer);
+          completedCommand = true;
+        } else if (comm == COMM_PLACE) {
+          // Parse the PLACE command arguments
+          // of the form "PLACE [TILE] AT [TILE]"
+          if (args.size() == 0 && imatch(buffer, COMM_TILE)) {
+            args.push_back(buffer);
+          } else if (args.size() == 1 && imatch(buffer, COMM_AT)) {
+            args.push_back(buffer);
+          } else if (args.size() == 2 && imatch(buffer, COMM_TILE)) {
+            doPlaceTile(args[0], buffer);
+            completedCommand = true;
+          } else {
+            invalid = true;
+            completedCommand = true;
+          }
+        } else if (comm == COMM_REPLACE) {
+          // Parse the REPLACE command arguments
+          // of the form REPLACE [TILE]
+          if (imatch(buffer, COMM_TILE)) {
+            doReplaceTile(buffer);
+            completedCommand = true;
+          } else {
+            invalid = true;
+            completedCommand = true;
+          }
+        } else {
+          invalid = true;
+          completedCommand = true;
+        }
+
+        // reset buffer
+        buffer.clear();
+      }
     }
   }
 

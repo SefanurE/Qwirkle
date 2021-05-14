@@ -25,6 +25,8 @@ class GameState {
     bool doPlaceTile(std::string tileString, std::string position);
     bool doReplaceTile(std::string tile);
     void showBeforeRoundOutput();
+    void showAfterGameOutput();
+    Player* getWinningPlayer();
 
   private:
     bool firstTile;

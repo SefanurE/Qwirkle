@@ -37,6 +37,13 @@ void GameManager::startGame() {
       showRoundOutput = false;
       parseCommand(command);
     }
+
+    // Did they win?
+    Player* winner = gameState->getWinningPlayer();
+    if (winner != nullptr) {
+      status = GAMEOVER;
+      gameState->showAfterGameOutput();
+    }
   }
 }
 

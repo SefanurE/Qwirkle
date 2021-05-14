@@ -17,7 +17,8 @@
 enum GameManagerState {
   DEFAULT,
   PLAYING,
-  QUIT
+  QUIT,
+  GAMEOVER
 };
 
 class GameManager {

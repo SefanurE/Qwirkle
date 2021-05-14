@@ -72,6 +72,30 @@ GameState::GameState(std::istream &gameData) {
   }
 }
 
+Player* GameState::getWinningPlayer() {
+  Player* winner = nullptr;
+  if (bag->getList()->getSize() == 0) {
+    for (int i = 0; i < PLAYER_COUNT; i++) {
+      if (players[i]->getHand()->getSize() == 0) {
+        winner = players[i];
+      }
+    }
+  }
+
+  return winner;
+}
+
+void GameState::showAfterGameOutput() {
+  Player* winner = getWinningPlayer();
+  std::cout << "Game over" << std::endl;
+  for (int i = 0; i < PLAYER_COUNT; i++) {
+    std::cout << "Score for " << players[i]->getName() << ":";
+    std::cout << players[i]->getScore() << std::endl;
+  }
+  std::cout << "Player " << winner->getName() << " won!" << std::endl;
+  std::cout << std::endl;
+}
+
 void GameState::showBeforeRoundOutput() {
   // Display the current players name
   std::cout << std::endl

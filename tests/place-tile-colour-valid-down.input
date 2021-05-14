@@ -1,0 +1,5 @@
+2
+tests/place-tile-basic.save
+PLACE G5 AT B1
+PLACE G4 AT C1
+

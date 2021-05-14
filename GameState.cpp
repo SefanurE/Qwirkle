@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <regex>
 
 GameState::GameState(std::string playerNames[PLAYER_COUNT]) {
   players = new Player *[PLAYER_COUNT];
@@ -72,6 +73,34 @@ GameState::GameState(std::istream &gameData) {
       currentPlayerIndex = i;
     }
   }
+}
+
+bool GameState::testSaveFileValidity(std::istream &gameData) {
+  // Create array of patterns
+  std::string patterns[PLAYER_COUNT * 3 + 4] = {};
+
+  // Add player patterns
+  for (int i = 0; i < PLAYER_COUNT; i++) {
+    patterns[i * 3] = NAME_PATTERN;
+    patterns[i * 3 + 1] = SCORE_PATTERN;
+    patterns[i * 3 + 2] = HAND_PATTERN;
+  }
+
+  // Add game patterns
+  patterns[PLAYER_COUNT * 3 + 0] = BOARD_SIZE_PATTERN;
+  patterns[PLAYER_COUNT * 3 + 1] = BOARD_TILES_PATTERN;
+  patterns[PLAYER_COUNT * 3 + 2] = BAG_TILES_PATTERN;
+  patterns[PLAYER_COUNT * 3 + 3] = NAME_PATTERN;
+
+  // Check the file against all the patterns, line by line
+  bool valid = true;
+  std::string line = "";
+  for (int i = 0; i < PLAYER_COUNT * 3 + 4; i++) {
+    getline(gameData, line);
+    valid = valid && std::regex_match(line, std::regex(patterns[i]));
+  }
+
+  return valid;
 }
 
 Player* GameState::getWinningPlayer() {

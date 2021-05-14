@@ -188,3 +188,28 @@ void GameManager::doReplaceTile(std::string tile) {
   bool success = gameState->doReplaceTile(tile);
   showRoundOutput = success;
 }
+
+bool GameManager::testSaveFileValidity(std::string path) {
+  bool valid = true; 
+  
+  // Validate path
+  valid = valid && std::regex_match(path, std::regex(PATH_PATTERN)); 
+
+  // Validate file
+  if (valid) {
+    std::ifstream gameData(path);
+    if (gameData.is_open()) {
+      valid = GameState::testSaveFileValidity(gameData);
+      if (!valid) {
+        std::cout << "Invalid save format" << std::endl;
+      }
+    } else {
+      valid = false;
+      std::cout << "Can't read file" << std::endl;
+    }
+  } else {
+    std::cout << "Invalid file path" << std::endl;
+  }
+
+  return valid;
+}

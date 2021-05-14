@@ -13,6 +13,7 @@
 #define COMM_REPLACE "REPLACE"
 #define COMM_AT "AT"
 #define COMM_TILE "[A-Z][0-9]+"
+#define PATH_PATTERN "((?:[^/\\s]*\\/)*)([^/\\s]+)"
 
 enum GameManagerState {
   DEFAULT,
@@ -39,4 +40,5 @@ class GameManager {
     void startGame();
     void newGame(std::string playerNames[PLAYER_COUNT]);
     void loadGame(std::string fileName);
+    static bool testSaveFileValidity(std::string path);
 };

@@ -135,7 +135,7 @@ void Menu::loadGame() {
         quit = true;
       } else if (c == '\n') {
         read = false;
-        done = true; // TODO: gameManager->testFileValidity(fileName);
+        done = GameManager::testSaveFileValidity(fileName);
       } else {
         fileName.push_back(c);
       }

@@ -7,12 +7,17 @@
 #include "TileBag.h"
 #include "Board.h"
 
-
 #define PLAYER_COUNT 2
 #define TILE_NOT_FOUND -1
 #define QWIRKLE 6
 #define BOARD_SIZE 26
 
+#define NAME_PATTERN "^[A-Z]+$"
+#define SCORE_PATTERN "^\\d+$"
+#define HAND_PATTERN "^(([A-Z][0-9]+),)*([A-Z][0-9]+)$"
+#define BOARD_SIZE_PATTERN "^\\d+,\\d+$"
+#define BOARD_TILES_PATTERN "^(([A-Z][0-9]+)@([A-Z][0-9]+),\\s?)([A-Z][0-9]+)@([A-Z][0-9]+)$"
+#define BAG_TILES_PATTERN "^(([A-Z][0-9]+),)*([A-Z][0-9]+)$"
 
 class GameState {
   public:
@@ -22,11 +27,12 @@ class GameState {
     GameState(std::istream &stream);
     ~GameState();
     std::string serialise();
+    Player* getWinningPlayer();
     bool doPlaceTile(std::string tileString, std::string position);
     bool doReplaceTile(std::string tile);
     void showBeforeRoundOutput();
     void showAfterGameOutput();
-    Player* getWinningPlayer();
+    static bool testSaveFileValidity(std::istream &gameData);
 
   private:
     bool firstTile;

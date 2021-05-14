@@ -1,5 +1,5 @@
 2
-tests/2x2-tiles-score.save
+tests/score-2x2-tiles.save
 PLACE G5 AT C2
 PLACE G4 AT D2
 PLACE O4 AT D3

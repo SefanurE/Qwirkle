@@ -35,9 +35,10 @@ void Menu::mainMenu() {
             printCredits();
             displayMenu();
         } else if (menuOption == QUIT_OPTION) {
+            std::cout << std::endl;
             quit = true;
         } else if (!quit) {
-            std::cout << "Invalid Input" << std::endl;
+            std::cout << "Invalid input, try again" << std::endl;
         }
     }
     std::cout << "Goodbye" << std::endl;
@@ -55,6 +56,7 @@ void Menu::displayMenu() {
 
 void Menu::newGame() {
     bool cancel = false;
+    std::cout << std::endl;
     std::cout << "Starting a New Game" << std::endl;
     std::string playerNames[PLAYER_COUNT] = {"0"};
     for (int i = 0; !cancel && i < PLAYER_COUNT; i++) {
@@ -100,7 +102,8 @@ std::string Menu::getNameInput() {
             playerName = "";
           } else if (c < 'A' || c > 'Z') {
             std::cin.ignore(INT8_MAX, '\n');
-            std::cout << "Invalid Input" << std::endl;
+            std::cout << "Name must be only uppercase letters, enter new name" 
+                      << std::endl;
             read = false;
             done = false;
           } else {
@@ -118,6 +121,7 @@ void Menu::loadGame() {
   bool done = false;
   bool quit = false;
   while (!done) {
+    std::cout << std::endl;
     std::cout << "Enter the filename from which load a game: " << std::endl;
     std::cout << "> ";
     fileName = "";
@@ -146,21 +150,22 @@ void Menu::loadGame() {
 }
 
 void Menu::printCredits() {
-    std::cout << "-----------------------------------" << std::endl;
-    std::cout << "Name: Maxwell Reid" << std::endl
-              << "Student ID: s3787033" << std::endl
-              << "Email: s3787033@student.rmit.edu.au" << std::endl;
-    std::cout << std::endl;
-    std::cout << "Name: Ewan Breakey" << std::endl
-              << "Student ID: s3845382" << std::endl
-              << "Email: s3845382@student.rmit.edu.au" << std::endl;
-    std::cout << std::endl;
-    std::cout << "Name: Sefaur Erciyas" << std::endl
-              << "Student ID: s3842307" << std::endl
-              << "Email: s3842307@student.rmit.edu.au" << std::endl;
-    std::cout << std::endl;
-    std::cout << "Name: Sivan Krispin" << std::endl
-              << "Student ID: s3856571" << std::endl
-              << "Email: s3856571@student.rmit.edu.au" << std::endl;
-    std::cout << "-----------------------------------" << std::endl;
+  std::cout << std::endl;
+  std::cout << "-----------------------------------" << std::endl;
+  std::cout << "Name: Maxwell Reid" << std::endl
+            << "Student ID: s3787033" << std::endl
+            << "Email: s3787033@student.rmit.edu.au" << std::endl;
+  std::cout << std::endl;
+  std::cout << "Name: Ewan Breakey" << std::endl
+            << "Student ID: s3845382" << std::endl
+            << "Email: s3845382@student.rmit.edu.au" << std::endl;
+  std::cout << std::endl;
+  std::cout << "Name: Sefaur Erciyas" << std::endl
+            << "Student ID: s3842307" << std::endl
+            << "Email: s3842307@student.rmit.edu.au" << std::endl;
+  std::cout << std::endl;
+  std::cout << "Name: Sivan Krispin" << std::endl
+            << "Student ID: s3856571" << std::endl
+            << "Email: s3856571@student.rmit.edu.au" << std::endl;
+  std::cout << "-----------------------------------" << std::endl;
 }

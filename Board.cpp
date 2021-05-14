@@ -37,6 +37,9 @@ Board::Board(std::string boardShapeString, std::string placedTilesString) {
       tile = new Tile(buffer[0], std::stoi(buffer.substr(1, buffer.length())));
       buffer = "";
     } else if (c == ',' || i == placedTilesString.length() - 1) {
+      if (i == placedTilesString.length() - 1) {
+        buffer.push_back(c);
+      }
       addTile(tile, buffer[0], buffer.substr(1, buffer.length()));
       buffer = "";
     } else if (!std::isspace(c)) {

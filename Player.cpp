@@ -26,8 +26,8 @@ void Player::setScore(int score) {
   this->score = score;
 }
 
-void Player::updateScore(int newScore) {
-  score = score + newScore;
+void Player::addScore(int newScore) {
+  score += newScore;
 }
 
 void Player::initHand(TileBag* bag) {

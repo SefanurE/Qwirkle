@@ -66,6 +66,11 @@ tests.each { |t|
     puts "  ✅ Test '#{name}' passed" unless silent
     File.delete("#{name}.actual")
   end
+
+  # clean up temp saves
+  if File.exist?("#{name}.tmp.save") then
+    File.delete("#{name}.tmp.save")
+  end
 }
 
 # Print stats

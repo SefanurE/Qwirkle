@@ -2,5 +2,5 @@
 tests/TEMPLATE.save
 LUKE
 LEIA
-save tests/save-game
+save tests/save-game.tmp
 

@@ -25,8 +25,6 @@ void Menu::mainMenu() {
           }
         }
 
-        std::cout << std::endl;
-
         if (menuOption == NEW_GAME_OPTION) {
             newGame();
             quit = true;
@@ -39,7 +37,7 @@ void Menu::mainMenu() {
         } else if (menuOption == QUIT_OPTION) {
             quit = true;
         } else if (!quit) {
-            std::cout << "Invalid input, try again" << std::endl;
+            std::cout << "Invalid Input" << std::endl;
         }
     }
     std::cout << "Goodbye" << std::endl;
@@ -102,8 +100,7 @@ std::string Menu::getNameInput() {
             playerName = "";
           } else if (c < 'A' || c > 'Z') {
             std::cin.ignore(INT8_MAX, '\n');
-            std::cout << "Name must be only uppercase letters, enter new name" 
-                      << std::endl;
+            std::cout << "Invalid Input" << std::endl;
             read = false;
             done = false;
           } else {

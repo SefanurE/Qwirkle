@@ -102,8 +102,7 @@ std::string Menu::getNameInput() {
             playerName = "";
           } else if (c < 'A' || c > 'Z') {
             std::cin.ignore(INT8_MAX, '\n');
-            std::cout << "Name must be only uppercase letters, enter new name" 
-                      << std::endl;
+            std::cout << "Invalid Input" << std::endl;
             read = false;
             done = false;
           } else {

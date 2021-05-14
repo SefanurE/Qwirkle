@@ -1,5 +1,6 @@
-1
+2
+tests/TEMPLATE.save
 LUKE
 LEIA
-save save-game.save
+save tests/save-game
 

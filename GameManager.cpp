@@ -59,6 +59,7 @@ void GameManager::loadGame(std::string fileName) {
     startGame();
   } else {
     std::cout << "Failed to read" << std::endl;
+    std::cout << std::endl;
   }
 }
 

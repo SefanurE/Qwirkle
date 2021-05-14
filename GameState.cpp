@@ -8,7 +8,7 @@
 
 GameState::GameState(std::string playerNames[PLAYER_COUNT]) {
   players = new Player *[PLAYER_COUNT];
-  board = new Board(20, 20);
+  board = new Board(BOARD_SIZE, BOARD_SIZE);
   bag = new TileBag();
   for (int i = 0; i < PLAYER_COUNT; i++) {
     players[i] = new Player(playerNames[i]);

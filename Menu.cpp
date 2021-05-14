@@ -25,8 +25,6 @@ void Menu::mainMenu() {
           }
         }
 
-        std::cout << std::endl;
-
         if (menuOption == NEW_GAME_OPTION) {
             newGame();
             quit = true;

@@ -1,4 +1,4 @@
 2
-tests/place-tile-valid-basic.save
+tests/place-tile-basic.save
 PLACE G5 AT B1
 PLACE O5 AT A1

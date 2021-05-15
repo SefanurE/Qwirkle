@@ -131,10 +131,22 @@ bool GameState::testSaveFileValidity(std::istream &gameData) {
  * TODO
  */
 Player* GameState::getWinningPlayer() {
-  Player* winner = nullptr;
+  // Is the game over?
+  bool gameOver = false;
   if (bag->getList()->getSize() == 0) {
     for (int i = 0; i < PLAYER_COUNT; i++) {
       if (players[i]->getHand()->getSize() == 0) {
+        gameOver = true;
+      }
+    }
+  }
+
+  // Get player w/ highest score
+  Player* winner = nullptr;
+  if (gameOver) {
+    winner = players[0];
+    for (int i = 1; i < PLAYER_COUNT; i++) {
+      if (players[i]->getScore() > winner->getScore()) {
         winner = players[i];
       }
     }
@@ -471,7 +483,7 @@ bool GameState::validateTile(Tile *tile, std::string position) {
   bool hasNeighbour = false;
 
   // For each orthogonal direction (UP,LEFT,DOWN,RIGHT)
-  for (int direction = 0; direction < 4; direction++) {
+  for (int direction = 0; valid && direction < 4; direction++) {
     // Get all of the connected tiles in this direction
     LinkedList *connected = getConnectedTilesInDir(tile, position, direction);
 
@@ -479,10 +491,8 @@ bool GameState::validateTile(Tile *tile, std::string position) {
     hasNeighbour = hasNeighbour || connected->getSize() > 0;
 
     // Validate all of these connected neighbours
-    bool doValidate = true;
-    for (int i = 0; doValidate && i < connected->getSize(); i++) {
+    for (int i = 0; valid && i < connected->getSize(); i++) {
       if (!checkPlacementValid(tile, connected->get(i))) {
-        doValidate = false;
         std::cout << "You can't place a " << tile->toString() << " tile here!"
                   << std::endl;
         valid = false;

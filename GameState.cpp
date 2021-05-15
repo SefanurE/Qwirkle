@@ -503,8 +503,8 @@ bool GameState::validateTile(Tile *tile, std::string position) {
     }
 
     // Validate all of these connected neighbours
-    for (int i = 0; valid && i < connectedA->getSize(); i++) {
-      if (!checkPlacementValid(tile, connectedA->get(i))) {
+    for (int i = 0; valid && i < connectedB->getSize(); i++) {
+      if (!checkPlacementValid(tile, connectedB->get(i))) {
         std::cout << "You can't place a " << tile->toString() << " tile here!"
                   << std::endl;
         valid = false;

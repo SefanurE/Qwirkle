@@ -57,6 +57,7 @@ void GameManager::loadGame(std::string fileName) {
   if (gameData.is_open()) {
     gameState = new GameState(gameData);
     startGame();
+    gameData.close();
   } else {
     std::cout << "Failed to read" << std::endl;
     std::cout << std::endl;
@@ -203,6 +204,7 @@ bool GameManager::testSaveFileValidity(std::string path) {
       if (!valid) {
         std::cout << "Invalid save format" << std::endl;
       }
+      gameData.close();
     } else {
       valid = false;
       std::cout << "Can't read file" << std::endl;

@@ -27,7 +27,6 @@ TileBag::TileBag(std::string tileBagString) {
       buffer = "";
     }
   }
-  shuffle();
 }
 
 TileBag::~TileBag() {

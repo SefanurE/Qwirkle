@@ -28,9 +28,8 @@ Node::Node(Node& other)
    next = other.next;
 }
 
-Node::~Node() {
-  delete tile;
-}
+
+Node::~Node() {}
 
 /*
  * Method Name: toString

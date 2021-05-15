@@ -25,6 +25,7 @@ LinkedList::~LinkedList() {
   while (node != nullptr) {
     nextNode = node->next;
     delete node;
+    delete node->tile;
     node = nextNode;
   }
 }
@@ -89,6 +90,10 @@ void LinkedList::insertAfter(int index, Tile *tile) {
  * Tile* - Removed tile
  */
 Tile* LinkedList::remove(int index) {
+  std::cout << "me: " << this->toString() << std::endl;
+  std::cout << "Removing " << index << std::endl;
+  std::cout << "size: " << size << std::endl;
+
   Node* removeNode = getNode(index);
   if (index == 0) {
     head = removeNode->next;

@@ -8,6 +8,13 @@ GameManager::~GameManager() {
   delete gameState;
 }
 
+/*
+ * Method Name: startGame
+ * Purpose: Starts a new game and takes input of commands from player to be
+ * executed on the gameState
+ * Parameters: N/A
+ * Return: void
+ */
 void GameManager::startGame() {
   // Read and parse commands till the player quits
   status = PLAYING;
@@ -47,22 +54,47 @@ void GameManager::startGame() {
   }
 }
 
+/*
+ * Method Name: newGame
+ * Purpose: Creates a new gameState with the provided player names and begins
+ * play on that gamestate
+ * Parameters:
+ * playerNames [string*] - Array of playerNames
+ * Return: void
+ */
 void GameManager::newGame(std::string playerNames[PLAYER_COUNT]) {
   gameState = new GameState(playerNames);
   startGame();
 }
 
+/*
+ * Method Name: loadGame
+ * Purpose: Reads save data from fileName and creates gameState with provided
+ * save information before starting new game.
+ * Parameters:
+ * fileName [string] - File path to save file
+ * Return: void
+ */
 void GameManager::loadGame(std::string fileName) {
   std::ifstream gameData(fileName);
   if (gameData.is_open()) {
     gameState = new GameState(gameData);
     startGame();
+    gameData.close();
   } else {
     std::cout << "Failed to read" << std::endl;
     std::cout << std::endl;
   }
 }
 
+/*
+ * Method Name: parseCommand
+ * Purpose: Interprets, validates and executes commands entered by player
+ * on the gameState
+ * Parameters:
+ * command [string] - Command entered by player
+ * Return: void
+ */
 void GameManager::parseCommand(std::string command) {
   // Parse the command character by character and keep track of what
   // command is being executed and what arguments we have seen so far
@@ -145,15 +177,38 @@ void GameManager::parseCommand(std::string command) {
   }
 }
 
-bool GameManager::imatch(std::string s, std::string pattern) {
-  return std::regex_match(s, std::regex(pattern, std::regex_constants::icase));
+/*
+ * Method Name: imatch
+ * Purpose: Checks if a given string complies with a given regex pattern
+ * Parameters:
+ * checkString [string] - String to run though regex check
+ * checkString [string] - Pattern to match passes string to
+ * Return: bool - If passed string passes the regex [true] or not [false]
+ */
+bool GameManager::imatch(std::string checkString, std::string pattern) {
+  return std::regex_match(checkString, std::regex(pattern, std::regex_constants::icase));
 }
 
+/*
+ * Method Name: doQuit
+ * Purpose: Updates status to QUIT so gameManager will no longer continue game
+ * loop
+ * Parameters: N/A
+ * Return: void
+ */
 void GameManager::doQuit() {
   std::cout << std::endl;
   status = QUIT;
 }
 
+/*
+ * Method Name: doSave
+ * Purpose: Create new stream with given file name and pass to gameState to
+ * serialise
+ * Parameters:
+ * fileName [string] - File path (excluding file type) of save location
+ * Return: void
+ */
 void GameManager::doSave(std::string fileName) {
   fileName = fileName + ".save";
   std::ofstream save(fileName);
@@ -162,6 +217,15 @@ void GameManager::doSave(std::string fileName) {
   std::cout << std::endl << "Game successfully saved" << std::endl;
 }
 
+/*
+ * Method Name: doPlaceTile
+ * Purpose: Ensure command format is correct and execute doPlaceTile on
+ * gameState. Updates success tracker based on outcome.
+ * Parameters:
+ * tile [string] - Tile code to be placed
+ * position [string] - Location on board tile will be placed
+ * Return: void
+ */
 void GameManager::doPlaceTile(std::string tile, std::string position) {
   // Ensure uppercase tile
   for (size_t i = 0; i < tile.length(); i++) {
@@ -178,6 +242,14 @@ void GameManager::doPlaceTile(std::string tile, std::string position) {
   showRoundOutput = success;
 }
 
+/*
+ * Method Name: doReplaceTile
+ * Purpose: Ensure command format is correct and execute doReplaceTile on
+ * gameState. Updates success tracker based on outcome.
+ * Parameters:
+ * tile [string] - Tile code to attempt to replace (Should be in hand)
+ * Return: void
+ */
 void GameManager::doReplaceTile(std::string tile) {
   // Ensure uppercase tile
   for (size_t i = 0; i < tile.length(); i++) {
@@ -203,6 +275,7 @@ bool GameManager::testSaveFileValidity(std::string path) {
       if (!valid) {
         std::cout << "Invalid save format" << std::endl;
       }
+      gameData.close();
     } else {
       valid = false;
       std::cout << "Can't read file" << std::endl;

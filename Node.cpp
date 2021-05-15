@@ -1,12 +1,27 @@
-
 #include "Node.h"
 
+/*
+ * Constructor Name: ode
+ * Purpose: Instantiates the tile within the node and pointer to the next node
+ * in the list
+ * Parameters:
+ * tile [Tile*] - Pointer to tile to be within the node
+ * next [Node*] - Pointer to next node in the list
+ * Return: N/A
+ */
 Node::Node(Tile* tile, Node* next)
 {
    this->tile = tile;
    this->next = next;
 }
 
+/*
+ * Constructor Name: Node
+ * Purpose: Constructs a node from another provided node
+ * Parameters:
+ * other [Node&] - Reference to another node to copy
+ * Return: N/A
+ */
 Node::Node(Node& other)
 {
    tile = other.tile;
@@ -14,9 +29,16 @@ Node::Node(Node& other)
 }
 
 Node::~Node() {
-
+  delete tile;
 }
 
+/*
+ * Method Name: toString
+ * Purpose: Converts node data to a string
+ * Parameters: N/A
+ * Return:
+ * string - Tile and next node data
+ */
 std::string Node::toString() {
   return "Tile: " + tile->toString() + ", Next: " + next->tile->toString();
 }

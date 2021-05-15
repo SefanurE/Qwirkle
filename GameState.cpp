@@ -8,6 +8,14 @@
 #include <vector>
 #include <regex>
 
+/*
+ * Constructor Name: GameState
+ * Purpose: Initalises all structures required for gameplay to their default
+ * values
+ * Parameters:
+ * playerNames [string*] - Array of player names to initialise players with
+ * Return: N/A
+ */
 GameState::GameState(std::string playerNames[PLAYER_COUNT]) {
   players = new Player *[PLAYER_COUNT];
   board = new Board(BOARD_SIZE, BOARD_SIZE);
@@ -20,6 +28,12 @@ GameState::GameState(std::string playerNames[PLAYER_COUNT]) {
   currentPlayerIndex = 0;
 }
 
+/*
+ * Deconstructor Name: GameState
+ * Purpose: Cleans up all structures required for gameplay
+ * Parameters: N/A
+ * Return: N/A
+ */
 GameState::~GameState() {
   for (int i = 0; i < PLAYER_COUNT; i++) {
     delete players[i];
@@ -29,6 +43,13 @@ GameState::~GameState() {
   delete bag;
 }
 
+/*
+ * Constructor Name: GameState
+ * Purpose: Instantiates a new gameState with the data contained in the gameData
+ * reference. Creates all players and updates state of board to last save/
+ * Parameters:
+ * gameData [istream] - A reference to the gameData istream
+ */
 GameState::GameState(std::istream &gameData) {
   // Read player information
   players = new Player *[PLAYER_COUNT];
@@ -106,11 +127,26 @@ bool GameState::testSaveFileValidity(std::istream &gameData) {
   return valid;
 }
 
+/*
+ * TODO
+ */
 Player* GameState::getWinningPlayer() {
-  Player* winner = nullptr;
+  // Is the game over?
+  bool gameOver = false;
   if (bag->getList()->getSize() == 0) {
     for (int i = 0; i < PLAYER_COUNT; i++) {
       if (players[i]->getHand()->getSize() == 0) {
+        gameOver = true;
+      }
+    }
+  }
+
+  // Get player w/ highest score
+  Player* winner = nullptr;
+  if (gameOver) {
+    winner = players[0];
+    for (int i = 1; i < PLAYER_COUNT; i++) {
+      if (players[i]->getScore() > winner->getScore()) {
         winner = players[i];
       }
     }
@@ -119,6 +155,13 @@ Player* GameState::getWinningPlayer() {
   return winner;
 }
 
+/*
+ * Method Name: showAfterGameOutput
+ * Purpose: Displays post game information such as final player scores and
+ * winning player
+ * Parameters: N/A
+ * Return: void
+ */
 void GameState::showAfterGameOutput() {
   std::cout << "Game over" << std::endl;
   for (int i = 0; i < PLAYER_COUNT; i++) {
@@ -131,6 +174,13 @@ void GameState::showAfterGameOutput() {
   std::cout << std::endl;
 }
 
+/*
+ * Method Name: showBeforeRoundOutput
+ * Purpose: Displays player scores, current state of board and current players
+ * hand.
+ * Parameters: N/A
+ * Return: void
+ */
 void GameState::showBeforeRoundOutput() {
   // Display the current players name
   std::cout << std::endl
@@ -152,6 +202,16 @@ void GameState::showBeforeRoundOutput() {
             << std::endl;
 }
 
+/*
+ * Method Name: doPlaceTile
+ * Purpose: Validates both the desired location and tile the user wants to place
+ * If valid, moves the tile from the players hand to the board and updates
+ * score. Otherwise notifies player of invalid move.
+ * Parameters:
+ * tileString [string] - Tile the player wants to place on the board
+ * position [string] - Desired position in which to place the tile
+ * Return: bool - If the tile was successfully placed [true] or not [false]
+ */
 bool GameState::doPlaceTile(std::string tileString, std::string position) {
   // Get row and col from position string
   int row = board->rowToInt(position[0]);
@@ -214,12 +274,35 @@ bool GameState::doPlaceTile(std::string tileString, std::string position) {
   return success;
 }
 
+/*
+ * Method Name: getCurrentPlayer
+ * Purpose: Retrieve the current player
+ * Parameters: N/A
+ * Return: Player* - Pointer to the current player
+ */
 Player *GameState::getCurrentPlayer() { return players[currentPlayerIndex]; }
 
+/*
+ * Method Name: nextPlayer
+ * Purpose: Move currentPlayerIndex to the next player
+ * Parameters: N/A
+ * Return: N/A
+ */
 void GameState::nextPlayer() {
   currentPlayerIndex = (currentPlayerIndex + 1) % PLAYER_COUNT;
 }
 
+/*
+ * Method Name: doReplaceTile
+ * Purpose: Check if the player has a given tile on their hand and there are
+ * tiles remaining in the bag. If so, replace their tile with a new tile and
+ * return theirs to the bag. Otherwise notifies the player of an invalid move
+ * Parameters:
+ * tile [string] - The tile the player wishes to replace
+ * Return:
+ * bool - If the the attempt to replace the tile was successful [true] or not
+ * [false]
+ */
 bool GameState::doReplaceTile(std::string tile) {
   // Get the player and their hand
   Player *player = getCurrentPlayer();
@@ -254,6 +337,13 @@ bool GameState::doReplaceTile(std::string tile) {
   return success;
 }
 
+/*
+ * Method Name: serialise
+ * Purpose: Converts all game data into a string stream to be saved to a file
+ * Parameters:
+ * Return:
+ * string - All important gamedata in the correct save format
+ */
 std::string GameState::serialise() {
   std::stringstream ss;
 
@@ -278,8 +368,17 @@ std::string GameState::serialise() {
   return ss.str();
 }
 
-// Get tiles connected to (tile) in orthogonal direction (dir) in ascending
-// distance order.
+/*
+ * Method Name: getConnectedTilesInDir
+ * Purpose: Get tiles connected to (tile) in orthogonal direction (dir) in
+ * ascending distance order.
+ * Parameters:
+ * tile [Tile*] -
+ * position [string] -
+ * dir [int] -
+ * Return:
+ * LinkedList* -
+ */
 LinkedList *GameState::getConnectedTilesInDir(Tile *tile, std::string position,
                                               int dir) {
   // Create the list
@@ -321,6 +420,17 @@ LinkedList *GameState::getConnectedTilesInDir(Tile *tile, std::string position,
   return tiles;
 }
 
+/*
+ * Method Name: placeTileScore
+ * Purpose: Get tiles connected to (tile) in orthogonal direction (dir) in
+ * ascending distance order.
+ * Parameters:
+ * tile [Tile*] -
+ * position [string] -
+ * dir [int] -
+ * Return:
+ * LinkedList* -
+ */
 int GameState::placeTileScore(Tile *tile, std::string position) {
   int roundScore = 0;
   bool gotRowScore = false;
@@ -358,12 +468,22 @@ int GameState::placeTileScore(Tile *tile, std::string position) {
   return roundScore;
 }
 
+/*
+ * Method Name: validateTile
+ * Purpose: Checks if a tile can be placed in a certain position based on its
+ * proposed neighbours and their colours/shapes
+ * Parameters:
+ * tile [Tile*] - The tile they wish to place
+ * position [string] - The location the tile wants to be palced at
+ * Return:
+ * bool - If the placement is valid [true] or not [false]
+ */
 bool GameState::validateTile(Tile *tile, std::string position) {
   bool valid = true;
   bool hasNeighbour = false;
 
   // For each orthogonal direction (UP,LEFT,DOWN,RIGHT)
-  for (int direction = 0; direction < 4; direction++) {
+  for (int direction = 0; valid && direction < 4; direction++) {
     // Get all of the connected tiles in this direction
     LinkedList *connected = getConnectedTilesInDir(tile, position, direction);
 
@@ -371,10 +491,8 @@ bool GameState::validateTile(Tile *tile, std::string position) {
     hasNeighbour = hasNeighbour || connected->getSize() > 0;
 
     // Validate all of these connected neighbours
-    bool doValidate = true;
-    for (int i = 0; doValidate && i < connected->getSize(); i++) {
+    for (int i = 0; valid && i < connected->getSize(); i++) {
       if (!checkPlacementValid(tile, connected->get(i))) {
-        doValidate = false;
         std::cout << "You can't place a " << tile->toString() << " tile here!"
                   << std::endl;
         valid = false;
@@ -391,6 +509,16 @@ bool GameState::validateTile(Tile *tile, std::string position) {
 
   return valid;
 }
+
+/*
+ * Method Name: checkPlacementValid
+ * Purpose: Checks if two tiles are valid to be placed next to eachother
+ * Parameters:
+ * myTile [Tile*] - The tile they wish to place
+ * neighbourTile [Tile*] - The tile that is already on board
+ * Return:
+ * bool - If the placement is valid [true] or not [false]
+ */
 bool GameState::checkPlacementValid(Tile *myTile, Tile *neighbourTile) {
   bool colourMatch = neighbourTile->getColour() == myTile->getColour();
   bool shapeMatch = neighbourTile->getShape() == myTile->getShape();

@@ -3,6 +3,7 @@
 
 LinkedList::LinkedList() {
    head = nullptr;
+   tail = nullptr;
    size = 0;
 }
 
@@ -21,9 +22,10 @@ void LinkedList::push(Tile *tile) {
   Node* newNode = new Node(tile, nullptr);
   if (size == 0) {
     head = newNode;
+    tail = newNode;
   } else {
-    Node* endNode = getNode(size - 1);
-    endNode->next = newNode;
+    tail->next = newNode;
+    tail = newNode;
   }
   size++;
 }
@@ -33,12 +35,14 @@ Tile* LinkedList::pop() {
 }
 
 void LinkedList::insertAfter(int index, Tile *tile) {
-  if (index < size) {
+  if (index < size - 1) {
     Node* nextNode = getNode(index + 1);
     Node* newNode = new Node(tile, nextNode);
     getNode(index)->next = newNode;
   } else {
-    getNode(index)->next = new Node(tile, nullptr);
+    Node* newNode = new Node(tile, nullptr);
+    getNode(index)->next = newNode;
+    tail = newNode;
   }
   size++;
 }
@@ -49,6 +53,13 @@ Tile* LinkedList::remove(int index) {
     head = removeNode->next;
   } else {
     getNode(index - 1)->next = removeNode->next;
+  }
+  if (tail == removeNode) {
+    if (index == 0) {
+      tail = nullptr;
+    } else {
+      tail = getNode(index - 1);
+    }
   }
   size--;
   Tile* removeTile = removeNode->tile;

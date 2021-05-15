@@ -21,6 +21,7 @@ public:
 
 private:
    Node* head;
+   Node* tail;
    int size;
    Node* getNode(int index);
 };

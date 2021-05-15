@@ -482,24 +482,46 @@ bool GameState::validateTile(Tile *tile, std::string position) {
   bool valid = true;
   bool hasNeighbour = false;
 
-  // For each orthogonal direction (UP,LEFT,DOWN,RIGHT)
-  for (int direction = 0; valid && direction < 4; direction++) {
-    // Get all of the connected tiles in this direction
-    LinkedList *connected = getConnectedTilesInDir(tile, position, direction);
+  // For vertical (0) and horizontal (1) directions
+  for (int direction = 0; valid && direction < 2; direction++) {
+    // Get all of the connected tiles in both directions
+    LinkedList *connectedA = getConnectedTilesInDir(tile, position, direction);
+    LinkedList *connectedB = getConnectedTilesInDir(tile, position, direction + 2);
 
     // Update whether we have a neighbour
-    hasNeighbour = hasNeighbour || connected->getSize() > 0;
+    hasNeighbour = hasNeighbour ||
+                   connectedA->getSize() > 0 ||
+                   connectedB->getSize() > 0;
 
     // Validate all of these connected neighbours
-    for (int i = 0; valid && i < connected->getSize(); i++) {
-      if (!checkPlacementValid(tile, connected->get(i))) {
+    for (int i = 0; valid && i < connectedA->getSize(); i++) {
+      if (!checkPlacementValid(tile, connectedA->get(i))) {
         std::cout << "You can't place a " << tile->toString() << " tile here!"
                   << std::endl;
         valid = false;
       }
     }
 
-    delete connected;
+    // Validate all of these connected neighbours
+    for (int i = 0; valid && i < connectedA->getSize(); i++) {
+      if (!checkPlacementValid(tile, connectedA->get(i))) {
+        std::cout << "You can't place a " << tile->toString() << " tile here!"
+                  << std::endl;
+        valid = false;
+      }
+    }
+
+    // Check that both directions validate the same way
+    if (connectedA->getSize() > 0 && connectedB->getSize() > 0) {
+      if (!checkPlacementValid(connectedA->get(0), connectedB->get(0))) {
+        std::cout << "You can't place a " << tile->toString() << " tile here!"
+                  << std::endl;
+        valid = false;
+      }
+    }
+
+    delete connectedA;
+    delete connectedB;
   }
 
   if (!hasNeighbour) {

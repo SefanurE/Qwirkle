@@ -2,12 +2,23 @@
 #include <regex>
 #include <fstream>
 
+/*
+ * Method Name:
+ * Parameters:
+ * Return:
+ */
 GameManager::GameManager() {}
 
 GameManager::~GameManager() {
   delete gameState;
 }
 
+/*
+ * Method Name: startGame
+ * Purpose: Starts
+ * Parameters: N/A
+ * Return: void
+ */
 void GameManager::startGame() {
   // Read and parse commands till the player quits
   status = PLAYING;

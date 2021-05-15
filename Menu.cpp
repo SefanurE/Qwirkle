@@ -1,6 +1,13 @@
 #include "Menu.h"
 #include "GameManager.h"
 
+/*
+ * Method Name: mainMenu
+ * Purpose: Begins requesting input from user as to what action they wish to
+ * complete and executes commands as requested.
+ * Parameters: N/A
+ * Return: N/A
+ */
 void Menu::mainMenu() {
     std::cout << std::endl 
               << "Welcome to Qwirkle!" << std::endl
@@ -44,6 +51,12 @@ void Menu::mainMenu() {
     std::cout << "Goodbye" << std::endl;
 }
 
+/*
+ * Method Name: displayMenu
+ * Purpose: Displays menu options to user
+ * Parameters: N/A
+ * Return: N/A
+ */
 void Menu::displayMenu() {
     std::cout << std::endl 
               << "Menu" << std::endl
@@ -54,6 +67,13 @@ void Menu::displayMenu() {
               << "4. Quit" << std::endl << std::endl;
 }
 
+/*
+ * Method Name: newGame
+ * Purpose: Retrieves player names from user and creates new gameManager
+ * instance for newGame to be called on
+ * Parameters: N/A
+ * Return: N/A
+ */
 void Menu::newGame() {
     bool cancel = false;
     std::cout << std::endl;
@@ -81,6 +101,13 @@ void Menu::newGame() {
     }
 }
 
+/*
+ * Method Name: getNameInput
+ * Purpose: Requests and validates name input from user
+ * Parameters: N/A
+ * Return:
+ * string - Validated player name
+ */
 std::string Menu::getNameInput() {
     std::string playerName = "";
     bool done = false;
@@ -114,6 +141,13 @@ std::string Menu::getNameInput() {
     return playerName;
 }
 
+/*
+ * Method Name: loadGame
+ * Purpose: Requests save file path and creates new gameManager instance for
+ * load game to be called on
+ * Parameters: N/A
+ * Return: N/A
+ */
 void Menu::loadGame() {
   GameManager* gameManager = new GameManager();
 
@@ -149,6 +183,12 @@ void Menu::loadGame() {
   delete gameManager;
 }
 
+/*
+ * Method Name: printCredits
+ * Purpose: Prints program author details
+ * Parameters: N/A
+ * Return: N/A
+ */
 void Menu::printCredits() {
   std::cout << std::endl;
   std::cout << "-----------------------------------" << std::endl;

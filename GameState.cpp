@@ -57,6 +57,9 @@ GameState::GameState(std::istream &gameData) {
   std::string placedTileString = "";
   getline(gameData, placedTileString);
 
+  // If we have no tiles then we can place anywhere
+  firstTile = placedTileString.length() == 0;
+
   // Construct the board
   board = new Board(boardShapeString, placedTileString);
 

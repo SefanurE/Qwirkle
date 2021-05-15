@@ -7,7 +7,14 @@
 #include <string>
 #include <vector>
 
-
+/*
+ * Constructor Name: GameState
+ * Purpose: Initalises all structures required for gameplay to their default
+ * values
+ * Parameters:
+ * playerNames [string*] - Array of player names to initialise players with
+ * Return: N/A
+ */
 GameState::GameState(std::string playerNames[PLAYER_COUNT]) {
   players = new Player *[PLAYER_COUNT];
   board = new Board(BOARD_SIZE, BOARD_SIZE);
@@ -20,6 +27,12 @@ GameState::GameState(std::string playerNames[PLAYER_COUNT]) {
   currentPlayerIndex = 0;
 }
 
+/*
+ * Deconstructor Name: GameState
+ * Purpose: Cleans up all structures required for gameplay
+ * Parameters: N/A
+ * Return: N/A
+ */
 GameState::~GameState() {
   for (int i = 0; i < PLAYER_COUNT; i++) {
     delete players[i];

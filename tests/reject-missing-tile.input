@@ -1,5 +1,3 @@
 2
-reject-missing-tile.save
+tests/reject-missing-tile.save
 PLACE P4 AT A0
-
-

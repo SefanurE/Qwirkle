@@ -1,6 +1,4 @@
 2
 tests/TEMPLATE.save
-LUKE
-LEIA
 save tests/save-game.tmp
 

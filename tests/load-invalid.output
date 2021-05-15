@@ -9,6 +9,11 @@ Menu
 3. Credits
 4. Quit
 
-> Enter the filename from which load a game: 
-> Failed to read
+> 
+Enter the filename from which load a game: 
+> Can't read file
+
+Enter the filename from which load a game: 
+> 
+
 Goodbye

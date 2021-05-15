@@ -18,10 +18,12 @@ OptionParser.new do |opts|
     options[:silent] = true
   end
   opts.on("-o", "--one", "Run only one test") do |v| options[:one] = true end
+  opts.on("-c", "--no-clean", "Don't delete the .actual output") do |v| options[:noClean] = true end
 end.parse!
 
 silent = options[:silent]
 diffCommand = ARGV[0] ? ARGV[0] : 'diff'
+noClean = options[:noClean] or false
 
 # Find tests
 tests = Dir.glob('**/*.input')
@@ -64,7 +66,7 @@ tests.each { |t|
     failedTests.push [name, "Diff of failed test'#{name}'\n\n#{diff}"]
   else
     puts "  ✅ Test '#{name}' passed" unless silent
-    File.delete("#{name}.actual")
+    File.delete("#{name}.actual") unless noClean
   end
 
   # clean up temp saves

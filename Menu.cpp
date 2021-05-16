@@ -19,6 +19,7 @@ void Menu::mainMenu() {
     std::cout << "> ";
     std::string menuOption = "";
     bool read = true;
+    // Check each character input by user
     while (read) {
       char c = std::cin.get();
       if (c == '\n') {
@@ -27,11 +28,13 @@ void Menu::mainMenu() {
         std::cout << std::endl;
         read = false;
         quit = true;
+      // If c isn not \n, EOF or a space add to menuOption string
       } else if (!std::isspace(c)) {
         menuOption.push_back(c);
       }
     }
 
+    // Check for which menu option was selected
     if (menuOption == NEW_GAME_OPTION) {
       newGame();
       quit = true;
@@ -79,11 +82,13 @@ void Menu::newGame() {
   std::cout << std::endl;
   std::cout << "Starting a New Game" << std::endl;
   std::string playerNames[PLAYER_COUNT] = { "0" };
+  // Ask user for each players' name
   for (int i = 0; !cancel && i < PLAYER_COUNT; i++) {
     std::cout << std::endl;
     std::cout << "Enter a name for player " << i + 1
               << " (uppercase letters only)" << std::endl;
     playerNames[i] = getNameInput();
+    // Did the user input EOF
     if (playerNames[i] == "") {
       cancel = true;
     }
@@ -93,6 +98,7 @@ void Menu::newGame() {
     std::cout << std::endl;
     std::cout << "Let's Play!" << std::endl;
 
+    // Create new gameManager and begin a new game with the player names
     GameManager* gameManager = new GameManager();
     gameManager->newGame(playerNames);
 
@@ -111,23 +117,29 @@ void Menu::newGame() {
 std::string Menu::getNameInput() {
   std::string playerName = "";
   bool done = false;
+  // Keep getting a player name from the user until it is valid (only caps)
   while (!done) {
     std::cout << "> ";
     playerName = "";
     bool read = true;
+    // Check each character input by user
     while (read) {
       char c = std::cin.get();
       if (c == '\n') {
         read = false;
+        // Make sure the player name atleast has one character
         if (playerName.length() > 0) {
           done = true;
         }
+      // Quit program if c is EOF
       } else if (c == EOF) {
         std::cout << std::endl << std::endl;
         read = false;
         done = true;
         playerName = "";
+      // Checks if c is a character other than a capital letter
       } else if (c < 'A' || c > 'Z') {
+        // Clears user input to check the new name input
         std::cin.ignore(INT8_MAX, '\n');
         std::cout << "Name must be only uppercase letters, enter new name"
                   << std::endl;
@@ -149,6 +161,7 @@ std::string Menu::getNameInput() {
  * Return: N/A
  */
 void Menu::loadGame() {
+  // Create new gameManager
   GameManager* gameManager = new GameManager();
 
   std::string fileName = "";
@@ -160,8 +173,10 @@ void Menu::loadGame() {
     std::cout << "> ";
     fileName = "";
     bool read = true;
+    // Check each character input by user
     while (read) {
       char c = std::cin.get();
+      // Quit program if c is EOF
       if (c == EOF) {
         std::cout << std::endl << std::endl;
         read = false;
@@ -169,6 +184,7 @@ void Menu::loadGame() {
         quit = true;
       } else if (c == '\n') {
         read = false;
+        // Check validity of file name input by user
         done = GameManager::testSaveFileValidity(fileName);
       } else {
         fileName.push_back(c);
@@ -177,9 +193,11 @@ void Menu::loadGame() {
   }
 
   if (!quit) {
+    // Load game from file
     gameManager->loadGame(fileName);
   }
 
+  // Game is over, cleanup
   delete gameManager;
 }
 

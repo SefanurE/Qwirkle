@@ -3,12 +3,29 @@
 #include <string>
 #include <vector>
 
+/*
+ * Constructor Name: Board
+ * Purpose: Initalises board dimensions and array to store placed tiles
+ * Parameters:
+ * width [int] - Width of the board
+ * height [int] - Height of the board
+ * Return: N/A
+ */
 Board::Board(int width, int height) {
   this->width = width;
   this->height = height;
   initGrid();
 }
 
+/*
+ * Constructor Name: Board
+ * Purpose: Initalises board dimensions from save and places all previously
+ * placed tiles into 2d vector
+ * Parameters:
+ * boardShapeString [string] - Contains width and height from save
+ * placedTilesString [string] - Contains all placed tiles from save
+ * Return: N/A
+ */
 Board::Board(std::string boardShapeString, std::string placedTilesString) {
   // Parse board shape string
   // of form "height,width"
@@ -48,6 +65,15 @@ Board::Board(std::string boardShapeString, std::string placedTilesString) {
   }
 }
 
+/*
+ * Deconstructor Name: Board
+ * Purpose: Initialises board dimensions from save and places all previously
+ * placed tiles into 2d vector
+ * Parameters:
+ * boardShapeString [string] - Contains width and height from save
+ * placedTilesString [string] - Contains all placed tiles from save
+ * Return: N/A
+ */
 Board::~Board() {
   for (int i = 0; i < width; i++) {
     for (int j = 0; j < height; j++) {
@@ -56,12 +82,24 @@ Board::~Board() {
   }
 }
 
+/*
+ * Method Name: initGrid
+ * Purpose: Initialises 2d vector based on width and height
+ * Parameters: N/A
+ * Return: N/A
+ */
 void Board::initGrid() {
   for (int i = 0; i < height; i++) {
     gridVec.push_back(std::vector<Tile*>(width));
   }
 }
 
+/*
+ * Method Name: printBoard
+ * Purpose: Prints board with all placed tiles
+ * Parameters: N/A
+ * Return: N/A
+ */
 void Board::printBoard() {
   std::cout << " ";
   for (int a = 0; a < width; a++) {
@@ -90,14 +128,39 @@ void Board::printBoard() {
   }
 }
 
+/*
+ * Method Name: addTile
+ * Purpose: Adds tile to board at a given position
+ * Parameters:
+ * tile [Tile*] - Pointer to a tile to add to the board
+ * row [int] - Row to place tile in
+ * col [int] - Column to place tile in
+ * Return: N/A
+ */
 void Board::addTile(Tile *tile, int row, int col) {
   gridVec[row][col] = tile;
 }
 
+/*
+ * Method Name: addTile
+ * Purpose: Adds tile to board at a given position
+ * Parameters:
+ * tile [Tile*] - Pointer to a tile to add to the board
+ * row [int] - Row to place tile in
+ * col [string] - Column to place tile in
+ * Return: N/A
+ */
 void Board::addTile(Tile *tile, char row, std::string col) {
   addTile(tile, rowToInt(row), std::stoi(col));
 }
 
+/*
+ * Method Name: toString
+ * Purpose: Converts all placed tiles to string, used for saving
+ * Parameters: N/A
+ * Return:
+ * string - String containing placed tiles in a valid save format
+ */
 std::string Board::toString() {
   std::string placedTilesString = "";
   for (int x = 0; x < height; x++) {
@@ -113,8 +176,22 @@ std::string Board::toString() {
   return placedTilesString;
 }
 
+/*
+ * Method Name: getWidth
+ * Purpose: Retrieves width of board
+ * Parameters: N/A
+ * Return:
+ * int - Width of board
+ */
 int Board::getWidth() { return width; }
 
+/*
+ * Method Name: getHeight
+ * Purpose: Retrieves height of board
+ * Parameters: N/A
+ * Return:
+ * int - Height of board
+ */
 int Board::getHeight() { return height; }
 
 Tile *Board::getTile(char row, char col) {
@@ -125,6 +202,14 @@ Tile *Board::getTile(int row, int col) {
   return gridVec[row][col];
 }
 
+/*
+ * Method Name: rowToInt
+ * Purpose: Concerts a row character to a row number
+ * Parameters:
+ * rowLabel [char] - Character to convert
+ * Return:
+ * int - Int representing the row
+ */
 int Board::rowToInt(char rowLabel) {
   std::string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   int index = -1;
@@ -136,6 +221,16 @@ int Board::rowToInt(char rowLabel) {
   return index;
 }
 
+/*
+ * Method Name: containsPosition
+ * Purpose: Checks if a position is within the bounds of the board
+ * Parameters:
+ * row [int] - Row to check
+ * col [int] - Col to check
+ * Return:
+ * bool - If the position is [true] or is not [false] within the bounds of the
+ * board
+ */
 bool Board::containsPosition(int row, int col) {
   return row >= 0 && row < width && col >= 0 && col < height;
 }

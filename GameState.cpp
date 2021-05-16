@@ -99,6 +99,12 @@ GameState::GameState(std::istream &gameData) {
   }
 }
 
+/*
+ * Constructor Name: testSaveFileValidity
+ * Purpose: Confirm that gameData matches a valid save format utalising REGEX
+ * Parameters:
+ * gameData [istream] - A reference to the gameData istream
+ */
 bool GameState::testSaveFileValidity(std::istream &gameData) {
   // Create array of patterns
   std::string patterns[PLAYER_COUNT * 3 + 4] = {};

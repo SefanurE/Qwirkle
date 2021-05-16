@@ -468,7 +468,8 @@ int GameState::placeTileScore(Tile* tile, std::string position) {
 
   // For each orthogonal direction (UP, LEFT, DOWN, RIGHT)
   for (int direction = 0; direction < 4; direction++) {
-    // Award points for the length of the amount of connected tiles in this direction
+    // Award points for the length of the amount of connected tiles in this 
+    // direction
     LinkedList* connected = getConnectedTilesInDir(tile, position, direction);
     roundScore += connected->getSize();
 

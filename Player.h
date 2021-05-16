@@ -1,5 +1,6 @@
 #ifndef COSC_ASSIGN_TWO_PLAYER
 #define COSC_ASSIGN_TWO_PLAYER
+
 #include "LinkedList.h"
 #include "TileBag.h"
 

@@ -86,7 +86,7 @@ void Player::addScore(int newScore) {
  * Return: N/A
  */
 void Player::initHand(TileBag* bag) {
-    for(int i = 0; i < HANDSIZE; i++) {
-        hand->push(bag->draw());
-    }
+  for (int i = 0; i < HANDSIZE; i++) {
+    hand->push(bag->draw());
+  }
 }

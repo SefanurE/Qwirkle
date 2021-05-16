@@ -9,11 +9,10 @@
 #define QUIT_OPTION      "4"
 
 class Menu {
-public:
+  public:
     void mainMenu();
-    
 
-private:
+  private:
     void displayMenu();
     void newGame();
     std::string getNameInput();

@@ -1,5 +1,6 @@
 #ifndef COSC_ASSIGN_TWO_GS
 #define COSC_ASSIGN_TWO_GS
+
 #include <iostream>
 #include <vector>
 #include <string>

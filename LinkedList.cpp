@@ -8,9 +8,9 @@
  * Return: N/A
  */
 LinkedList::LinkedList() {
-   head = nullptr;
-   tail = nullptr;
-   size = 0;
+  head = nullptr;
+  tail = nullptr;
+  size = 0;
 }
 
 /*
@@ -37,7 +37,7 @@ LinkedList::~LinkedList() {
  * tile [Tile*] - Pointer to the tile to add to the list
  * Return: N/A
  */
-void LinkedList::push(Tile *tile) {
+void LinkedList::push(Tile* tile) {
   Node* newNode = new Node(tile, nullptr);
   if (size == 0) {
     head = newNode;
@@ -68,7 +68,7 @@ Tile* LinkedList::pop() {
  * tile [Tile*] - Pointer to the tile to add to the list
  * Return: N/A
  */
-void LinkedList::insertAfter(int index, Tile *tile) {
+void LinkedList::insertAfter(int index, Tile* tile) {
   if (index < size - 1) {
     Node* nextNode = getNode(index + 1);
     Node* newNode = new Node(tile, nextNode);

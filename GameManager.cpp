@@ -38,7 +38,7 @@ void GameManager::startGame() {
         command.push_back(c);
       }
     }
-    
+
     // Did we not quit?
     if (status == PLAYING) {
       showRoundOutput = false;
@@ -185,7 +185,8 @@ void GameManager::parseCommand(std::string command) {
  * Return: bool - If passed string passes the regex [true] or not [false]
  */
 bool GameManager::imatch(std::string checkString, std::string pattern) {
-  return std::regex_match(checkString, std::regex(pattern, std::regex_constants::icase));
+  return std::regex_match(
+    checkString, std::regex(pattern, std::regex_constants::icase));
 }
 
 /*
@@ -261,10 +262,10 @@ void GameManager::doReplaceTile(std::string tile) {
 }
 
 bool GameManager::testSaveFileValidity(std::string path) {
-  bool valid = true; 
-  
+  bool valid = true;
+
   // Validate path
-  valid = valid && std::regex_match(path, std::regex(PATH_PATTERN)); 
+  valid = valid && std::regex_match(path, std::regex(PATH_PATTERN));
 
   // Validate file
   if (valid) {

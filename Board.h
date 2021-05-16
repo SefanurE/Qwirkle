@@ -1,12 +1,13 @@
 #ifndef COSC_ASSIGN_TWO_BOARD
 #define COSC_ASSIGN_TWO_BOARD
+
 #include <iostream>
 #include <vector>
 #include <string>
 #include "Tile.h"
 
 class Board {
-public:
+  public:
     Board();
     Board(int width, int height);
     Board(std::string boardShapeString, std::string placedTilesString);
@@ -22,8 +23,7 @@ public:
     bool containsPosition(int row, int col);
     int rowToInt(char rowLabel);
 
-private:
-
+  private:
     int width, height;
     const std::string rowLabels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     std::vector<std::vector<Tile*>> gridVec;

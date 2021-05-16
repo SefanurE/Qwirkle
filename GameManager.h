@@ -23,7 +23,6 @@ enum GameManagerState {
 };
 
 class GameManager {
-
   private:
     void parseCommand(std::string command);
     void doQuit();

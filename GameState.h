@@ -28,6 +28,7 @@ class GameState {
     ~GameState();
     std::string serialise();
     Player* getWinningPlayer();
+    bool isGameOver();
     bool doPlaceTile(std::string tileString, std::string position);
     bool doReplaceTile(std::string tile);
     void showBeforeRoundOutput();

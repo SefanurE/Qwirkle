@@ -133,26 +133,44 @@ bool GameState::testSaveFileValidity(std::istream &gameData) {
   return valid;
 }
 
+
 /*
- * TODO
+ * Method Name: isGameOver()
+ * Purpose: Determine whether the game is over.
  */
-Player* GameState::getWinningPlayer() {
+bool GameState::isGameOver() {
   // Is the game over?
   bool gameOver = false;
   if (bag->getList()->getSize() == 0) {
-    for (int i = 0; i < PLAYER_COUNT; i++) {
+    for (int i = 0; !gameOver && i < PLAYER_COUNT; i++) {
       if (players[i]->getHand()->getSize() == 0) {
         gameOver = true;
       }
     }
   }
+  
+  return gameOver;
+}
 
-  // Get player w/ highest score
+
+/*
+ * Method Name: getWinningPlayer()
+ * Purpose: Returns the player with the highest score if there is one
+ * and the game is over.
+ */
+Player* GameState::getWinningPlayer() {
   Player* winner = nullptr;
-  if (gameOver) {
+ 
+  // Is the game over?
+  if (isGameOver()) {
+    // Get player w/ highest score (if there is one)
+    bool isDraw = false;
     winner = players[0];
-    for (int i = 1; i < PLAYER_COUNT; i++) {
-      if (players[i]->getScore() > winner->getScore()) {
+    for (int i = 1; !isDraw && i < PLAYER_COUNT; i++) {
+      if (players[i]->getScore() == winner->getScore()) {
+        winner = nullptr;
+        isDraw = true;
+      } else if (players[i]->getScore() > winner->getScore()) {
         winner = players[i];
       }
     }
@@ -176,7 +194,9 @@ void GameState::showAfterGameOutput() {
   }
 
   Player* winner = getWinningPlayer();
-  std::cout << "Player " << winner->getName() << " won!" << std::endl;
+  if (winner != nullptr) {
+    std::cout << "Player " << winner->getName() << " won!" << std::endl;
+  }
   std::cout << std::endl;
 }
 
@@ -542,8 +562,8 @@ bool GameState::validateTile(Tile *tile, std::string position) {
  * Method Name: checkPlacementValid
  * Purpose: Checks if two tiles are valid to be placed next to eachother
  * Parameters:
- * myTile [Tile*] - The tile they wish to place
- * neighbourTile [Tile*] - The tile that is already on board
+ * myTile [Tile*] - The tile to be placed
+ * neighbourTile [Tile*] - The tile already on board
  * Return:
  * bool - If the placement is valid [true] or not [false]
  */

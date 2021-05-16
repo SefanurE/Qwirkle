@@ -45,9 +45,8 @@ void GameManager::startGame() {
       parseCommand(command);
     }
 
-    // Did they win?
-    Player* winner = gameState->getWinningPlayer();
-    if (winner != nullptr) {
+    // Is the game over?
+    if (gameState->isGameOver()) {
       status = GAMEOVER;
       gameState->showAfterGameOutput();
     }

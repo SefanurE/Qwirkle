@@ -190,7 +190,8 @@ void GameState::showAfterGameOutput() {
   std::cout << "Game over" << std::endl;
   for (int i = 0; i < PLAYER_COUNT; i++) {
     std::cout << "Score for " << players[i]->getName() << ": ";
-    std::cout << std::setfill('0') << std::setw(3) << players[i]->getScore() << std::endl;
+    std::cout << std::setfill('0') << std::setw(3) << players[i]->getScore() 
+              << std::endl;
   }
 
   Player* winner = getWinningPlayer();
@@ -266,7 +267,8 @@ bool GameState::doPlaceTile(std::string tileString, std::string position) {
 
           // Award score for this move
           // First tile gets 1 point
-          int score = placeTileScore(playedTile, position) + (firstTile ? 1 : 0);
+          int score = placeTileScore(playedTile, position) 
+                                     + (firstTile ? 1 : 0);
           player->addScore(score);
 
           // Draw the player a new tile if any remain in the bag

@@ -22,7 +22,8 @@ TileBag::TileBag(std::string tileBagString) {
     if (c != ',') {
       buffer.push_back(c);
     } else {
-      Tile* tile = new Tile(buffer[0], std::stoi(buffer.substr(1, buffer.length())));
+      Tile* tile = new Tile(
+                       buffer[0], std::stoi(buffer.substr(1, buffer.length())));
       tiles->push(tile);
       buffer = "";
     }

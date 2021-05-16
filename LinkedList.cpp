@@ -24,8 +24,8 @@ LinkedList::~LinkedList() {
   Node* nextNode = nullptr;
   while (node != nullptr) {
     nextNode = node->next;
-    delete node;
     delete node->tile;
+    delete node;
     node = nextNode;
   }
 }

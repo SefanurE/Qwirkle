@@ -70,7 +70,7 @@ tests.each { |t|
   end
 
   # clean up temp saves
-  if File.exist?("#{name}.tmp.save") then
+  if File.exist?("#{name}.tmp.save") and not noClean then
     File.delete("#{name}.tmp.save")
   end
 }

@@ -8,7 +8,6 @@
 #include "TileBag.h"
 #include "Board.h"
 
-#define PLAYER_COUNT 2
 #define TILE_NOT_FOUND -1
 #define QWIRKLE 6
 #define BOARD_SIZE 26
@@ -25,8 +24,8 @@ class GameState {
   public:
     Board* board;
 
-    GameState(std::string playerNames[PLAYER_COUNT]);
-    GameState(std::istream &stream);
+    GameState(std::vector<std::string> playerNames);
+    GameState(std::istream &stream, bool varPlayers);
     ~GameState();
     std::string serialise();
     Player* getWinningPlayer();
@@ -35,14 +34,15 @@ class GameState {
     bool doReplaceTile(std::string tile);
     void showBeforeRoundOutput();
     void showAfterGameOutput();
-    static bool testSaveFileValidity(std::istream &gameData);
+    bool testSaveFileValidity(std::istream &gameData);
 
   private:
     bool firstTile;
     int currentPlayerIndex;
     Player** players;
     TileBag* bag;
-   
+    int numPlayers;
+
     Player* getCurrentPlayer();
     void nextPlayer();
     LinkedList* getConnectedTilesInDir(Tile* tile, std::string position, int dir);

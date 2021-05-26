@@ -16,11 +16,12 @@
  * playerNames [string*] - Array of player names to initialise players with
  * Return: N/A
  */
-GameState::GameState(std::string playerNames[PLAYER_COUNT]) {
-  players = new Player* [PLAYER_COUNT];
+GameState::GameState(std::vector<std::string> playerNames) {
+  numPlayers = playerNames.size();
+  players = new Player* [numPlayers];
   board = new Board(BOARD_SIZE, BOARD_SIZE);
   bag = new TileBag();
-  for (int i = 0; i < PLAYER_COUNT; i++) {
+  for (int i = 0; i < numPlayers; i++) {
     players[i] = new Player(playerNames[i]);
     players[i]->initHand(bag);
   }
@@ -35,7 +36,7 @@ GameState::GameState(std::string playerNames[PLAYER_COUNT]) {
  * Return: N/A
  */
 GameState::~GameState() {
-  for (int i = 0; i < PLAYER_COUNT; i++) {
+  for (int i = 0; i < numPlayers; i++) {
     delete players[i];
   }
   delete[] players;
@@ -50,23 +51,33 @@ GameState::~GameState() {
  * Parameters:
  * gameData [istream] - A reference to the gameData istream
  */
-GameState::GameState(std::istream& gameData) {
+GameState::GameState(std::istream& gameData, bool varPlayers) {
   // Read player information
-  players = new Player* [PLAYER_COUNT];
-  for (int i = 0; i < PLAYER_COUNT; i++) {
+  numPlayers = 2;
+  if (varPlayers) {
+    std::string tempNumPlayers = "";
+    getline(gameData, tempNumPlayers);
+    numPlayers = stoi(tempNumPlayers);;
+  }
+  players = new Player* [numPlayers];
+  std::cout << "Num players " << numPlayers << std::endl;
+  for (int i = 0; i < numPlayers; i++) {
     std::string tempPlayerInfoString = "";
 
     // Read the player name and construct the player
     getline(gameData, tempPlayerInfoString);
+    std::cout << "Player " << i << " name " << tempPlayerInfoString << std::endl;
     players[i] = new Player(tempPlayerInfoString);
 
     // Read the player score and set
     getline(gameData, tempPlayerInfoString);
+    std::cout << "Player " << i << " score " << tempPlayerInfoString << std::endl;
     int score = stoi(tempPlayerInfoString);
     players[i]->setScore(score);
 
     // Read the players hand and set
     getline(gameData, tempPlayerInfoString);
+    std::cout << "Player " << i << " hand " << tempPlayerInfoString << std::endl;
     players[i]->getHand()->fromString(tempPlayerInfoString);
   }
 
@@ -92,47 +103,12 @@ GameState::GameState(std::istream& gameData) {
   // Read the current player then find its index
   std::string currentPlayerName = "";
   getline(gameData, currentPlayerName);
-  for (int i = 0; i < PLAYER_COUNT; i++) {
+  for (int i = 0; i < numPlayers; i++) {
     if (players[i]->getName() == currentPlayerName) {
       currentPlayerIndex = i;
     }
   }
 }
-
-/*
- * Constructor Name: testSaveFileValidity
- * Purpose: Confirm that gameData matches a valid save format utalising REGEX
- * Parameters:
- * gameData [istream] - A reference to the gameData istream
- */
-bool GameState::testSaveFileValidity(std::istream& gameData) {
-  // Create array of patterns
-  std::string patterns[PLAYER_COUNT * 3 + 4] = {};
-
-  // Add player patterns
-  for (int i = 0; i < PLAYER_COUNT; i++) {
-    patterns[i * 3] = NAME_PATTERN;
-    patterns[i * 3 + 1] = SCORE_PATTERN;
-    patterns[i * 3 + 2] = HAND_PATTERN;
-  }
-
-  // Add game patterns
-  patterns[PLAYER_COUNT * 3 + 0] = BOARD_SIZE_PATTERN;
-  patterns[PLAYER_COUNT * 3 + 1] = BOARD_TILES_PATTERN;
-  patterns[PLAYER_COUNT * 3 + 2] = BAG_TILES_PATTERN;
-  patterns[PLAYER_COUNT * 3 + 3] = NAME_PATTERN;
-
-  // Check the file against all the patterns, line by line
-  bool valid = true;
-  std::string line = "";
-  for (int i = 0; i < PLAYER_COUNT * 3 + 4; i++) {
-    getline(gameData, line);
-    valid = valid && std::regex_match(line, std::regex(patterns[i]));
-  }
-
-  return valid;
-}
-
 
 /*
  * Method Name: isGameOver()
@@ -142,7 +118,7 @@ bool GameState::isGameOver() {
   // Is the game over?
   bool gameOver = false;
   if (bag->getList()->getSize() == 0) {
-    for (int i = 0; !gameOver && i < PLAYER_COUNT; i++) {
+    for (int i = 0; !gameOver && i < numPlayers; i++) {
       if (players[i]->getHand()->getSize() == 0) {
         gameOver = true;
       }
@@ -166,7 +142,7 @@ Player* GameState::getWinningPlayer() {
     // Get player w/ highest score (if there is one)
     bool isDraw = false;
     winner = players[0];
-    for (int i = 1; !isDraw && i < PLAYER_COUNT; i++) {
+    for (int i = 1; !isDraw && i < numPlayers; i++) {
       if (players[i]->getScore() == winner->getScore()) {
         winner = nullptr;
         isDraw = true;
@@ -188,7 +164,7 @@ Player* GameState::getWinningPlayer() {
  */
 void GameState::showAfterGameOutput() {
   std::cout << "Game over" << std::endl;
-  for (int i = 0; i < PLAYER_COUNT; i++) {
+  for (int i = 0; i < numPlayers; i++) {
     std::cout << "Score for " << players[i]->getName() << ": ";
     std::cout << std::setfill('0') << std::setw(3) << players[i]->getScore() 
               << std::endl;
@@ -214,7 +190,7 @@ void GameState::showBeforeRoundOutput() {
             << getCurrentPlayer()->getName() << ", it's your turn" << std::endl;
 
   // Display all players score
-  for (int playerIndex = 0; playerIndex < PLAYER_COUNT; playerIndex++) {
+  for (int playerIndex = 0; playerIndex < numPlayers; playerIndex++) {
     std::cout << "Score for " << players[playerIndex]->getName() << ": "
               << players[playerIndex]->getScore() << std::endl;
   }
@@ -319,7 +295,7 @@ Player* GameState::getCurrentPlayer() {
  * Return: N/A
  */
 void GameState::nextPlayer() {
-  currentPlayerIndex = (currentPlayerIndex + 1) % PLAYER_COUNT;
+  currentPlayerIndex = (currentPlayerIndex + 1) % numPlayers;
 }
 
 /*
@@ -377,8 +353,11 @@ bool GameState::doReplaceTile(std::string tile) {
 std::string GameState::serialise() {
   std::stringstream ss;
 
+  if (numPlayers != 2) {
+    ss << numPlayers << std::endl;
+  }
   // Write player info
-  for (int i = 0; i < PLAYER_COUNT; i++) {
+  for (int i = 0; i < numPlayers; i++) {
     ss << players[i]->getName() << std::endl;
     ss << players[i]->getScore() << std::endl;
     ss << players[i]->getHand()->toString(false) << std::endl;

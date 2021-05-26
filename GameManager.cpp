@@ -61,7 +61,7 @@ void GameManager::startGame() {
  * playerNames [string*] - Array of playerNames
  * Return: void
  */
-void GameManager::newGame(std::string playerNames[PLAYER_COUNT]) {
+void GameManager::newGame(std::vector<std::string> playerNames) {
   gameState = new GameState(playerNames);
   startGame();
 }
@@ -74,10 +74,10 @@ void GameManager::newGame(std::string playerNames[PLAYER_COUNT]) {
  * fileName [string] - File path to save file
  * Return: void
  */
-void GameManager::loadGame(std::string fileName) {
+void GameManager::loadGame(std::string fileName, bool varPlayers) {
   std::ifstream gameData(fileName);
   if (gameData.is_open()) {
-    gameState = new GameState(gameData);
+    gameState = new GameState(gameData, varPlayers);
     startGame();
     gameData.close();
   } else {
@@ -259,30 +259,4 @@ void GameManager::doReplaceTile(std::string tile) {
   // Replace the tile
   bool success = gameState->doReplaceTile(tile);
   showRoundOutput = success;
-}
-
-bool GameManager::testSaveFileValidity(std::string path) {
-  bool valid = true;
-
-  // Validate path
-  valid = valid && std::regex_match(path, std::regex(PATH_PATTERN));
-
-  // Validate file
-  if (valid) {
-    std::ifstream gameData(path);
-    if (gameData.is_open()) {
-      valid = GameState::testSaveFileValidity(gameData);
-      if (!valid) {
-        std::cout << "Invalid save format" << std::endl;
-      }
-      gameData.close();
-    } else {
-      valid = false;
-      std::cout << "Can't read file" << std::endl;
-    }
-  } else {
-    std::cout << "Invalid file path" << std::endl;
-  }
-
-  return valid;
 }

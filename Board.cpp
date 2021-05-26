@@ -119,7 +119,7 @@ void Board::printBoard() {
     std::cout << rowLabels[x] << " |";
     for (int y = 0; y < width; y++) {
       if (gridVec[x][y] != nullptr) {
-        std::cout << gridVec[x][y]->toString() << "|";
+        std::cout << gridVec[x][y]->toDisplayString() << "|";
       } else {
         std::cout << "  |";
       }

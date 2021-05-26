@@ -17,6 +17,24 @@ std::string Tile::toString() {
   return colour + std::to_string(shape);
 }
 
+std::string Tile::toDisplayString() {
+  std::string escape = "";
+  if (colour == RED) {
+    escape = RED_ESCAPE;
+  } else if (colour == ORANGE) {
+    escape = ORANGE_ESCAPE;
+  } else if (colour == YELLOW) {
+    escape = YELLOW_ESCAPE;
+  } else if (colour == GREEN) {
+    escape = GREEN_ESCAPE;
+  } else if (colour == BLUE) {
+    escape = BLUE_ESCAPE;
+  } else if (colour == PURPLE) {
+    escape = PURPLE_ESCAPE;
+  }
+  return escape + colour + std::to_string(shape) + RESET_ESCAPE;
+}
+
 Shape Tile::getShape() {
   return shape;
 }

@@ -139,16 +139,20 @@ Node* LinkedList::getNode(int index) {
 
 /*
  * Method Name: toString
- * Purpose: Converts linked list to string for saving
+ * Purpose: Converts linked list to string for saving and display
  * Parameters: N/A
  * Return:
  * string - All values within linked list comma seperated
  */
-std::string LinkedList::toString() {
+std::string LinkedList::toString(bool isColoured) {
   std::string listString = "";
   Node* node = head;
   while (node != nullptr) {
-    listString += node->tile->toString();
+    if (isColoured) {
+      listString += node->tile->toDisplayString();
+    } else {
+      listString += node->tile->toString();
+    }
     if (node->next != nullptr) {
       listString += ",";
     }

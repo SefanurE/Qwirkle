@@ -225,7 +225,7 @@ void GameState::showBeforeRoundOutput() {
   // Display the current players hand 
   std::cout << std::endl
             << "Your hand is" << std::endl
-            << getCurrentPlayer()->getHand()->toString() << std::endl
+            << getCurrentPlayer()->getHand()->toString(true) << std::endl
             << std::endl;
 }
 
@@ -381,7 +381,7 @@ std::string GameState::serialise() {
   for (int i = 0; i < PLAYER_COUNT; i++) {
     ss << players[i]->getName() << std::endl;
     ss << players[i]->getScore() << std::endl;
-    ss << players[i]->getHand()->toString() << std::endl;
+    ss << players[i]->getHand()->toString(false) << std::endl;
   }
   // Write board dimension
   ss << board->getHeight() << "," << board->getWidth() << std::endl;
@@ -390,7 +390,7 @@ std::string GameState::serialise() {
   ss << board->toString() << std::endl;
 
   // Write tile bag
-  ss << bag->getList()->toString() << std::endl;
+  ss << bag->getList()->toString(false) << std::endl;
 
   // Write current player
   ss << getCurrentPlayer()->getName() << std::endl;

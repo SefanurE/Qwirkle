@@ -10,6 +10,15 @@
 #define PURPLE 'P'
 #define COLOURS_COUNT 6
 
+// Colour Escape Codes
+#define RED_ESCAPE "\u001b[31m"
+#define ORANGE_ESCAPE "\033[48;5;000;38;5;202m"
+#define YELLOW_ESCAPE "\033[48;5;000;38;5;226m"
+#define GREEN_ESCAPE "\u001b[32m"
+#define BLUE_ESCAPE "\u001b[34m"
+#define PURPLE_ESCAPE "\u001b[35m"
+#define RESET_ESCAPE "\u001b[0m"
+
 // Shapes
 #define CIRCLE    1
 #define STAR_4    2

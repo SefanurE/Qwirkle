@@ -9,7 +9,7 @@
  * Parameters: N/A
  * Return: N/A
  */
-void Menu::mainMenu() {
+void Menu::mainMenu(int numPlayers, bool multiPlace) {
   std::cout << std::endl
     << "Welcome to Qwirkle!" << std::endl
     << "-------------------" << std::endl;
@@ -20,10 +20,10 @@ void Menu::mainMenu() {
     std::string menuOption = getMenuOption();
     // Check for which menu option was selected
     if (menuOption == NEW_GAME_OPTION) {
-      newGame();
+      newGame(numPlayers, multiPlace);
       quit = true;
     } else if (menuOption == LOAD_GAME_OPTION) {
-      loadGame();
+      loadGame(numPlayers, multiPlace);
       quit = true;
     } else if (menuOption == CREDITS_OPTION) {
       printCredits();
@@ -61,27 +61,10 @@ void Menu::displayMenu() {
  * Parameters: N/A
  * Return: N/A
  */
-void Menu::newGame() {
+void Menu::newGame(int numPlayers, bool multiPlace) {
   bool cancel = false;
   std::cout << std::endl;
   std::cout << "Starting a New Game" << std::endl;
-  std::cout << std::endl << "Select how many players" << std::endl;
-  std::cout << "1. 2 players" << std::endl;
-  std::cout << "2. 3 players" << std::endl;
-  std::cout << "3. 4 players" << std::endl;
-  int numPlayers = PENDING_INPUT;
-  while (numPlayers == PENDING_INPUT && !cancel) {
-    std::string playerCountOption = getMenuOption();
-    if (playerCountOption == TWO_PLAYER_OPTION) {
-      numPlayers = 2;
-    } else if (playerCountOption == THREE_PLAYER_OPTION) {
-      numPlayers = 3;
-    } else if (playerCountOption == FOUR_PLAYER_OPTION) {
-      numPlayers = 4;
-    } else if (playerCountOption == QUIT_OPTION) {
-      cancel = true;
-    }
-  }
 
   if (!cancel) {
     std::vector<std::string> playerNames(numPlayers, "");
@@ -103,7 +86,7 @@ void Menu::newGame() {
 
       // Create new gameManager and begin a new game with the player names
       GameManager* gameManager = new GameManager();
-      gameManager->newGame(playerNames);
+      gameManager->newGame(playerNames, multiPlace);
 
       // Game is over, cleanup
       delete gameManager;
@@ -185,50 +168,44 @@ std::string Menu::getNameInput() {
  * Parameters: N/A
  * Return: N/A
  */
-void Menu::loadGame() {
+void Menu::loadGame(int numPlayers, bool multiPlace) {
   // Create new gameManager
-
-
-  bool cancel = false;
-  if (!cancel) {
-    GameManager* gameManager = new GameManager();
-    int numPlayers = 2;
-    std::string fileName = "";
-    bool done = false;
-    bool quit = false;
-    while (!done) {
-      std::cout << std::endl;
-      std::cout << "Enter the filename from which load a game: " << std::endl;
-      std::cout << "> ";
-      fileName = "";
-      bool read = true;
-      // Check each character input by user
-      while (read) {
-        char c = std::cin.get();
-        // Quit program if c is EOF
-        if (c == EOF) {
-          std::cout << std::endl << std::endl;
-          read = false;
-          done = true;
-          quit = true;
-        } else if (c == '\n') {
-          read = false;
-          // Check validity of file name input by user
-          done = testSaveFileValidity(fileName, numPlayers);
-        } else {
-          fileName.push_back(c);
-        }
+  GameManager* gameManager = new GameManager();
+  std::string fileName = "";
+  bool done = false;
+  bool quit = false;
+  while (!done) {
+    std::cout << std::endl;
+    std::cout << "Enter the filename from which load a game: " << std::endl;
+    std::cout << "> ";
+    fileName = "";
+    bool read = true;
+    // Check each character input by user
+    while (read) {
+      char c = std::cin.get();
+      // Quit program if c is EOF
+      if (c == EOF) {
+        std::cout << std::endl << std::endl;
+        read = false;
+        done = true;
+        quit = true;
+      } else if (c == '\n') {
+        read = false;
+        // Check validity of file name input by user
+        done = testSaveFileValidity(fileName, numPlayers);
+      } else {
+        fileName.push_back(c);
       }
     }
-
-    if (!quit) {
-      // Load game from file
-      gameManager->loadGame(fileName, numPlayers);
-    }
-
-    // Game is over, cleanup
-    delete gameManager;
   }
+
+  if (!quit) {
+    // Load game from file
+    gameManager->loadGame(fileName, numPlayers, multiPlace);
+  }
+
+  // Game is over, cleanup
+  delete gameManager;
 }
 
 /*
@@ -258,25 +235,14 @@ void Menu::printCredits() {
   std::cout << "-----------------------------------" << std::endl;
 }
 
-bool Menu::testSaveFileValidity(std::string path, int &numPlayers) {
+bool Menu::testSaveFileValidity(std::string path, int numPlayers) {
   // Validate path
   bool valid = std::regex_match(path, std::regex(PATH_PATTERN));
 
   // Validate file
   if (valid) {
     std::ifstream gameData(path);
-    std::string line = "";
     if (gameData.is_open()) {
-      getline(gameData, line);
-      if (line == NUM_PLAYERS_LAYOUT) {
-        getline(gameData, line);
-        valid = std::regex_match(line, std::regex(NUMPLAYERS_PATTERN));
-        if (valid) {
-          numPlayers = stoi(line);
-          getline(gameData, line);
-        }
-      }
-
       std::vector<std::string> patterns(numPlayers * 3 + 4, "");
 
       // Add player patterns
@@ -293,9 +259,10 @@ bool Menu::testSaveFileValidity(std::string path, int &numPlayers) {
       patterns[numPlayers * 3 + 3] = NAME_PATTERN;
 
       // Check the file against all the patterns, line by line
+      std::string line = "";
       for (int i = 0; i < numPlayers * 3 + 4; i++) {
-        valid = valid && std::regex_match(line, std::regex(patterns[i]));
         getline(gameData, line);
+        valid = valid && std::regex_match(line, std::regex(patterns[i]));
       }
       if (!valid) {
         std::cout << "Invalid save format" << std::endl;

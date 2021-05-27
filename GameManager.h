@@ -11,6 +11,7 @@
 #define COMM_SAVE "SAVE"
 #define COMM_PLACE "PLACE"
 #define COMM_REPLACE "REPLACE"
+#define COMM_DONE "DONE"
 #define COMM_AT "AT"
 #define COMM_TILE "[A-Z][0-9]+"
 #define PATH_PATTERN "((?:[^/\\s]*\\/)*)([^/\\s]+)"
@@ -32,14 +33,16 @@ class GameManager {
     void doSave(std::string path);
     void doPlaceTile(std::string tile, std::string position);
     void doReplaceTile(std::string tile);
+    void doEndTurn();
     GameState* gameState;
     GameManagerState status = DEFAULT;
     bool showRoundOutput = true;
+    bool multiPlace;
     bool imatch(std::string s, std::string pattern);
 
   public:
     GameManager(); ~GameManager();
     void startGame();
-    void newGame(std::vector<std::string>);
-    void loadGame(std::string fileName, int numPlayers);
+    void newGame(std::vector<std::string>, bool multiPlace);
+    void loadGame(std::string fileName, int numPlayers, bool multiPlace);
 };

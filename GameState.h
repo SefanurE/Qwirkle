@@ -17,14 +17,15 @@ class GameState {
   public:
     Board* board;
 
-    GameState(std::vector<std::string> playerNames);
-    GameState(std::istream &stream, int numPlayers);
+    GameState(std::vector<std::string> playerNames, bool multiPlace);
+    GameState(std::istream &stream, int numPlayers, bool multiPlace);
     ~GameState();
     std::string serialise();
     Player* getWinningPlayer();
     bool isGameOver();
     bool doPlaceTile(std::string tileString, std::string position);
     bool doReplaceTile(std::string tile);
+    bool doEndTurn();
     void showBeforeRoundOutput();
     void showAfterGameOutput();
     bool testSaveFileValidity(std::istream &gameData);
@@ -35,13 +36,15 @@ class GameState {
     Player** players;
     TileBag* bag;
     int numPlayers;
+    bool multiPlace;
+    int placedTilesOnTurn = 0;
 
     Player* getCurrentPlayer();
-    void nextPlayer();
     LinkedList* getConnectedTilesInDir(Tile* tile, std::string position, int dir);
     bool validateTile(Tile* tile, std::string position);
     int placeTileScore(Tile* tile, std::string position);
     bool checkPlacementValid(Tile* myTile, Tile* neighbourTile);
+    void nextPlayer();
 };
 
 #endif //COSC_ASSIGN_TWO_GS

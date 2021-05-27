@@ -1,12 +1,18 @@
-.default: all
+OBJS = Tile.o Node.o LinkedList.o qwirkle.o Menu.o GameManager.o TileBag.o GameState.o Player.o Board.o
+DEPS := $(OBJS:.o=.d)
+CXX = g++
+CFLAGS = -Wall -Werror -std=c++14 -g -O
 
 all: qwirkle
 
 clean:
-	rm -rf qwirkle *.o *.dSYM
+	rm -rf qwirkle *.o *.dSYM 
+	rm -rf *.d
 
-qwirkle: Tile.o Node.o LinkedList.o qwirkle.o Menu.o GameManager.o TileBag.o GameState.o Player.o Board.o
-	g++ -Wall -Werror -std=c++14 -g -O -o $@ $^
+qwirkle: $(OBJS)
+	$(CXX) $(CFLAGS) -o $@ $^
 
-%.o: %.cpp %.h
-	g++ -Wall -Werror -std=c++14 -g -O -c $<
+-include $(DEPS)
+
+%.o: %.cpp
+	$(CXX) $(CFLAGS) -MMD -c -o $@ $<

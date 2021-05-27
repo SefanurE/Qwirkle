@@ -61,8 +61,9 @@ void GameManager::startGame() {
  * playerNames [string*] - Array of playerNames
  * Return: void
  */
-void GameManager::newGame(std::vector<std::string> playerNames) {
-  gameState = new GameState(playerNames);
+void GameManager::newGame(std::vector<std::string> playerNames, bool multiPlace) {
+  this->multiPlace = multiPlace;
+  gameState = new GameState(playerNames, multiPlace);
   startGame();
 }
 
@@ -74,10 +75,11 @@ void GameManager::newGame(std::vector<std::string> playerNames) {
  * fileName [string] - File path to save file
  * Return: void
  */
-void GameManager::loadGame(std::string fileName, int numPlayers) {
+void GameManager::loadGame(std::string fileName, int numPlayers, bool multiPlace) {
+  this->multiPlace = multiPlace;
   std::ifstream gameData(fileName);
   if (gameData.is_open()) {
-    gameState = new GameState(gameData, numPlayers);
+    gameState = new GameState(gameData, numPlayers, multiPlace);
     startGame();
     gameData.close();
   } else {
@@ -110,7 +112,6 @@ void GameManager::parseCommand(std::string command) {
 
     // Once we get to a natural break...
     if (std::isspace(c) || i == command.length() - 1) {
-
       if (buffer != "") {
         // Establish initial command
         if (comm == "") {
@@ -122,6 +123,9 @@ void GameManager::parseCommand(std::string command) {
             comm = COMM_PLACE;
           } else if (imatch(buffer, COMM_REPLACE)) {
             comm = COMM_REPLACE;
+          } else if (imatch(buffer, COMM_DONE) && multiPlace) {
+            doEndTurn();
+            completedCommand = true;
           } else {
             invalid = true;
             completedCommand = true;
@@ -159,7 +163,6 @@ void GameManager::parseCommand(std::string command) {
           invalid = true;
           completedCommand = true;
         }
-
         // reset buffer
         buffer.clear();
       }
@@ -258,5 +261,10 @@ void GameManager::doReplaceTile(std::string tile) {
 
   // Replace the tile
   bool success = gameState->doReplaceTile(tile);
+  showRoundOutput = success;
+}
+
+void GameManager::doEndTurn() {
+  bool success = gameState->doEndTurn();
   showRoundOutput = success;
 }

@@ -16,8 +16,9 @@
  * playerNames [string*] - Array of player names to initialise players with
  * Return: N/A
  */
-GameState::GameState(std::vector<std::string> playerNames) {
+GameState::GameState(std::vector<std::string> playerNames, bool multiPlace) {
   numPlayers = playerNames.size();
+  this->multiPlace = multiPlace;
   players = new Player* [numPlayers];
   board = new Board(BOARD_SIZE, BOARD_SIZE);
   bag = new TileBag();
@@ -51,17 +52,12 @@ GameState::~GameState() {
  * Parameters:
  * gameData [istream] - A reference to the gameData istream
  */
-GameState::GameState(std::istream& gameData, int numPlayers) {
+GameState::GameState(std::istream& gameData, int numPlayers, bool multiPlace) {
   // Read player information
   players = new Player* [numPlayers];
   this->numPlayers = numPlayers;
-
+  this->multiPlace = multiPlace;
   // Clean through first 2 lines if numPlayers was part of the save file
-  if (numPlayers != 2) {
-    std::string garbage = "";
-    getline(gameData, garbage);
-    getline(gameData, garbage);
-  }
   for (int i = 0; i < numPlayers; i++) {
     std::string tempPlayerInfoString = "";
 
@@ -245,11 +241,11 @@ bool GameState::doPlaceTile(std::string tileString, std::string position) {
                                      + (firstTile ? 1 : 0);
           player->addScore(score);
 
-          // Draw the player a new tile if any remain in the bag
-          if (bag->getList()->getSize() > 0) {
-            player->getHand()->push(bag->draw());
-          }
+          placedTilesOnTurn += 1;
 
+          if (!multiPlace || player->getHand()->getSize() == 0) {
+            nextPlayer();
+          }
           firstTile = false;
           success = true;
         }
@@ -263,11 +259,6 @@ bool GameState::doPlaceTile(std::string tileString, std::string position) {
     }
   } else {
     std::cout << "You do not have a " << tileString << " tile!" << std::endl;
-  }
-
-  // Next player is called upon a successful end to a round
-  if (success) {
-    nextPlayer();
   }
 
   // Cleanup
@@ -293,7 +284,13 @@ Player* GameState::getCurrentPlayer() {
  * Return: N/A
  */
 void GameState::nextPlayer() {
+  for (int i = 0; i < placedTilesOnTurn; i++) {
+    if (bag->getList()->getSize() > 0) {
+      getCurrentPlayer()->getHand()->push(bag->draw());
+    }
+  }
   currentPlayerIndex = (currentPlayerIndex + 1) % numPlayers;
+  placedTilesOnTurn = 0;
 }
 
 /*
@@ -308,36 +305,50 @@ void GameState::nextPlayer() {
  * [false]
  */
 bool GameState::doReplaceTile(std::string tile) {
-  // Get the player and their hand
-  Player* player = getCurrentPlayer();
-  LinkedList* hand = player->getHand();
-
-  // Is the tile in the hand?
   bool success = false;
-  int tileIndex = hand->getIndexOf(tile);
-  if (tileIndex != TILE_NOT_FOUND) {
-    // Is the bag empty?
-    if (bag->getList()->getSize() != 0) {
-      // Draw a tile and put it in the players hand
-      hand->insertAfter(tileIndex, bag->draw());
+  if (placedTilesOnTurn == 0) {
+    // Get the player and their hand
+    Player* player = getCurrentPlayer();
+    LinkedList* hand = player->getHand();
 
-      // Remove the tile from the players hand and put it in the bag
-      bag->getList()->push(hand->remove(tileIndex));
+    // Is the tile in the hand?
+    int tileIndex = hand->getIndexOf(tile);
+    if (tileIndex != TILE_NOT_FOUND) {
+      // Is the bag empty?
+      if (bag->getList()->getSize() != 0) {
+        // Draw a tile and put it in the players hand
+        hand->insertAfter(tileIndex, bag->draw());
 
-      success = true;
+        // Remove the tile from the players hand and put it in the bag
+        bag->getList()->push(hand->remove(tileIndex));
+
+        success = true;
+      } else {
+        std::cout << "The bag is empty! You cannot replace your tile!"
+                  << std::endl;
+      }
     } else {
-      std::cout << "The bag is empty! You cannot replace your tile!"
-                << std::endl;
+      std::cout << "You do not have a " << tile << " tile!" << std::endl;
+    }
+
+    // Swap player if move was successful
+    if (success) {
+      nextPlayer();
     }
   } else {
-    std::cout << "You do not have a " << tile << " tile!" << std::endl;
+    std::cout << "You have already placed a tile this around" << std::endl;
   }
+  return success;
+}
 
-  // Swap player if move was successfull
-  if (success) {
+bool GameState::doEndTurn() {
+  bool success = false;
+  if (placedTilesOnTurn != 0 || !multiPlace) {
     nextPlayer();
+    success = true;
+  } else {
+    std::cout << "You must do 1 action before ending your turn" << std::endl;
   }
-
   return success;
 }
 
@@ -351,10 +362,6 @@ bool GameState::doReplaceTile(std::string tile) {
 std::string GameState::serialise() {
   std::stringstream ss;
 
-  if (numPlayers != 2) {
-    ss << NUM_PLAYERS_LAYOUT << std::endl;
-    ss << numPlayers << std::endl;
-  }
   // Write player info
   for (int i = 0; i < numPlayers; i++) {
     ss << players[i]->getName() << std::endl;

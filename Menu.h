@@ -13,7 +13,14 @@
 #define PENDING_INPUT -1
 #define VAR_PLAYERS_FALSE "1"
 #define VAR_PLAYERS_TRUE "2"
-
+#define NAME_PATTERN "^[A-Z]+$"
+#define SCORE_PATTERN "^\\d+$"
+#define HAND_PATTERN "^(([A-Z][0-9]+),)*([A-Z][0-9]+)$|(^$)"
+#define BOARD_SIZE_PATTERN "^\\d+,\\d+$"
+#define BOARD_TILES_PATTERN "^(([A-Z][0-9]+)@([A-Z][0-9]+),\\s?)*\
+([A-Z][0-9]+)@([A-Z][0-9]+)$|(^$)"
+#define BAG_TILES_PATTERN "^(([A-Z][0-9]+),)*([A-Z][0-9]+)$|(^$)"
+#define NUM_PLAYERS_PATTERN "[2-4]"
 class Menu {
   public:
     void mainMenu();
@@ -26,5 +33,5 @@ class Menu {
     std::string getMenuOption();
     void loadGame();
     void printCredits();
-    bool testSaveFileValidity(std::string path, bool varPlayers);
+    bool testSaveFileValidity(std::string path, int &numPlayers);
 };

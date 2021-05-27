@@ -74,10 +74,10 @@ void GameManager::newGame(std::vector<std::string> playerNames) {
  * fileName [string] - File path to save file
  * Return: void
  */
-void GameManager::loadGame(std::string fileName, bool varPlayers) {
+void GameManager::loadGame(std::string fileName, int numPlayers) {
   std::ifstream gameData(fileName);
   if (gameData.is_open()) {
-    gameState = new GameState(gameData, varPlayers);
+    gameState = new GameState(gameData, numPlayers);
     startGame();
     gameData.close();
   } else {

@@ -51,33 +51,31 @@ GameState::~GameState() {
  * Parameters:
  * gameData [istream] - A reference to the gameData istream
  */
-GameState::GameState(std::istream& gameData, bool varPlayers) {
+GameState::GameState(std::istream& gameData, int numPlayers) {
   // Read player information
-  numPlayers = 2;
-  if (varPlayers) {
-    std::string tempNumPlayers = "";
-    getline(gameData, tempNumPlayers);
-    numPlayers = stoi(tempNumPlayers);;
-  }
   players = new Player* [numPlayers];
-  std::cout << "Num players " << numPlayers << std::endl;
+  this->numPlayers = numPlayers;
+
+  // Clean through first 2 lines if numPlayers was part of the save file
+  if (numPlayers != 2) {
+    std::string garbage = "";
+    getline(gameData, garbage);
+    getline(gameData, garbage);
+  }
   for (int i = 0; i < numPlayers; i++) {
     std::string tempPlayerInfoString = "";
 
     // Read the player name and construct the player
     getline(gameData, tempPlayerInfoString);
-    std::cout << "Player " << i << " name " << tempPlayerInfoString << std::endl;
     players[i] = new Player(tempPlayerInfoString);
 
     // Read the player score and set
     getline(gameData, tempPlayerInfoString);
-    std::cout << "Player " << i << " score " << tempPlayerInfoString << std::endl;
     int score = stoi(tempPlayerInfoString);
     players[i]->setScore(score);
 
     // Read the players hand and set
     getline(gameData, tempPlayerInfoString);
-    std::cout << "Player " << i << " hand " << tempPlayerInfoString << std::endl;
     players[i]->getHand()->fromString(tempPlayerInfoString);
   }
 
@@ -94,7 +92,8 @@ GameState::GameState(std::istream& gameData, bool varPlayers) {
 
   // Construct the board
   board = new Board(boardShapeString, placedTileString);
-
+  std::cout << "boardShapeString " << boardShapeString << std::endl;
+  std::cout << "boardShapeString " << placedTileString << std::endl;
   // Read the tile bag and construct it
   std::string tileBagString = "";
   getline(gameData, tileBagString);
@@ -354,6 +353,7 @@ std::string GameState::serialise() {
   std::stringstream ss;
 
   if (numPlayers != 2) {
+    ss << NUM_PLAYERS_LAYOUT << std::endl;
     ss << numPlayers << std::endl;
   }
   // Write player info

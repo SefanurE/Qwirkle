@@ -188,28 +188,11 @@ std::string Menu::getNameInput() {
 void Menu::loadGame() {
   // Create new gameManager
 
-  bool varPlayers = false;
-  bool done = false;
-  bool cancel = false;
-  std::cout << "What kind of save would you like to load?" << std::endl;
-  std::cout << "1. 2 Players" << std::endl;
-  std::cout << "2. 3-4 Players" << std::endl;
-  while (!done && !cancel) {
-    std::string varPlayersOption = getMenuOption();
-    if (varPlayersOption == VAR_PLAYERS_FALSE) {
-      varPlayers = false;
-      done = true;
-    } else if (varPlayersOption == VAR_PLAYERS_TRUE) {
-      varPlayers = true;;
-      done = true;
-    } else if (varPlayersOption == QUIT_OPTION) {
-      cancel = true;
-    }
-  }
 
+  bool cancel = false;
   if (!cancel) {
     GameManager* gameManager = new GameManager();
-
+    int numPlayers = 2;
     std::string fileName = "";
     bool done = false;
     bool quit = false;
@@ -231,7 +214,7 @@ void Menu::loadGame() {
         } else if (c == '\n') {
           read = false;
           // Check validity of file name input by user
-          done = testSaveFileValidity(fileName, varPlayers);
+          done = testSaveFileValidity(fileName, numPlayers);
         } else {
           fileName.push_back(c);
         }
@@ -240,7 +223,7 @@ void Menu::loadGame() {
 
     if (!quit) {
       // Load game from file
-      gameManager->loadGame(fileName, varPlayers);
+      gameManager->loadGame(fileName, numPlayers);
     }
 
     // Game is over, cleanup
@@ -275,22 +258,22 @@ void Menu::printCredits() {
   std::cout << "-----------------------------------" << std::endl;
 }
 
-bool Menu::testSaveFileValidity(std::string path, bool varPlayers) {
-  bool valid = true;
-
+bool Menu::testSaveFileValidity(std::string path, int &numPlayers) {
   // Validate path
-  valid = valid && std::regex_match(path, std::regex(PATH_PATTERN));
+  bool valid = std::regex_match(path, std::regex(PATH_PATTERN));
 
   // Validate file
   if (valid) {
     std::ifstream gameData(path);
     std::string line = "";
     if (gameData.is_open()) {
-      int numPlayers = 2;
-      if (varPlayers) {
+      getline(gameData, line);
+      if (line == NUM_PLAYERS_LAYOUT) {
         getline(gameData, line);
-        if (std::regex_match(line, std::regex(NUMPLAYERS_PATTERN))) {
+        valid = std::regex_match(line, std::regex(NUMPLAYERS_PATTERN));
+        if (valid) {
           numPlayers = stoi(line);
+          getline(gameData, line);
         }
       }
 
@@ -310,7 +293,6 @@ bool Menu::testSaveFileValidity(std::string path, bool varPlayers) {
       patterns[numPlayers * 3 + 3] = NAME_PATTERN;
 
       // Check the file against all the patterns, line by line
-      getline(gameData, line);
       for (int i = 0; i < numPlayers * 3 + 4; i++) {
         valid = valid && std::regex_match(line, std::regex(patterns[i]));
         getline(gameData, line);

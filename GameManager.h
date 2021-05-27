@@ -41,5 +41,5 @@ class GameManager {
     GameManager(); ~GameManager();
     void startGame();
     void newGame(std::vector<std::string>);
-    void loadGame(std::string fileName, bool varPlayers);
+    void loadGame(std::string fileName, int numPlayers);
 };

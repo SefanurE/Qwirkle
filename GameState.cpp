@@ -92,8 +92,7 @@ GameState::GameState(std::istream& gameData, int numPlayers) {
 
   // Construct the board
   board = new Board(boardShapeString, placedTileString);
-  std::cout << "boardShapeString " << boardShapeString << std::endl;
-  std::cout << "boardShapeString " << placedTileString << std::endl;
+
   // Read the tile bag and construct it
   std::string tileBagString = "";
   getline(gameData, tileBagString);

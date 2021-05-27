@@ -21,6 +21,7 @@
 ([A-Z][0-9]+)@([A-Z][0-9]+)$|(^$)"
 #define BAG_TILES_PATTERN "^(([A-Z][0-9]+),)*([A-Z][0-9]+)$|(^$)"
 #define NUM_PLAYERS_PATTERN "[2-4]"
+
 class Menu {
   public:
     void mainMenu();

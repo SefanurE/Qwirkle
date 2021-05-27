@@ -45,7 +45,7 @@ tests.each { |t|
   name = t.match(/(.*)\.input$/)[1]
 
   # Run test
-  _, stderr, status = Open3.capture3("./qwirkle 1 < #{name}.input > #{name}.actual")
+  _, stderr, status = Open3.capture3("./qwirkle --3players < #{name}.input > #{name}.actual")
 
   unless status == 0 
     puts "  ❌ Failed to run test '#{name}'. Got status of '#{status}'"

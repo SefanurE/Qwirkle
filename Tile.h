@@ -19,7 +19,7 @@ class Tile {
     Tile(Colour colour, Shape shape);
     Tile(Tile& other);
     std::string toString();
-    std::string toDisplayString();
+    std::string toDisplayString(bool colured);
     Shape getShape();
     Colour getColour();
 };

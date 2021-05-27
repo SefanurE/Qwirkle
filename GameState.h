@@ -11,14 +11,15 @@
 #define TILE_NOT_FOUND -1
 #define QWIRKLE 6
 #define BOARD_SIZE 26
-#define NUM_PLAYERS_LAYOUT "#numPlayers"
+#define NO_TILE_COL -1
+#define NO_TILE_ROW ' '
 
 class GameState {
   public:
     Board* board;
 
-    GameState(std::vector<std::string> playerNames, bool multiPlace);
-    GameState(std::istream &stream, int numPlayers, bool multiPlace);
+    GameState(std::vector<std::string> playerNames, bool multiPlace, bool coloured);
+    GameState(std::istream &stream, int numPlayers, bool multiPlace, bool coloured);
     ~GameState();
     std::string serialise();
     Player* getWinningPlayer();
@@ -31,16 +32,25 @@ class GameState {
     bool testSaveFileValidity(std::istream &gameData);
 
   private:
-    bool firstTile;
+    Tile* firstTile;
     int currentPlayerIndex;
     Player** players;
     TileBag* bag;
     int numPlayers;
     bool multiPlace;
+    bool coloured;
+
+    char firstTileRow = NO_TILE_ROW;
+    int firstTileCol = NO_TILE_COL;
+
+    char validTileRowCreated = NO_TILE_ROW;
+    int validTileColCreated = NO_TILE_COL;
+
     int placedTilesOnTurn = 0;
+    bool newGame;
 
     Player* getCurrentPlayer();
-    LinkedList* getConnectedTilesInDir(Tile* tile, std::string position, int dir);
+    LinkedList* getConnectedTilesInDir(std::string position, int dir);
     bool validateTile(Tile* tile, std::string position);
     int placeTileScore(Tile* tile, std::string position);
     bool checkPlacementValid(Tile* myTile, Tile* neighbourTile);

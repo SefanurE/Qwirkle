@@ -149,7 +149,7 @@ std::string LinkedList::toString(bool isColoured) {
   Node* node = head;
   while (node != nullptr) {
     if (isColoured) {
-      listString += node->tile->toDisplayString();
+      listString += node->tile->toDisplayString(isColoured);
     } else {
       listString += node->tile->toString();
     }

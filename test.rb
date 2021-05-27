@@ -26,7 +26,7 @@ diffCommand = ARGV[0] ? ARGV[0] : 'diff'
 noClean = options[:noClean] or false
 
 # Find tests
-tests = Dir.glob('**/*.input')
+tests = Dir.glob('tests/standard/*.input')
 if tests.length == 0 then
   puts "Found no tests. Will auto detect any .input files input this dir and subdirs." unless silent
   exit

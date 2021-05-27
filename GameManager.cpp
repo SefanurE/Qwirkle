@@ -61,9 +61,9 @@ void GameManager::startGame() {
  * playerNames [string*] - Array of playerNames
  * Return: void
  */
-void GameManager::newGame(std::vector<std::string> playerNames, bool multiPlace) {
+void GameManager::newGame(std::vector<std::string> playerNames, bool multiPlace, bool coloured) {
   this->multiPlace = multiPlace;
-  gameState = new GameState(playerNames, multiPlace);
+  gameState = new GameState(playerNames, multiPlace, coloured);
   startGame();
 }
 
@@ -75,11 +75,11 @@ void GameManager::newGame(std::vector<std::string> playerNames, bool multiPlace)
  * fileName [string] - File path to save file
  * Return: void
  */
-void GameManager::loadGame(std::string fileName, int numPlayers, bool multiPlace) {
+void GameManager::loadGame(std::string fileName, int numPlayers, bool multiPlace, bool coloured) {
   this->multiPlace = multiPlace;
   std::ifstream gameData(fileName);
   if (gameData.is_open()) {
-    gameState = new GameState(gameData, numPlayers, multiPlace);
+    gameState = new GameState(gameData, numPlayers, multiPlace, coloured);
     startGame();
     gameData.close();
   } else {

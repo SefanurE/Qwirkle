@@ -43,6 +43,6 @@ class GameManager {
   public:
     GameManager(); ~GameManager();
     void startGame();
-    void newGame(std::vector<std::string>, bool multiPlace);
-    void loadGame(std::string fileName, int numPlayers, bool multiPlace);
+    void newGame(std::vector<std::string>, bool multiPlace, bool coloured);
+    void loadGame(std::string fileName, int numPlayers, bool multiPlace, bool coloured);
 };

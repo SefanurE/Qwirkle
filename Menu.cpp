@@ -9,7 +9,7 @@
  * Parameters: N/A
  * Return: N/A
  */
-void Menu::mainMenu(int numPlayers, bool multiPlace) {
+void Menu::mainMenu(int numPlayers, bool multiPlace, bool coloured) {
   std::cout << std::endl
     << "Welcome to Qwirkle!" << std::endl
     << "-------------------" << std::endl;
@@ -20,10 +20,10 @@ void Menu::mainMenu(int numPlayers, bool multiPlace) {
     std::string menuOption = getMenuOption();
     // Check for which menu option was selected
     if (menuOption == NEW_GAME_OPTION) {
-      newGame(numPlayers, multiPlace);
+      newGame(numPlayers, multiPlace, coloured);
       quit = true;
     } else if (menuOption == LOAD_GAME_OPTION) {
-      loadGame(numPlayers, multiPlace);
+      loadGame(numPlayers, multiPlace, coloured);
       quit = true;
     } else if (menuOption == CREDITS_OPTION) {
       printCredits();
@@ -31,7 +31,7 @@ void Menu::mainMenu(int numPlayers, bool multiPlace) {
     } else if (menuOption == QUIT_OPTION) {
       std::cout << std::endl;
       quit = true;
-    } else if (!quit) {
+    } else {
       std::cout << "Invalid input, try again" << std::endl;
     }
   }
@@ -61,7 +61,7 @@ void Menu::displayMenu() {
  * Parameters: N/A
  * Return: N/A
  */
-void Menu::newGame(int numPlayers, bool multiPlace) {
+void Menu::newGame(int numPlayers, bool multiPlace, bool coloured) {
   bool cancel = false;
   std::cout << std::endl;
   std::cout << "Starting a New Game" << std::endl;
@@ -86,7 +86,7 @@ void Menu::newGame(int numPlayers, bool multiPlace) {
 
       // Create new gameManager and begin a new game with the player names
       GameManager* gameManager = new GameManager();
-      gameManager->newGame(playerNames, multiPlace);
+      gameManager->newGame(playerNames, multiPlace, coloured);
 
       // Game is over, cleanup
       delete gameManager;
@@ -168,7 +168,7 @@ std::string Menu::getNameInput() {
  * Parameters: N/A
  * Return: N/A
  */
-void Menu::loadGame(int numPlayers, bool multiPlace) {
+void Menu::loadGame(int numPlayers, bool multiPlace, bool coloured) {
   // Create new gameManager
   GameManager* gameManager = new GameManager();
   std::string fileName = "";
@@ -201,7 +201,7 @@ void Menu::loadGame(int numPlayers, bool multiPlace) {
 
   if (!quit) {
     // Load game from file
-    gameManager->loadGame(fileName, numPlayers, multiPlace);
+    gameManager->loadGame(fileName, numPlayers, multiPlace, coloured);
   }
 
   // Game is over, cleanup

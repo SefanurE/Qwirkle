@@ -8,6 +8,7 @@
 int main(int argc, char** argv) {
   int numPlayers = 2;
   bool multiPlace = false;
+  bool coloured = false;
   if (argc > 2) {
     std::cerr << "Invalid game options" << std::endl;
   } else if (argc == 2) {
@@ -18,12 +19,14 @@ int main(int argc, char** argv) {
       numPlayers = 4;
     } else if (argument == CLA_MULTI_PLACE) {
       multiPlace = true;
+    } else if (argument == CLA_COLOUR) {
+      coloured = true;
     } else {
       std::cerr << "Invalid game options" << std::endl;
     }
   }
   Menu* menu = new Menu();
-  menu->mainMenu(numPlayers, multiPlace);
+  menu->mainMenu(numPlayers, multiPlace, coloured);
   delete menu;
   return EXIT_SUCCESS;
 }

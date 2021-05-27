@@ -20,21 +20,22 @@
 #define BOARD_TILES_PATTERN "^(([A-Z][0-9]+)@([A-Z][0-9]+),\\s?)*\
 ([A-Z][0-9]+)@([A-Z][0-9]+)$|(^$)"
 #define BAG_TILES_PATTERN "^(([A-Z][0-9]+),)*([A-Z][0-9]+)$|(^$)"
-#define CLA_3_PLAYERS "1"
-#define CLA_4_PLAYERS "2"
-#define CLA_MULTI_PLACE "3"
+#define CLA_3_PLAYERS "--3players"
+#define CLA_4_PLAYERS "--4players"
+#define CLA_MULTI_PLACE "--multi"
+#define CLA_COLOUR "--colour"
 
 class Menu {
   public:
-    void mainMenu(int numPlayers, bool multiPlace);
+    void mainMenu(int numPlayers, bool multiPlace, bool coloured);
 
   private:
     void displayMenu();
-    void newGame(int numPlayers, bool multiPlace);
+    void newGame(int numPlayers, bool multiPlace, bool coloured);
     int getNumPlayers();
     std::string getNameInput();
     std::string getMenuOption();
-    void loadGame(int numPlayers, bool multiPlace);
+    void loadGame(int numPlayers, bool multiPlace, bool coloured);
     void printCredits();
     bool testSaveFileValidity(std::string path, int numPlayers);
 };

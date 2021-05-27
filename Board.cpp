@@ -100,7 +100,7 @@ void Board::initGrid() {
  * Parameters: N/A
  * Return: N/A
  */
-void Board::printBoard() {
+void Board::printBoard(bool coloured) {
   std::cout << " ";
   for (int a = 0; a < width; a++) {
     if (a < 11) {
@@ -119,7 +119,7 @@ void Board::printBoard() {
     std::cout << rowLabels[x] << " |";
     for (int y = 0; y < width; y++) {
       if (gridVec[x][y] != nullptr) {
-        std::cout << gridVec[x][y]->toDisplayString() << "|";
+        std::cout << gridVec[x][y]->toDisplayString(coloured) << "|";
       } else {
         std::cout << "  |";
       }

@@ -11,8 +11,8 @@
  */
 void Menu::mainMenu(int numPlayers, bool multiPlace, bool coloured) {
   std::cout << std::endl
-    << "Welcome to Qwirkle!" << std::endl
-    << "-------------------" << std::endl;
+            << "Welcome to Qwirkle!" << std::endl
+            << "-------------------" << std::endl;
   displayMenu();
 
   bool quit = false;
@@ -67,7 +67,7 @@ void Menu::newGame(int numPlayers, bool multiPlace, bool coloured) {
   std::cout << "Starting a New Game" << std::endl;
 
   if (!cancel) {
-    std::string* playerNames = new std::string [numPlayers];;
+    std::string* playerNames = new std::string[numPlayers];;
     // Ask user for each players' name
     for (int i = 0; !cancel && i < numPlayers; i++) {
       std::cout << std::endl;
@@ -139,13 +139,13 @@ std::string Menu::getNameInput() {
         if (playerName.length() > 0) {
           done = true;
         }
-      // Quit program if c is EOF
+        // Quit program if c is EOF
       } else if (c == EOF) {
         std::cout << std::endl << std::endl;
         read = false;
         done = true;
         playerName = "";
-      // Checks if c is a character other than a capital letter
+        // Checks if c is a character other than a capital letter
       } else if (c < 'A' || c > 'Z') {
         // Clears user input to check the new name input
         std::cin.ignore(INT8_MAX, '\n');
@@ -192,7 +192,7 @@ void Menu::loadGame(int numPlayers, bool multiPlace, bool coloured) {
       } else if (c == '\n') {
         read = false;
         // Check validity of file name input by user
-        done = testSaveFileValidity(fileName, numPlayers);
+        done = testSaveFileValidity(fileName, numPlayers, multiPlace);
       } else {
         fileName.push_back(c);
       }
@@ -235,7 +235,18 @@ void Menu::printCredits() {
   std::cout << "-----------------------------------" << std::endl;
 }
 
-bool Menu::testSaveFileValidity(std::string path, int numPlayers) {
+/*
+ * Method Name: testSaveFileValidity
+ * Purpose: Ensures that the selected game save is valid for the selected
+ * game options
+ * Parameters:
+ * path [std::string] - Path of the save file
+ * numPlayers [int] - Number of players selected
+ * multiPlace [bool] - Whether multiplace is enabled
+ * Return: N/A
+ */
+bool
+Menu::testSaveFileValidity(std::string path, int numPlayers, bool multiPlace) {
   // Validate path
   bool valid = std::regex_match(path, std::regex(PATH_PATTERN));
 
@@ -243,7 +254,7 @@ bool Menu::testSaveFileValidity(std::string path, int numPlayers) {
   if (valid) {
     std::ifstream gameData(path);
     if (gameData.is_open()) {
-      std::vector<std::string> patterns(numPlayers * 3 + 4, "");
+      std::vector<std::string> patterns(numPlayers * 3 + 9, "");
 
       // Add player patterns
       for (int i = 0; i < numPlayers; i++) {
@@ -257,12 +268,23 @@ bool Menu::testSaveFileValidity(std::string path, int numPlayers) {
       patterns[numPlayers * 3 + 1] = BOARD_TILES_PATTERN;
       patterns[numPlayers * 3 + 2] = BAG_TILES_PATTERN;
       patterns[numPlayers * 3 + 3] = NAME_PATTERN;
+      patterns[numPlayers * 3 + 4] = COLROW_PATTERN;
+      patterns[numPlayers * 3 + 5] = COLROW_PATTERN;
+      patterns[numPlayers * 3 + 6] = SCORE_PATTERN;
+      patterns[numPlayers * 3 + 7] = NUM_PLACED_TILES_PATTERN;
+      patterns[numPlayers * 3 + 8] = SCORE_PATTERN;
 
       // Check the file against all the patterns, line by line
       std::string line = "";
       for (int i = 0; i < numPlayers * 3 + 4; i++) {
         getline(gameData, line);
         valid = valid && std::regex_match(line, std::regex(patterns[i]));
+      }
+      if (multiPlace) {
+        for (size_t i = numPlayers * 3 + 4; i < patterns.size(); i++) {
+          getline(gameData, line);
+          valid = valid && std::regex_match(line, std::regex(patterns[i]));
+        }
       }
       if (!valid) {
         std::cout << "Invalid save format" << std::endl;

@@ -16,8 +16,6 @@
 #define COMM_TILE "[A-Z][0-9]+"
 #define PATH_PATTERN "((?:[^/\\s]*\\/)*)([^/\\s]+)"
 #define COMM_TILE "[A-Z][0-9]+"
-#define CODE_MOD_NUMPLAYERS "#MOD_NUMPLAYERS"
-#define NUMPLAYERS_PATTERN "[2-4]"
 
 enum GameManagerState {
   DEFAULT,
@@ -43,6 +41,12 @@ class GameManager {
   public:
     GameManager(); ~GameManager();
     void startGame();
-    void newGame(std::string* playerNames, int numPlayers, bool multiPlace, bool coloured);
-    void loadGame(std::string fileName, int numPlayers, bool multiPlace, bool coloured);
+    void newGame(std::string* playerNames,
+                 int numPlayers,
+                 bool multiPlace,
+                 bool coloured);
+    void loadGame(std::string fileName,
+                  int numPlayers,
+                  bool multiPlace,
+                  bool coloured);
 };

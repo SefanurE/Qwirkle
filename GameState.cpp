@@ -16,7 +16,8 @@
  * playerNames [string*] - Array of player names to initialise players with
  * Return: N/A
  */
-GameState::GameState(std::string* playerNames, int numPlayers, bool multiPlace, bool coloured) {
+GameState::GameState(std::string* playerNames, int numPlayers, bool multiPlace,
+                     bool coloured) {
   this->numPlayers = numPlayers;
   this->multiPlace = multiPlace;
   this->coloured = coloured;
@@ -56,7 +57,8 @@ GameState::~GameState() {
  * multiPlace [bool] - If optional multi place is enabled (default false)
  * coloured [bool] - If coloured coloured is enabled (default false)
  */
-GameState::GameState(std::istream& gameData, int numPlayers, bool multiPlace, bool coloured) {
+GameState::GameState(std::istream &gameData, int numPlayers, bool multiPlace,
+                     bool coloured) {
   // Initialise class states based on option selected
   players = new Player* [numPlayers];
   this->numPlayers = numPlayers;
@@ -115,13 +117,14 @@ GameState::GameState(std::istream& gameData, int numPlayers, bool multiPlace, bo
     std::string firstTileString = "";
     getline(gameData, firstTileString);
     firstTileRow = firstTileString[0];
-    firstTileCol = stoi(firstTileString.substr(1,firstTileString.size()));
+    firstTileCol = stoi(firstTileString.substr(1, firstTileString.size()));
 
     // Read the saved valid tile directions (col and row) from previous game
     std::string validTileDirectionsString = "";
     getline(gameData, validTileDirectionsString);
     validTileRowCreated = validTileDirectionsString[0];
-    validTileColCreated = stoi(validTileDirectionsString.substr(1,firstTileString.size()));
+    validTileColCreated = stoi(
+        validTileDirectionsString.substr(1, firstTileString.size()));
 
     // Read the location of previous first place tile from save
     getline(gameData, firstTileString);
@@ -195,7 +198,7 @@ void GameState::showAfterGameOutput() {
   std::cout << "Game over" << std::endl;
   for (int i = 0; i < numPlayers; i++) {
     std::cout << "Score for " << players[i]->getName() << ": ";
-    std::cout << std::setfill('0') << std::setw(3) << players[i]->getScore() 
+    std::cout << std::setfill('0') << std::setw(3) << players[i]->getScore()
               << std::endl;
   }
 
@@ -222,7 +225,8 @@ void GameState::showBeforeRoundOutput() {
   for (int playerIndex = 0; playerIndex < numPlayers; playerIndex++) {
     if (playerIndex == currentPlayerIndex) {
       std::cout << "Score for " << players[playerIndex]->getName() << ": "
-                << players[playerIndex]->getScore() + roundScore + firstTileScore << std::endl;
+                << players[playerIndex]->getScore() + roundScore +
+                   firstTileScore << std::endl;
     } else {
       std::cout << "Score for " << players[playerIndex]->getName() << ": "
                 << players[playerIndex]->getScore() << std::endl;
@@ -257,7 +261,7 @@ bool GameState::doPlaceTile(std::string tileString, std::string position) {
 
   Player* player = getCurrentPlayer();
   Tile* playedTile = new Tile(
-    tileString[0], std::stoi(tileString.substr(1, tileString.length())));
+      tileString[0], std::stoi(tileString.substr(1, tileString.length())));
 
   bool success = false;
   int tileIndex = player->getHand()->getIndexOf(tileString);
@@ -291,7 +295,8 @@ bool GameState::doPlaceTile(std::string tileString, std::string position) {
           }
 
           // Track what the current firstTile score is
-          firstTileScore = placeTileScore(firstTileRow + std::to_string(firstTileCol), true, true);
+          firstTileScore = placeTileScore(
+              firstTileRow + std::to_string(firstTileCol), true, true);
 
           // If the first tile wouldnt give any points from adjacent tiles
           // then give 1 point for placing the tile
@@ -342,7 +347,8 @@ Player* GameState::getCurrentPlayer() {
 
 /*
  * Method Name: nextPlayer
- * Purpose: Move currentPlayerIndex to the next player
+ * Purpose: Refill players hand, update score, reset multiplace variables and
+ * move currentPlayerIndex to the next player
  * Parameters: N/A
  * Return: N/A
  */
@@ -354,6 +360,7 @@ void GameState::nextPlayer() {
       getCurrentPlayer()->getHand()->push(bag->draw());
     }
   }
+
   // Update the players score with the points they earnt throughout the round
   players[currentPlayerIndex]->addScore(roundScore + firstTileScore);
 
@@ -418,9 +425,17 @@ bool GameState::doReplaceTile(std::string tile) {
   return success;
 }
 
+/*
+ * Method Name: doEndTurn
+ * Purpose: Makes sure the player has placed a tile before they are able to end
+ * their turn
+ * Parameters:
+ * Return:
+ * bool - If the player was [true] or wasnt [false] able to end their turn
+ */
 bool GameState::doEndTurn() {
   bool success = false;
-  if (placedTilesOnTurn != 0 || !multiPlace) {
+  if (placedTilesOnTurn != 0) {
     nextPlayer();
     success = true;
   } else {
@@ -460,7 +475,7 @@ std::string GameState::serialise() {
   // Write vars required for tracking multiplace
   if (multiPlace) {
     ss << firstTileRow << firstTileCol << std::endl;
-    ss << validTileRowCreated << validTileColCreated<< std::endl;
+    ss << validTileRowCreated << validTileColCreated << std::endl;
     ss << firstTileScore << std::endl;
     ss << placedTilesOnTurn << std::endl;
     ss << roundScore << std::endl;
@@ -473,14 +488,12 @@ std::string GameState::serialise() {
  * Purpose: Get tiles connected to (tile) in orthogonal direction (dir) in
  * ascending distance order.
  * Parameters:
- * tile [Tile*] -
- * position [string] -
- * dir [int] -
+ * position [string] - The position to check connections for
+ * dir [int] - The direction to check directions for
  * Return:
- * LinkedList* -
+ * LinkedList* - The tiles connected to a position in a given direction
  */
-LinkedList* GameState::getConnectedTilesInDir(std::string position,
-                                              int dir) {
+LinkedList* GameState::getConnectedTilesInDir(std::string position, int dir) {
   // Create the list
   LinkedList* tiles = new LinkedList();
 
@@ -492,7 +505,7 @@ LinkedList* GameState::getConnectedTilesInDir(std::string position,
   // Make a set of orthogonal directions
   std::pair<int, int> directions[4] = {
       std::make_pair(0, -1), std::make_pair(-1, 0),
-      std::make_pair(0, 1),  std::make_pair(1, 0) };
+      std::make_pair(0, 1), std::make_pair(1, 0)};
 
   std::pair<int, int> direction = directions[dir];
   int distance = 1;
@@ -525,13 +538,14 @@ LinkedList* GameState::getConnectedTilesInDir(std::string position,
  * Purpose: Get tiles connected to (tile) in orthogonal direction (dir) in
  * ascending distance order.
  * Parameters:
- * tile [Tile*] -
- * position [string] -
- * dir [int] -
+ * position [string] - Position that the tile will be placed
+ * checkCol [bool] - If columns impacting score should be checked
+ * checkRow [bool] - If rows impacting score should be checked
  * Return:
- * LinkedList* -
+ * int - score for placing the tile in the location
  */
-int GameState::placeTileScore(std::string position, bool checkCol, bool checkRow) {
+int
+GameState::placeTileScore(std::string position, bool checkCol, bool checkRow) {
   bool gotRowScore = false;
   bool gotColScore = false;
   int placeScore = 0;
@@ -541,11 +555,11 @@ int GameState::placeTileScore(std::string position, bool checkCol, bool checkRow
     // Award points for the length of the amount of connected tiles in this
     // direction
     LinkedList* connected = getConnectedTilesInDir(position, direction);
-    // Award double points if the length is a QWIRKLE!!
 
     if ((checkRow && (direction % 2 == 0)) || (
-                                                  checkCol && (direction % 2 == 1))) {
+        checkCol && (direction % 2 == 1))) {
 
+      // Award double points if the length is a QWIRKLE!!
       if (connected->getSize() == QWIRKLE - 1) {
         placeScore += QWIRKLE;
         std::cout << std::endl << "QWIRKLE!!" << std::endl << std::endl;
@@ -606,7 +620,7 @@ bool GameState::validateTile(Tile* tile, std::string position) {
       // Get all of the connected tiles in both directions
       LinkedList* connectedA = getConnectedTilesInDir(position, direction);
       LinkedList* connectedB = getConnectedTilesInDir(position, direction
-                                                                      + 2);
+                                                                + 2);
       // Update whether we have a neighbour
       hasNeighbour = hasNeighbour ||
                      connectedA->getSize() > 0 ||
@@ -615,7 +629,8 @@ bool GameState::validateTile(Tile* tile, std::string position) {
       // Validate all of these connected neighbours
       for (int i = 0; valid && i < connectedA->getSize(); i++) {
         if (!checkPlacementValid(tile, connectedA->get(i))) {
-          std::cout << "You can't place a " << tile->toString(coloured) << " tile here!"
+          std::cout << "You can't place a " << tile->toString(coloured)
+                    << " tile here!"
                     << std::endl;
           valid = false;
         }
@@ -624,7 +639,8 @@ bool GameState::validateTile(Tile* tile, std::string position) {
       // Validate all of these connected neighbours
       for (int i = 0; valid && i < connectedB->getSize(); i++) {
         if (!checkPlacementValid(tile, connectedB->get(i))) {
-          std::cout << "You can't place a " << tile->toString(coloured) << " tile here!"
+          std::cout << "You can't place a " << tile->toString(coloured)
+                    << " tile here!"
                     << std::endl;
           valid = false;
         }
@@ -633,7 +649,8 @@ bool GameState::validateTile(Tile* tile, std::string position) {
       // Check that both directions validate the same way
       if (connectedA->getSize() > 0 && connectedB->getSize() > 0) {
         if (!checkPlacementValid(connectedA->get(0), connectedB->get(0))) {
-          std::cout << "You can't place a " << tile->toString(coloured) << " tile here!"
+          std::cout << "You can't place a " << tile->toString(coloured)
+                    << " tile here!"
                     << std::endl;
           valid = false;
         }

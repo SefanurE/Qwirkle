@@ -20,6 +20,8 @@
 #define BOARD_TILES_PATTERN "^(([A-Z][0-9]+)@([A-Z][0-9]+),\\s?)*\
 ([A-Z][0-9]+)@([A-Z][0-9]+)$|(^$)"
 #define BAG_TILES_PATTERN "^(([A-Z][0-9]+),)*([A-Z][0-9]+)$|(^$)"
+#define NUM_PLACED_TILES_PATTERN "[0-6]"
+#define COLROW_PATTERN "^[a-zA-Z ]-?[0-9]+$"
 #define CLA_3_PLAYERS "--3players"
 #define CLA_4_PLAYERS "--4players"
 #define CLA_MULTI_PLACE "--multi"
@@ -37,5 +39,5 @@ class Menu {
     std::string getMenuOption();
     void loadGame(int numPlayers, bool multiPlace, bool coloured);
     void printCredits();
-    bool testSaveFileValidity(std::string path, int numPlayers);
+    bool testSaveFileValidity(std::string path, int numPlayers, bool multiPlace);
 };

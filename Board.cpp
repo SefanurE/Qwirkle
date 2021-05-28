@@ -97,7 +97,8 @@ void Board::initGrid() {
 /*
  * Method Name: printBoard
  * Purpose: Prints board with all placed tiles
- * Parameters: N/A
+ * Parameters:
+ * coloured [bool] - If the tiles should or shouldn't be coloured when printed
  * Return: N/A
  */
 void Board::printBoard(bool coloured) {

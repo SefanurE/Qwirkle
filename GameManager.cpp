@@ -61,7 +61,8 @@ void GameManager::startGame() {
  * playerNames [string*] - Array of playerNames
  * Return: void
  */
-void GameManager::newGame(std::string* playerNames, int numPlayers, bool multiPlace, bool coloured) {
+void GameManager::newGame(std::string* playerNames, int numPlayers,
+                          bool multiPlace, bool coloured) {
   this->multiPlace = multiPlace;
   gameState = new GameState(playerNames, numPlayers, multiPlace, coloured);
   startGame();
@@ -75,7 +76,8 @@ void GameManager::newGame(std::string* playerNames, int numPlayers, bool multiPl
  * fileName [string] - File path to save file
  * Return: void
  */
-void GameManager::loadGame(std::string fileName, int numPlayers, bool multiPlace, bool coloured) {
+void GameManager::loadGame(std::string fileName, int numPlayers,
+                           bool multiPlace, bool coloured) {
   this->multiPlace = multiPlace;
   std::ifstream gameData(fileName);
   if (gameData.is_open()) {
@@ -189,7 +191,7 @@ void GameManager::parseCommand(std::string command) {
  */
 bool GameManager::imatch(std::string checkString, std::string pattern) {
   return std::regex_match(
-    checkString, std::regex(pattern, std::regex_constants::icase));
+      checkString, std::regex(pattern, std::regex_constants::icase));
 }
 
 /*
@@ -264,6 +266,13 @@ void GameManager::doReplaceTile(std::string tile) {
   showRoundOutput = success;
 }
 
+/*
+ * Method Name: doEndTurn
+ * Purpose: Executes doEndTurn on the gamestate and records if the command
+ * was completed successfully
+ * Parameters: N/A
+ * Return: void
+ */
 void GameManager::doEndTurn() {
   bool success = gameState->doEndTurn();
   showRoundOutput = success;

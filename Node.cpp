@@ -9,8 +9,7 @@
  * next [Node*] - Pointer to next node in the list
  * Return: N/A
  */
-Node::Node(Tile* tile, Node* next)
-{
+Node::Node(Tile* tile, Node* next) {
   this->tile = tile;
   this->next = next;
 }
@@ -22,8 +21,7 @@ Node::Node(Tile* tile, Node* next)
  * other [Node&] - Reference to another node to copy
  * Return: N/A
  */
-Node::Node(Node& other)
-{
+Node::Node(Node &other) {
   tile = other.tile;
   next = other.next;
 }

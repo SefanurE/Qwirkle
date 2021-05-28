@@ -1,0 +1,9 @@
+2
+tests/multi/refill-hand-after-round.save
+place g0 at a0
+place g1 at a1
+place g2 at a2
+place g3 at a3
+place g4 at a4
+place g5 at a5
+replace g0

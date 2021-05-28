@@ -18,7 +18,7 @@ class GameState {
   public:
     Board* board;
 
-    GameState(std::vector<std::string> playerNames, bool multiPlace, bool coloured);
+    GameState(std::string* playerNames, int numPlayers, bool multiPlace, bool coloured);
     GameState(std::istream &stream, int numPlayers, bool multiPlace, bool coloured);
     ~GameState();
     std::string serialise();
@@ -32,29 +32,30 @@ class GameState {
     bool testSaveFileValidity(std::istream &gameData);
 
   private:
-    Tile* firstTile;
     int currentPlayerIndex;
     Player** players;
     TileBag* bag;
     int numPlayers;
     bool multiPlace;
     bool coloured;
-
     char firstTileRow = NO_TILE_ROW;
     int firstTileCol = NO_TILE_COL;
-
+    int firstTileScore = 0;
     char validTileRowCreated = NO_TILE_ROW;
     int validTileColCreated = NO_TILE_COL;
-
     int placedTilesOnTurn = 0;
-    bool newGame;
+    bool newGame = true;
+    int roundScore = 0;
 
     Player* getCurrentPlayer();
     LinkedList* getConnectedTilesInDir(std::string position, int dir);
     bool validateTile(Tile* tile, std::string position);
-    int placeTileScore(Tile* tile, std::string position);
+    int placeTileScore(std::string position, bool checkCol, bool checkRow);
     bool checkPlacementValid(Tile* myTile, Tile* neighbourTile);
     void nextPlayer();
 };
 
 #endif //COSC_ASSIGN_TWO_GS
+
+
+

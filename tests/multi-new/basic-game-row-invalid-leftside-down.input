@@ -1,0 +1,6 @@
+2
+tests/multi-new/basic-game-row-invalid-leftside-down.save
+place g2 at d3
+place g1 at d2
+place g0 at e2
+done

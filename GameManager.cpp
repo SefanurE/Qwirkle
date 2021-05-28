@@ -61,9 +61,9 @@ void GameManager::startGame() {
  * playerNames [string*] - Array of playerNames
  * Return: void
  */
-void GameManager::newGame(std::vector<std::string> playerNames, bool multiPlace, bool coloured) {
+void GameManager::newGame(std::string* playerNames, int numPlayers, bool multiPlace, bool coloured) {
   this->multiPlace = multiPlace;
-  gameState = new GameState(playerNames, multiPlace, coloured);
+  gameState = new GameState(playerNames, numPlayers, multiPlace, coloured);
   startGame();
 }
 

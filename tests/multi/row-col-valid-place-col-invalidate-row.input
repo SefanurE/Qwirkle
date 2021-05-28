@@ -1,0 +1,12 @@
+2
+tests/multi/row-col-valid-place-col-invalidate-row.save
+place g0 at d2
+place g1 at d3
+done
+place g2 at c3
+done
+place g4 at c2
+place g5 at b2
+place g3 at c1
+place g3 at c4
+place g3 at e2

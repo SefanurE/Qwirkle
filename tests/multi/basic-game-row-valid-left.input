@@ -1,0 +1,6 @@
+2
+tests/multi/basic-game-row-valid-left.save
+place g2 at d3
+place g1 at d2
+place g0 at d1
+done

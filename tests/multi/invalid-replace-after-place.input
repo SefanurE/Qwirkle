@@ -1,0 +1,4 @@
+2
+tests/multi/invalid-replace-after-place.save
+place g0 at a0
+replace g0

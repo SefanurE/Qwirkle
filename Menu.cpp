@@ -67,7 +67,7 @@ void Menu::newGame(int numPlayers, bool multiPlace, bool coloured) {
   std::cout << "Starting a New Game" << std::endl;
 
   if (!cancel) {
-    std::vector<std::string> playerNames(numPlayers, "");
+    std::string* playerNames = new std::string [numPlayers];;
     // Ask user for each players' name
     for (int i = 0; !cancel && i < numPlayers; i++) {
       std::cout << std::endl;
@@ -86,7 +86,7 @@ void Menu::newGame(int numPlayers, bool multiPlace, bool coloured) {
 
       // Create new gameManager and begin a new game with the player names
       GameManager* gameManager = new GameManager();
-      gameManager->newGame(playerNames, multiPlace, coloured);
+      gameManager->newGame(playerNames, numPlayers, multiPlace, coloured);
 
       // Game is over, cleanup
       delete gameManager;

@@ -30,14 +30,3 @@ Node::Node(Node& other)
 
 
 Node::~Node() {}
-
-/*
- * Method Name: toString
- * Purpose: Converts node data to a string
- * Parameters: N/A
- * Return:
- * string - Tile and next node data
- */
-std::string Node::toString() {
-  return "Tile: " + tile->toString() + ", Next: " + next->tile->toString();
-}

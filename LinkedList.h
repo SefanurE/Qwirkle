@@ -13,7 +13,7 @@ class LinkedList {
     void insertAfter(int index, Tile* tile);
     Tile* remove(int index);
     Tile* get(int index);
-    std::string toString(bool isColoured);
+    std::string toString(bool coloured);
     void fromString(std::string listString);
     int getIndexOf(std::string tileString);
 

@@ -18,8 +18,7 @@ class Tile {
   public:
     Tile(Colour colour, Shape shape);
     Tile(Tile& other);
-    std::string toString();
-    std::string toDisplayString(bool colured);
+    std::string toString(bool coloured);
     Shape getShape();
     Colour getColour();
 };

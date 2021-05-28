@@ -615,7 +615,7 @@ bool GameState::validateTile(Tile* tile, std::string position) {
       // Validate all of these connected neighbours
       for (int i = 0; valid && i < connectedA->getSize(); i++) {
         if (!checkPlacementValid(tile, connectedA->get(i))) {
-          std::cout << "You can't place a " << tile->toString() << " tile here!"
+          std::cout << "You can't place a " << tile->toString(coloured) << " tile here!"
                     << std::endl;
           valid = false;
         }
@@ -624,7 +624,7 @@ bool GameState::validateTile(Tile* tile, std::string position) {
       // Validate all of these connected neighbours
       for (int i = 0; valid && i < connectedB->getSize(); i++) {
         if (!checkPlacementValid(tile, connectedB->get(i))) {
-          std::cout << "You can't place a " << tile->toString() << " tile here!"
+          std::cout << "You can't place a " << tile->toString(coloured) << " tile here!"
                     << std::endl;
           valid = false;
         }
@@ -633,7 +633,7 @@ bool GameState::validateTile(Tile* tile, std::string position) {
       // Check that both directions validate the same way
       if (connectedA->getSize() > 0 && connectedB->getSize() > 0) {
         if (!checkPlacementValid(connectedA->get(0), connectedB->get(0))) {
-          std::cout << "You can't place a " << tile->toString() << " tile here!"
+          std::cout << "You can't place a " << tile->toString(coloured) << " tile here!"
                     << std::endl;
           valid = false;
         }

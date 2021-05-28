@@ -13,11 +13,7 @@ Tile::Tile(Tile& other) {
   this->shape = other.getShape();
 }
 
-std::string Tile::toString() {
-  return colour + std::to_string(shape);
-}
-
-std::string Tile::toDisplayString(bool coloured) {
+std::string Tile::toString(bool coloured) {
   std::string tileString = colour + std::to_string(shape);
   if (coloured) {
     std::string escape = "";

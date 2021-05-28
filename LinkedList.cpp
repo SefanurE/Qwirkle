@@ -144,15 +144,11 @@ Node* LinkedList::getNode(int index) {
  * Return:
  * string - All values within linked list comma seperated
  */
-std::string LinkedList::toString(bool isColoured) {
+std::string LinkedList::toString(bool coloured) {
   std::string listString = "";
   Node* node = head;
   while (node != nullptr) {
-    if (isColoured) {
-      listString += node->tile->toDisplayString(isColoured);
-    } else {
-      listString += node->tile->toString();
-    }
+    listString += node->tile->toString(coloured);
     if (node->next != nullptr) {
       listString += ",";
     }
@@ -207,7 +203,7 @@ int LinkedList::getIndexOf(std::string tileString) {
   bool found = false;
   int index = -1;
   for (int i = 0; !found && i < size; i++) {
-    if (tileString == get(i)->toString()) {
+    if (tileString == get(i)->toString(false)) {
       found = true;
       index = i;
     }

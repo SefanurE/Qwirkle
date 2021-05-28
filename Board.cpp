@@ -119,7 +119,7 @@ void Board::printBoard(bool coloured) {
     std::cout << rowLabels[x] << " |";
     for (int y = 0; y < width; y++) {
       if (gridVec[x][y] != nullptr) {
-        std::cout << gridVec[x][y]->toDisplayString(coloured) << "|";
+        std::cout << gridVec[x][y]->toString(coloured) << "|";
       } else {
         std::cout << "  |";
       }
@@ -166,7 +166,7 @@ std::string Board::toString() {
   for (int x = 0; x < height; x++) {
     for (int y = 0; y < width; y++) {
       if (gridVec[x][y] != nullptr) {
-        placedTilesString += gridVec[x][y]->toString() + "@" + rowLabels[x]
+        placedTilesString += gridVec[x][y]->toString(false) + "@" + rowLabels[x]
                              + std::to_string(y) + ", ";
       }
     }

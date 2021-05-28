@@ -9,7 +9,6 @@ class Node {
     Node(Tile* tile, Node* next);
     Node(Node& other);
     ~Node();
-    std::string toString();
 
     Tile* tile;
     Node* next;

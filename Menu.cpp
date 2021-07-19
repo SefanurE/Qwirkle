@@ -16,7 +16,7 @@ void Menu::mainMenu() {
 
   bool quit = false;
   while (!quit && !std::cin.eof()) {
-    std::cout << "> ";
+    std::cout << PROMPT;
     std::string menuOption = "";
     bool read = true;
     // Check each character input by user
@@ -25,7 +25,7 @@ void Menu::mainMenu() {
       if (c == '\n') {
         read = false;
       } else if (c == EOF) {
-        std::cout << std::endl;
+        std::cout << std::endl << std::endl;
         read = false;
         quit = true;
       // If c isn not \n, EOF or a space add to menuOption string
@@ -44,11 +44,16 @@ void Menu::mainMenu() {
     } else if (menuOption == CREDITS_OPTION) {
       printCredits();
       displayMenu();
+    } else if (menuOption == COLOUR_OPTION) {
+      // Switches coloured value
+      coloured = !coloured;
+      displayMenu();
     } else if (menuOption == QUIT_OPTION) {
       std::cout << std::endl;
       quit = true;
     } else if (!quit) {
-      std::cout << "Invalid input, try again" << std::endl;
+      std::cout << "Try a number displayed on the menu (1, 2, 3, 4 or 5)"
+                << std::endl;
     }
   }
   std::cout << "Goodbye" << std::endl;
@@ -67,7 +72,27 @@ void Menu::displayMenu() {
             << "1. New Game" << std::endl
             << "2. Load Game" << std::endl
             << "3. Credits" << std::endl
-            << "4. Quit" << std::endl << std::endl;
+            << "4. Toggle colour " << colouredStatus() << std::endl
+            << "5. Quit" << std::endl << std::endl;
+}
+
+/*
+ * Method Name: colouredStatus
+ * Purpose: Return string representation of coloured value
+ * Parameters: N/A
+ * Return: string - Represents whether the coloured option is on or off
+ */
+std::string Menu::colouredStatus() {
+  std::string status = "";
+  if (coloured) {
+    status = GREEN_TXT;
+    status += "[ON]";
+  } else {
+    status = RED_TXT;
+    status += "[OFF]";
+  }
+  status += RESET_TXT;
+  return status;
 }
 
 /*
@@ -79,18 +104,34 @@ void Menu::displayMenu() {
  */
 void Menu::newGame() {
   bool cancel = false;
-  std::cout << std::endl;
-  std::cout << "Starting a New Game" << std::endl;
-  std::string playerNames[PLAYER_COUNT] = { "0" };
-  // Ask user for each players' name
-  for (int i = 0; !cancel && i < PLAYER_COUNT; i++) {
-    std::cout << std::endl;
-    std::cout << "Enter a name for player " << i + 1
-              << " (uppercase letters only)" << std::endl;
-    playerNames[i] = getNameInput();
-    // Did the user input EOF
-    if (playerNames[i] == "") {
-      cancel = true;
+  int playerCount = 0;
+  std::cout << std::endl
+            << "Starting a New Game" << std::endl;
+  std::cout << std::endl
+            << "Enter the number of players (2, 3 or 4)" << std::endl;
+  std::string playerCountStr = getPlayerCountInput();
+  // Did the user input EOF
+  if (playerCountStr != "") {
+    playerCount = stoi(playerCountStr);
+  } else {
+    cancel = true;
+  }
+
+  std::string playerNames[playerCount] = {"0"}; 
+  if (!cancel) {
+    std::cout << std::endl
+                << "(Put 'AI ' at the start of the name to have an AI player)"
+                << std::endl;
+    // Ask user for each players' name
+    for (int i = 0; !cancel && i < playerCount; i++) {
+      std::cout << std::endl;
+      std::cout << "Enter a name for player " << i + 1
+                << " (uppercase letters only)" << std::endl;
+      playerNames[i] = getNameInput();
+      // Did the user input EOF
+      if (playerNames[i] == "") {
+        cancel = true;
+      }
     }
   }
 
@@ -100,11 +141,59 @@ void Menu::newGame() {
 
     // Create new gameManager and begin a new game with the player names
     GameManager* gameManager = new GameManager();
-    gameManager->newGame(playerNames);
+    gameManager->newGame(playerNames, playerCount, coloured);
 
     // Game is over, cleanup
     delete gameManager;
   }
+}
+
+/*
+ * Method Name: getPlayerCount
+ * Purpose: Requests and validates player count from user
+ * Parameters: N/A
+ * Return: int - Validated player count
+ */
+std::string Menu::getPlayerCountInput() {
+  std::string playerCountStr = "";
+  bool done = false;
+  // Keep getting a player count from the user until it is valid
+  while (!done) {
+    std::cout << PROMPT;
+    playerCountStr = "";
+    bool read = true;
+    // Check each character input by user
+    while (read) {
+      char c = std::cin.get();
+      if (c == '\n') {
+        read = false;
+        // Make sure the player count has one character
+        if (playerCountStr.length() == 1) {
+          done = true;
+        } else {
+          std::cout << "Number of players must be 2, 3 or 4"
+                    << std::endl;
+        }
+      // Quit program if c is EOF
+      } else if (c == EOF) {
+        std::cout << std::endl << std::endl;
+        read = false;
+        done = true;
+        // playerCountStr = "";
+      // Checks if c is a character other than 2, 3 or 4
+      } else if (c < MIN_PLAYER_COUNT || c > MAX_PLAYER_COUNT) {
+        // Clears user input to check the player count input
+        std::cin.ignore(INT8_MAX, '\n');
+        std::cout << "Number of players must be 2, 3 or 4"
+                  << std::endl;
+        read = false;
+        done = false;
+      } else {
+        playerCountStr.push_back(c);
+      }
+    }
+  }
+  return playerCountStr;
 }
 
 /*
@@ -119,7 +208,7 @@ std::string Menu::getNameInput() {
   bool done = false;
   // Keep getting a player name from the user until it is valid (only caps)
   while (!done) {
-    std::cout << "> ";
+    std::cout << PROMPT;
     playerName = "";
     bool read = true;
     // Check each character input by user
@@ -136,12 +225,12 @@ std::string Menu::getNameInput() {
         std::cout << std::endl << std::endl;
         read = false;
         done = true;
-        playerName = "";
+        // playerName = "";
       // Checks if c is a character other than a capital letter
-      } else if (c < 'A' || c > 'Z') {
+      } else if ((c < 'A' || c > 'Z') && !(c == ' ' && playerName == "AI")) {
         // Clears user input to check the new name input
         std::cin.ignore(INT8_MAX, '\n');
-        std::cout << "Name must be only uppercase letters, enter new name"
+        std::cout << "Name must only be uppercase letters, enter new name"
                   << std::endl;
         read = false;
         done = false;
@@ -169,8 +258,8 @@ void Menu::loadGame() {
   bool quit = false;
   while (!done) {
     std::cout << std::endl;
-    std::cout << "Enter the filename from which load a game: " << std::endl;
-    std::cout << "> ";
+    std::cout << "Enter the filename from which to load a game" << std::endl;
+    std::cout << PROMPT;
     fileName = "";
     bool read = true;
     // Check each character input by user
@@ -185,7 +274,7 @@ void Menu::loadGame() {
       } else if (c == '\n') {
         read = false;
         // Check validity of file name input by user
-        done = GameManager::testSaveFileValidity(fileName);
+        done = gameManager->testSaveFileValidity(fileName);
       } else {
         fileName.push_back(c);
       }
@@ -194,7 +283,7 @@ void Menu::loadGame() {
 
   if (!quit) {
     // Load game from file
-    gameManager->loadGame(fileName);
+    gameManager->loadGame(fileName, coloured);
   }
 
   // Game is over, cleanup

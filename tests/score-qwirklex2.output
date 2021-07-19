@@ -7,10 +7,11 @@ Menu
 1. New Game
 2. Load Game
 3. Credits
-4. Quit
+4. Toggle colour [31m[OFF][0m
+5. Quit
 
 > 
-Enter the filename from which load a game: 
+Enter the filename from which to load a game
 > 
 B, it's your turn
 Score for A: 38
@@ -47,13 +48,10 @@ Z |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  
 Your hand is
 G5,P2,Y1,B2,Y2,P0
 
-
 > 
-QWIRKLE!!
+QWIRKLE!!!
 
-
-QWIRKLE!!
-
+QWIRKLE!!!
 
 A, it's your turn
 Score for A: 38
@@ -89,7 +87,6 @@ Z |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  
 
 Your hand is
 O3,G5,Y3,P1,P4,B1
-
 
 > 
 

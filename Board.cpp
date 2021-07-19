@@ -97,10 +97,12 @@ void Board::initGrid() {
 /*
  * Method Name: printBoard
  * Purpose: Prints board with all placed tiles
- * Parameters: N/A
+ * Parameters: 
+ * coloured [bool] - If colour option was toggled on in menu [true] 
+ * or not [false]
  * Return: N/A
  */
-void Board::printBoard() {
+void Board::printBoard(bool coloured) {
   std::cout << " ";
   for (int a = 0; a < width; a++) {
     if (a < 11) {
@@ -119,7 +121,27 @@ void Board::printBoard() {
     std::cout << rowLabels[x] << " |";
     for (int y = 0; y < width; y++) {
       if (gridVec[x][y] != nullptr) {
-        std::cout << gridVec[x][y]->toString() << "|";
+        if (coloured) {
+          std::string colourTxt = "";
+          if (gridVec[x][y]->getColour() == RED) {
+            colourTxt = RED_TXT;
+          } else if (gridVec[x][y]->getColour() == ORANGE) {
+            colourTxt = ORANGE_TXT;
+          } else if (gridVec[x][y]->getColour() == YELLOW) {
+            colourTxt = YELLOW_TXT;
+          } else if (gridVec[x][y]->getColour() == GREEN) {
+            colourTxt = GREEN_TXT;
+          } else if (gridVec[x][y]->getColour() == BLUE) {
+            colourTxt = BLUE_TXT;
+          } else if (gridVec[x][y]->getColour() == PURPLE) {
+            colourTxt = PURPLE_TXT;
+          }
+          std::cout << colourTxt << gridVec[x][y]->toString() 
+                      << RESET_TXT << "|";
+        } else {
+          std::cout << gridVec[x][y]->toString() << "|";
+        }
+        
       } else {
         std::cout << "  |";
       }
@@ -211,14 +233,26 @@ Tile* Board::getTile(int row, int col) {
  * int - Int representing the row
  */
 int Board::rowToInt(char rowLabel) {
-  std::string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   int index = -1;
-  for (size_t i = 0; i < alphabet.length() && index == -1; i++) {
-    if (alphabet[i] == rowLabel) {
+  for (size_t i = 0; i < rowLabels.length() && index == -1; i++) {
+    if (rowLabels[i] == rowLabel) {
       index = i;
     }
   }
   return index;
+}
+
+/*
+ * Method Name: intToRow
+ * Purpose: Concerts a row number to a row character
+ * Parameters:
+ * rowLabel [int] - Int to convert
+ * Return: string - String representing the row
+ */
+std::string Board::intToRow(int row) {
+  std::string rowLabel = "";
+  rowLabel.push_back(rowLabels[row]);
+  return rowLabel;
 }
 
 /*

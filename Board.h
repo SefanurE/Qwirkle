@@ -12,7 +12,7 @@ class Board {
     Board(int width, int height);
     Board(std::string boardShapeString, std::string placedTilesString);
     ~Board();
-    void printBoard();
+    void printBoard(bool coloured);
     void addTile(Tile* tile, char row, std::string col);
     void addTile(Tile* tile, int row, int col);
     Tile* getTile(int row, int col);
@@ -22,6 +22,7 @@ class Board {
     std::string toString();
     bool containsPosition(int row, int col);
     int rowToInt(char rowLabel);
+    std::string intToRow(int row);
 
   private:
     int width, height;

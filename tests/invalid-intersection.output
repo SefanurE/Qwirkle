@@ -7,10 +7,11 @@ Menu
 1. New Game
 2. Load Game
 3. Credits
-4. Quit
+4. Toggle colour [31m[OFF][0m
+5. Quit
 
 > 
-Enter the filename from which load a game: 
+Enter the filename from which to load a game
 > 
 BBB, it's your turn
 Score for AAA: 3
@@ -47,8 +48,7 @@ Z |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  
 Your hand is
 G2,Y2,G4,R1,O5,G0
 
-
-> You can't place a R1 tile here!
+> You can't place a R1 tile there!
 > 
 
 Goodbye

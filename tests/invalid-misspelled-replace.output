@@ -7,10 +7,11 @@ Menu
 1. New Game
 2. Load Game
 3. Credits
-4. Quit
+4. Toggle colour [31m[OFF][0m
+5. Quit
 
 > 
-Enter the filename from which load a game: 
+Enter the filename from which to load a game
 > 
 LUKE, it's your turn
 Score for LUKE: 0
@@ -47,8 +48,7 @@ Z |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  
 Your hand is
 P5,G5,G3,Y2,O4,Y5
 
-
-> Invalid Input
-> > 
+> Unrecognised command 'replsce'
+> 
 
 Goodbye

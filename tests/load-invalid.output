@@ -7,13 +7,14 @@ Menu
 1. New Game
 2. Load Game
 3. Credits
-4. Quit
+4. Toggle colour [31m[OFF][0m
+5. Quit
 
 > 
-Enter the filename from which load a game: 
-> Can't read file
+Enter the filename from which to load a game
+> Can't read file, be sure to include the filename extension
 
-Enter the filename from which load a game: 
+Enter the filename from which to load a game
 > 
 
 Goodbye

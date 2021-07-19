@@ -158,6 +158,43 @@ std::string LinkedList::toString() {
 }
 
 /*
+ * Method Name: toStringColour
+ * Purpose: Converts linked list to string for coloured printing
+ * Parameters: N/A
+ * Return:
+ * string - All values within linked list comma seperated with colour and reset
+ * codes
+ */
+std::string LinkedList::toStringColour() {
+  std::string listStringColoured = "";
+  Node* node = head;
+  while (node != nullptr) {
+    std::string colourTxt = "";
+    if (node->tile->getColour() == RED) {
+      colourTxt = RED_TXT;
+    } else if (node->tile->getColour() == ORANGE) {
+      colourTxt = ORANGE_TXT;
+    } else if (node->tile->getColour() == YELLOW) {
+      colourTxt = YELLOW_TXT;
+    } else if (node->tile->getColour() == GREEN) {
+      colourTxt = GREEN_TXT;
+    } else if (node->tile->getColour() == BLUE) {
+      colourTxt = BLUE_TXT;
+    } else if (node->tile->getColour() == PURPLE) {
+      colourTxt = PURPLE_TXT;
+    }
+    listStringColoured += colourTxt;
+    listStringColoured += node->tile->toString();
+    listStringColoured += RESET_TXT;
+    if (node->next != nullptr) {
+      listStringColoured += ",";
+    }
+    node = node->next;
+  }
+  return listStringColoured;
+}
+
+/*
  * Method Name: getSize
  * Purpose: Retrieves the size of the linked list
  * Parameters: N/A

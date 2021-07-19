@@ -7,10 +7,11 @@ Menu
 1. New Game
 2. Load Game
 3. Credits
-4. Quit
+4. Toggle colour [31m[OFF][0m
+5. Quit
 
 > 
-Enter the filename from which load a game: 
+Enter the filename from which to load a game
 > 
 A, it's your turn
 Score for A: 15
@@ -47,7 +48,6 @@ Z |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  
 Your hand is
 B0,R0,O0,R3,Y0,B0
 
-
 > 
 B, it's your turn
 Score for A: 23
@@ -83,7 +83,6 @@ Z |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  
 
 Your hand is
 P0,P0,G0,P3,R2,Y1
-
 
 > 
 

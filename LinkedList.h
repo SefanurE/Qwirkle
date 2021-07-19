@@ -14,6 +14,7 @@ class LinkedList {
     Tile* remove(int index);
     Tile* get(int index);
     std::string toString();
+    std::string toStringColour();
     void fromString(std::string listString);
     int getIndexOf(std::string tileString);
 

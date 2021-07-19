@@ -12,43 +12,53 @@ GameManager::~GameManager() {
  * Method Name: startGame
  * Purpose: Starts a new game and takes input of commands from player to be
  * executed on the gameState
- * Parameters: N/A
+ * Parameters: 
+ * coloured [bool] - If colour option was toggled on in menu [true] 
+ * or not [false]
  * Return: void
  */
-void GameManager::startGame() {
+void GameManager::startGame(bool coloured) {
   // Read and parse commands till the player quits
   status = PLAYING;
   while (status == PLAYING) {
     if (showRoundOutput) {
-      gameState->showBeforeRoundOutput();
+      gameState->showBeforeRoundOutput(coloured);
       std::cout << std::endl;
     }
-    std::cout << PROMPT;
-    std::string command;
-    bool readCommand = true;
-    while (readCommand) {
-      char c = std::cin.get();
-      if (c == EOF) {
-        std::cout << std::endl << std::endl;
-        status = QUIT;
-        readCommand = false;
-      } else if (c == '\n') {
-        readCommand = false;
-      } else {
-        command.push_back(c);
-      }
-    }
 
-    // Did we not quit?
-    if (status == PLAYING) {
-      showRoundOutput = false;
-      parseCommand(command);
+    // Is the player an AI
+    if (gameState->getCurrentPlayer()->getIsAI()) {
+      gameState->determineAIMove();
+
+    // If player isn't an AI prompt them
+    } else {
+      std::cout << PROMPT;
+      std::string command;
+      bool readCommand = true;
+      while (readCommand) {
+        char c = std::cin.get();
+        if (c == EOF) {
+          std::cout << std::endl << std::endl;
+          status = QUIT;
+          readCommand = false;
+        } else if (c == '\n') {
+          readCommand = false;
+        } else {
+          command.push_back(c);
+        }
+      }
+
+      // Did we not quit?
+      if (status == PLAYING) {
+        showRoundOutput = false;
+        parseCommand(command);
+        }
     }
 
     // Is the game over?
     if (gameState->isGameOver()) {
       status = GAMEOVER;
-      gameState->showAfterGameOutput();
+      gameState->showAfterGameOutput(coloured);
     }
   }
 }
@@ -59,11 +69,15 @@ void GameManager::startGame() {
  * play on that gamestate
  * Parameters:
  * playerNames [string*] - Array of playerNames
+ * playerCount [int] - Number of players
+ * coloured [bool] - If colour option was toggled on in menu [true] 
+ * or not [false]
  * Return: void
  */
-void GameManager::newGame(std::string playerNames[PLAYER_COUNT]) {
-  gameState = new GameState(playerNames);
-  startGame();
+void GameManager::newGame(std::string playerNames[], int playerCount, 
+                          bool coloured) {
+  gameState = new GameState(playerNames, playerCount);
+  startGame(coloured);
 }
 
 /*
@@ -74,11 +88,12 @@ void GameManager::newGame(std::string playerNames[PLAYER_COUNT]) {
  * fileName [string] - File path to save file
  * Return: void
  */
-void GameManager::loadGame(std::string fileName) {
+void GameManager::loadGame(std::string fileName, bool coloured) {
   std::ifstream gameData(fileName);
   if (gameData.is_open()) {
     gameState = new GameState(gameData);
-    startGame();
+    // When loading game, board is never coloured, hence false
+    startGame(coloured);
     gameData.close();
   } else {
     std::cout << "Failed to read" << std::endl;
@@ -100,7 +115,7 @@ void GameManager::parseCommand(std::string command) {
   std::string buffer = "";
   std::string comm = "";
   std::vector<std::string> args;
-  bool invalid = false;
+  // bool invalid = false;
   bool completedCommand = false;
   for (size_t i = 0; !completedCommand && i < command.length(); i++) {
     char c = command[i];
@@ -123,7 +138,7 @@ void GameManager::parseCommand(std::string command) {
           } else if (imatch(buffer, COMM_REPLACE)) {
             comm = COMM_REPLACE;
           } else {
-            invalid = true;
+            std::cout << "Unrecognised command '" << buffer << "'" << std::endl;
             completedCommand = true;
           }
         } else if (comm == COMM_SAVE) {
@@ -142,7 +157,7 @@ void GameManager::parseCommand(std::string command) {
             doPlaceTile(args[0], buffer);
             completedCommand = true;
           } else {
-            invalid = true;
+            std::cout << "Malformed " << comm << " command" << std::endl;
             completedCommand = true;
           }
         } else if (comm == COMM_REPLACE) {
@@ -152,11 +167,11 @@ void GameManager::parseCommand(std::string command) {
             doReplaceTile(buffer);
             completedCommand = true;
           } else {
-            invalid = true;
+            std::cout << "Malformed " << comm << " command" << std::endl;
             completedCommand = true;
           }
         } else {
-          invalid = true;
+          std::cout << "Malformed " << comm << " command" << std::endl;
           completedCommand = true;
         }
 
@@ -168,11 +183,7 @@ void GameManager::parseCommand(std::string command) {
 
   // Report on unfinished commands
   if (comm != "" && !completedCommand) {
-    invalid = true;
-  }
-
-  if (invalid) {
-    std::cout << "Invalid Input" << std::endl;
+    std::cout << "Incomplete " << comm << " command" << std::endl;
   }
 }
 
@@ -271,14 +282,15 @@ bool GameManager::testSaveFileValidity(std::string path) {
   if (valid) {
     std::ifstream gameData(path);
     if (gameData.is_open()) {
-      valid = GameState::testSaveFileValidity(gameData);
+      valid = gameState->testSaveFileValidity(gameData);
       if (!valid) {
         std::cout << "Invalid save format" << std::endl;
       }
       gameData.close();
     } else {
       valid = false;
-      std::cout << "Can't read file" << std::endl;
+      std::cout << "Can't read file, be sure to include the filename extension"
+                << std::endl;
     }
   } else {
     std::cout << "Invalid file path" << std::endl;

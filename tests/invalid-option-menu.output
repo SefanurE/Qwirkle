@@ -7,8 +7,10 @@ Menu
 1. New Game
 2. Load Game
 3. Credits
-4. Quit
+4. Toggle colour [31m[OFF][0m
+5. Quit
 
-> Invalid input, try again
+> Try a number displayed on the menu (1, 2, 3, 4 or 5)
 > 
+
 Goodbye

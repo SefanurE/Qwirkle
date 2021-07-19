@@ -7,13 +7,18 @@ Menu
 1. New Game
 2. Load Game
 3. Credits
-4. Quit
+4. Toggle colour [31m[OFF][0m
+5. Quit
 
 > 
 Starting a New Game
 
+Enter the number of players (2, 3 or 4)
+> 
+(Put 'AI ' at the start of the name to have an AI player)
+
 Enter a name for player 1 (uppercase letters only)
-> Name must be only uppercase letters, enter new name
+> Name must only be uppercase letters, enter new name
 > 
 
 Goodbye

@@ -6,7 +6,6 @@
 #include "GameState.h"
 #include "Board.h"
 
-#define PROMPT "> "
 #define COMM_QUIT "QUIT"
 #define COMM_SAVE "SAVE"
 #define COMM_PLACE "PLACE"
@@ -36,8 +35,8 @@ class GameManager {
 
   public:
     GameManager(); ~GameManager();
-    void startGame();
-    void newGame(std::string playerNames[PLAYER_COUNT]);
-    void loadGame(std::string fileName);
-    static bool testSaveFileValidity(std::string path);
+    void startGame(bool coloured);
+    void newGame(std::string playerNames[], int playerCount, bool coloured);
+    void loadGame(std::string fileName, bool coloured);
+    bool testSaveFileValidity(std::string path);
 };

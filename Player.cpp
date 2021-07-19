@@ -7,10 +7,11 @@
  * name [string] - Name of player
  * Return: N/A
  */
-Player::Player(std::string name) {
+Player::Player(std::string name, bool isAI) {
   this->name = name;
   hand = new LinkedList();
   score = 0;
+  this->isAI = isAI;
 }
 
 /*
@@ -89,4 +90,14 @@ void Player::initHand(TileBag* bag) {
   for (int i = 0; i < HANDSIZE; i++) {
     hand->push(bag->draw());
   }
+}
+
+/*
+ * Method Name: getIsAI
+ * Purpose: Retrieves player's AI status
+ * Parameters: N/A
+ * Return: bool - [true] if the player is an AI otherwise [false]
+ */
+bool Player::getIsAI() {
+  return isAI;
 }
